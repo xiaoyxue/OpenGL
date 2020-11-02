@@ -18,8 +18,6 @@ ipch/
 media/pictures/
 *.db
 *.user
-*.bmp
-*.png
 ReadMe.txt
 stdafx.h
 stdafx.cpp
