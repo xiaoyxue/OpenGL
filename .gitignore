@@ -17,9 +17,7 @@ Release/
 ipch/
 external/lib/
 media/pictures/
-*.sln
 *.db
-*.filters
 *.user
 *.bmp
 *.png
