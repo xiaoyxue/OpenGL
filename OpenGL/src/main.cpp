@@ -8,7 +8,7 @@
 #include "VertexArray.h"
 #include "VertexBufferLayout.h"
 #include "Shader.h"
-
+#include "Texture.h"
 
 int main(void)
 {
@@ -23,7 +23,7 @@ int main(void)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(1024, 768, "Hello World", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -40,10 +40,10 @@ int main(void)
     std::cout << glGetString(GL_VERSION) << std::endl;
     {
         float positions[] = {
-            -0.5f, -0.5f,
-            0.5f, -0.5f,
-            0.5f, 0.5f,
-            -0.5f, 0.5f
+            -0.5f, -0.5f, 0.0f, 0.0f,
+            0.5f, -0.5f, 1.0f, 0.0f,
+            0.5f, 0.5f, 1.0f, 1.0f,
+            -0.5f, 0.5f, 0.0f, 1.0f
         };
 
         unsigned int indices[] = {
@@ -54,8 +54,9 @@ int main(void)
 
         VertexArray va;
 
-        VertexBuffer vb(positions, 2 * 4 * sizeof(float));
+        VertexBuffer vb(positions, 4 * 4 * sizeof(float));
         VertexBufferLayout layout;
+        layout.Push<float>(2);
         layout.Push<float>(2);
 
         va.AddBuffer(vb, layout);
@@ -68,8 +69,11 @@ int main(void)
         shader.Bind();
         shader.SetUniform4f("u_Color", 0.2f, 0.3f, 0.8f, 1.0f);
 
+		Texture texture("res/textures/texture1.png");
+		texture.Bind(0);
+		shader.SetUniform1i("u_Texture", 0);
+
         va.UnBind();
-        
         vb.UnBind();
         ib.UnBind();
         shader.UnBind();
