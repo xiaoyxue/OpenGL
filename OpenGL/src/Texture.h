@@ -4,20 +4,23 @@
 #include "GLOjbect.h"
 #include <string>
 
-class Texture: public GLObject
+namespace OpenGL
 {
-private:
-	std::string mFilePath;
-	unsigned char* mLocalBuffer;
-	int mWidth, mHeight, mBPP;
+	class Texture : public GLObject
+	{
+	private:
+		std::string mFilePath;
+		unsigned char* mLocalBuffer;
+		int mWidth, mHeight, mBPP;
 
-public:
-	Texture(const std::string& path);
-	~Texture();
+	public:
+		Texture(const std::string& path);
+		~Texture();
 
-	void Bind(unsigned int slot = 0) const;
-	void UnBind() const;
+		void Bind(unsigned int slot = 0) const;
+		void UnBind() const;
 
-	inline int GetWidth() const { return mWidth; }
-	inline int GetHeight() const { return mHeight; }
-};
+		inline int GetWidth() const { return mWidth; }
+		inline int GetHeight() const { return mHeight; }
+	};
+}
