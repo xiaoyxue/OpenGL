@@ -111,14 +111,14 @@ namespace OpenGL
 	void Viewer::Draw() const
 	{
 		mRenderer->Clear();
-		
 		for (auto it : mMeshes)
 		{
 			mShader->Bind();
+			mCamera->Rotate(-0.05f, 0.f);
 			glm::mat4 proj = mCamera->GetProjMatrix();
 			glm::mat4 view = mCamera->GetViewMatrix();
 			glm::mat4 model = glm::mat4(1.f);
-			model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
+			//model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
 			mShader->SetUniformMat4f("u_Model", model);
 			mShader->SetUniformMat4f("u_View", view);
 			mShader->SetUniformMat4f("u_Proj", proj);

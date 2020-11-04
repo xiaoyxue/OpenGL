@@ -95,6 +95,7 @@ namespace OpenGL
 			float z = mR * sinTheta * std::sin(mPhi);
 			mPosition = vec3(x, y, z);
 			ComputeDirction();
+			ComputeViewMatrix();
 		}
 
 		inline mat4 GetViewMatrix() const { return mViewMatrix; }
