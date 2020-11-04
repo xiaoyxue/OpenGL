@@ -8,8 +8,6 @@ namespace OpenGL
 	VertexArray::VertexArray()
 	{
 		GLCall(glGenVertexArrays(1, &mHandle));
-
-
 	}
 
 	VertexArray::~VertexArray()

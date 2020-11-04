@@ -19,6 +19,8 @@ namespace OpenGL
 		vec3 mCx, mCy, mCz;
 		mat4 mViewMatrix;
 		mat4 mProjMatrix;
+
+		float mMoveSpeed;
 	public:
 		void Init(
 			const vec3& position,
@@ -42,6 +44,12 @@ namespace OpenGL
 			mFar = fClip;
 			mUp = up;
 
+			mMoveSpeed = 2.5f;
+
+			mCz = glm::normalize(mPosition - mLookAt); // -1 * dir in raytracer
+			mCx = glm::normalize(glm::cross(mUp, mCz));
+			mCy = glm::cross(mCz, mCx);
+
 			ComputeViewMatrix();
 			ComputeProjMatrix();
 		}
@@ -59,6 +67,18 @@ namespace OpenGL
 			ComputeProjMatrix();
 		}
 
+		void MoveX(float scale)
+		{
+			mPosition = mPosition + scale * mMoveSpeed * mCx;
+			ComputeViewMatrix();
+		}
+
+		void MoveY(float scale)
+		{
+			mPosition = mPosition + scale * mMoveSpeed * mCy;
+			ComputeViewMatrix();
+		}
+
 		inline mat4 GetViewMatrix() const { return mViewMatrix; }
 
 		inline mat4 GetProjMatrix() const { return mProjMatrix; }
@@ -66,9 +86,7 @@ namespace OpenGL
 	private:
 		void ComputeViewMatrix()
 		{
-			mCz = glm::normalize(mPosition - mLookAt); // -1 * dir in raytracer
-			mCx = glm::normalize(glm::cross(mUp, mCz));
-			mCy = glm::cross(mCz, mCx);
+			mLookAt = mPosition + (-1.f) * mCz;
 			mViewMatrix = glm::lookAt(mPosition, mLookAt, mUp);
 		}
 

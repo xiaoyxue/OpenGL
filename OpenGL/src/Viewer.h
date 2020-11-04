@@ -1,21 +1,28 @@
 #pragma once
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <string>
+#include <vector>
+
 
 namespace OpenGL 
 {
 	class Renderer;
 	class Camera;
+	class DrawableObject;
+	class Shader;
 
 	class Viewer
 	{
 	private:
-		Renderer* mRenderer;
 		GLFWwindow* mWindow;
-		Camera* mCamera;
-		int mWidth, mHeight;
+		static Renderer* mRenderer;
+		static Camera* mCamera;
+		static Shader* mShader;
+		static int mWidth, mHeight;
+		static float mDeltaTime, mLastFrame;
 		std::string mTitle;
-
+		std::vector<DrawableObject*> mMeshes;
 	public:
 		Viewer(const std::string &title);
 		~Viewer();
@@ -24,6 +31,9 @@ namespace OpenGL
 		void SetRenderer(Renderer* renderer);
 		void SetCamera(Camera* camera);
 		void SetSize(int width, int height);
+		void SetShader(Shader* shader);
+		//TO REMOVE
+		void Add(DrawableObject* obj) { mMeshes.push_back(obj); }
 		void Draw() const;
 
 		static void ErrorCallback(int error, const char* description);

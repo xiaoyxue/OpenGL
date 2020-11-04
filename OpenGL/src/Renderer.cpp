@@ -8,7 +8,12 @@ namespace OpenGL
 {
 	void GLClearError()
 	{
-		while (glGetError() != GL_NO_ERROR);
+		//std::cout << std::hex << glGetError() << std::endl;
+		int err;
+		while ((err = glGetError()) != GL_NO_ERROR)
+		{
+			std::cout << std::hex << err << std::endl;
+		};
 	}
 
 	bool GLLogCall(const char* function, const char* file, int line)
@@ -24,8 +29,7 @@ namespace OpenGL
 
 	Renderer::Renderer()
 	{
-		if (glewInit() != GLEW_OK)
-			std::cout << "Error" << std::endl;
+
 	}
 
 	void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const
