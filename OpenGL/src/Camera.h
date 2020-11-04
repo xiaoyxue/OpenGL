@@ -93,6 +93,7 @@ namespace OpenGL
 			float x = mR * sinTheta * std::cos(mPhi);
 			float y = mR * std::cos(mTheta);
 			float z = mR * sinTheta * std::sin(mPhi);
+			mPosition = vec3(x, y, z);
 			ComputeDirction();
 		}
 
