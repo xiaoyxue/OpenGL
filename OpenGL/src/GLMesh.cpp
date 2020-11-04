@@ -12,7 +12,7 @@ namespace OpenGL
 		renderer.EnableDepthTest();
 
 		renderer.Draw(*mVAO, *mIBO, shader);
-		renderer.EnableDepthTest();
+		renderer.DisableDepthTest();
 	}
 
 }
