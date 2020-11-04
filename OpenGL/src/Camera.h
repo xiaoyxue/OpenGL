@@ -2,6 +2,7 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtx/string_cast.hpp"
+#include "Def.h"
 #include <iostream>
 
 namespace OpenGL
@@ -15,6 +16,7 @@ namespace OpenGL
 		float mFocusDistance;
 		float mNear, mFar;
 		int mWidth, mHeight;
+		float mR, mTheta, mPhi;
 		vec3 mPosition, mLookAt, mUp;
 		vec3 mCx, mCy, mCz;
 		mat4 mViewMatrix;
@@ -49,6 +51,8 @@ namespace OpenGL
 			mCz = glm::normalize(mPosition - mLookAt); // -1 * dir in raytracer
 			mCx = glm::normalize(glm::cross(mUp, mCz));
 			mCy = glm::cross(mCz, mCx);
+			
+			ComputeSphereCoord();
 
 			ComputeViewMatrix();
 			ComputeProjMatrix();
@@ -70,13 +74,26 @@ namespace OpenGL
 		void MoveX(float scale)
 		{
 			mPosition = mPosition + scale * mMoveSpeed * mCx;
+			ComputeSphereCoord();
 			ComputeViewMatrix();
 		}
 
 		void MoveY(float scale)
 		{
 			mPosition = mPosition + scale * mMoveSpeed * mCy;
+			ComputeSphereCoord();
 			ComputeViewMatrix();
+		}
+
+		void Rotate(float dPhi, float dTheta) 
+		{
+			mPhi += dPhi;
+			mTheta = glm::clamp(mTheta + dTheta, 0.f, PI);
+			float sinTheta = std::sin(mTheta);
+			float x = mR * sinTheta * std::cos(mPhi);
+			float y = mR * std::cos(mTheta);
+			float z = mR * sinTheta * std::sin(mPhi);
+			ComputeDirction();
 		}
 
 		inline mat4 GetViewMatrix() const { return mViewMatrix; }
@@ -86,8 +103,27 @@ namespace OpenGL
 	private:
 		void ComputeViewMatrix()
 		{
-			mLookAt = mPosition + (-1.f) * mCz;
-			mViewMatrix = glm::lookAt(mPosition, mLookAt, mUp);
+			float sinTheta = std::sin(mTheta);
+			float x = mR * sinTheta * std::cos(mPhi);
+			float y = mR * std::cos(mTheta);
+			float z = mR * sinTheta * std::sin(mPhi);
+			mPosition = vec3(x, y, z);
+			mViewMatrix = glm::lookAt(mPosition, mPosition + (-1.f) * mCz, mUp);
+		}
+
+		void ComputeSphereCoord()
+		{
+			mR = (mPosition - mLookAt).length();
+			mPhi = std::atan2(mPosition.z, mPosition.x);
+			mPhi = mPhi > 0 ? mPhi : 2.f * PI - mPhi;
+			mTheta = std::acos(mPosition.y / mR);
+		}
+
+		void ComputeDirction()
+		{
+			mCz = glm::normalize(mPosition - mLookAt); // -1 * dir in raytracer
+			mCx = glm::normalize(glm::cross(mUp, mCz));
+			mCy = glm::cross(mCz, mCx);
 		}
 
 		void ComputeProjMatrix()
