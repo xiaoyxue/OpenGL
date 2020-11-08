@@ -1,0 +1,11 @@
+#pragma once
+#include <GLFW/glfw3.h>
+namespace OpenGL
+{
+#define MOUSE_LEFT		GLFW_MOUSE_BUTTON_1
+#define MOUSE_RIGHT		GLFW_MOUSE_BUTTON_2
+#define MOUSE_MIDDLE    GLFW_MOUSE_BUTTON_3
+
+#define MOUSE_BUTTON_PRESS		GLFW_PRESS
+#define MOUSE_BUTTON_RELEASE	GLFW_RELEASE
+}

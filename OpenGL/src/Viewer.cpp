@@ -2,6 +2,7 @@
 #include "Camera.h"
 #include "Shader.h"
 #include "Renderer.h"
+#include "Misc.h"
 #include <iostream>
 namespace OpenGL
 {
@@ -12,6 +13,14 @@ namespace OpenGL
 
 	OpenGL::Shader* Viewer::mShader = nullptr;
 
+	bool Viewer::mMouseLeftDown = false;
+
+	bool Viewer::mMouseMiddleDown = false;
+	
+	float Viewer::mMouseX, Viewer::mMouseY;
+
+	bool Viewer::mMouseRightDown = false;
+		
 	int Viewer::mWidth, Viewer::mHeight;
 
 	float Viewer::mDeltaTime, Viewer::mLastFrame;
@@ -114,7 +123,7 @@ namespace OpenGL
 		for (auto it : mMeshes)
 		{
 			mShader->Bind();
-			mCamera->Rotate(-0.05f, 0.f);
+			//mCamera->Rotate(-0.05f, 0.f);
 			glm::mat4 proj = mCamera->GetProjMatrix();
 			glm::mat4 view = mCamera->GetViewMatrix();
 			glm::mat4 model = glm::mat4(1.f);
@@ -166,7 +175,10 @@ namespace OpenGL
 
 	void Viewer::CursorCallback(GLFWwindow* window, double xpos, double ypos)
 	{
-
+		if(!mMouseLeftDown && !mMouseMiddleDown && mMouseRightDown)
+			MouseDrag(xpos, ypos);
+		mMouseX = xpos;
+		mMouseY = ypos;
 	}
 
 	void Viewer::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
@@ -176,8 +188,37 @@ namespace OpenGL
 
 	void Viewer::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 	{
-
+		if (button == MOUSE_LEFT)
+		{
+			if (action == MOUSE_BUTTON_PRESS)
+				mMouseLeftDown = true;
+			else
+				mMouseLeftDown = false;
+		}
+		else if (button == MOUSE_RIGHT)
+		{
+			if (action == MOUSE_BUTTON_PRESS)
+				mMouseRightDown = true;
+			else
+				mMouseRightDown = false;
+		}
+		else if (button == MOUSE_MIDDLE)
+		{
+			if (action == MOUSE_BUTTON_PRESS)
+				mMouseMiddleDown = true;
+			else
+				mMouseMiddleDown = false;
+		}
 	}
 
+
+	void Viewer::MouseDrag(float x, float y)
+	{
+		float dx = x - mMouseX;
+		float dy = y - mMouseY;
+		float dPhi = dx * (PI / mWidth);
+		float dTheta = dy * (PI / mHeight);
+		mCamera->Rotate(dPhi, -dTheta);
+	}
 
 }

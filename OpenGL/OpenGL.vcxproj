@@ -551,6 +551,7 @@
     <ClInclude Include="src\glm\vector_relational.hpp" />
     <ClInclude Include="src\GLOjbect.h" />
     <ClInclude Include="src\IndexBuffer.h" />
+    <ClInclude Include="src\Misc.h" />
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\stb_image\stb_image.h" />

@@ -1232,5 +1232,8 @@
     <ClInclude Include="src\Def.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Misc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

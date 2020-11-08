@@ -23,6 +23,11 @@ namespace OpenGL
 		static float mDeltaTime, mLastFrame;
 		std::string mTitle;
 		std::vector<DrawableObject*> mMeshes;
+
+		static bool mMouseLeftDown;
+		static bool mMouseRightDown;
+		static bool mMouseMiddleDown;
+		static float mMouseX, mMouseY;
 	public:
 		Viewer(const std::string &title);
 		~Viewer();
@@ -42,5 +47,7 @@ namespace OpenGL
 		static void CursorCallback(GLFWwindow* window, double xpos, double ypos);
 		static void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 		static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+
+		static void MouseDrag(float x, float y);
 	};
 }
