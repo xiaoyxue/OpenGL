@@ -5,9 +5,6 @@ namespace OpenGL
 {
 	class VertexBuffer : public GLObject
 	{
-	private:
-		unsigned int mHandle;
-
 	public:
 		VertexBuffer(const void* data, unsigned int size);
 		~VertexBuffer();
