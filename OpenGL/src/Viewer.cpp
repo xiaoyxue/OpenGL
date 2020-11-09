@@ -113,16 +113,16 @@ namespace OpenGL
 		mpRenderer->Clear();
 		for (auto it : mMeshes)
 		{
-			mpShader->Bind();
+			//mpShader->Bind();
 			//mCamera->Rotate(-0.05f, 0.f);
-			glm::mat4 proj = mpRenderer->GetCamera()->GetProjMatrix();
-			glm::mat4 view = mpRenderer->GetCamera()->GetViewMatrix();
-			glm::mat4 model = glm::mat4(1.f);
+			//glm::mat4 proj = mpRenderer->GetCamera()->GetProjMatrix();
+			//glm::mat4 view = mpRenderer->GetCamera()->GetViewMatrix();
+			//glm::mat4 model = glm::mat4(1.f);
 			//model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
-			mpShader->SetUniformMat4f("u_Model", model);
-			mpShader->SetUniformMat4f("u_View", view);
-			mpShader->SetUniformMat4f("u_Proj", proj);
-			mpShader->UnBind();
+			//mpShader->SetUniformMat4f("u_Model", model);
+			//mpShader->SetUniformMat4f("u_View", view);
+			//mpShader->SetUniformMat4f("u_Proj", proj);
+			//mpShader->UnBind();
 			it->Draw(*mpRenderer, *mpShader);
 		}
 

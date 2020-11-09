@@ -7,15 +7,29 @@
 
 namespace OpenGL
 {
-	Shader::Shader(const std::string& filepath) : mFilePath(filepath), GLObject(0)
+	Shader::Shader(const std::string& filepath) : mFilePath(filepath), GLObject(-1)
 	{
 		ShaderProgramSource source = ParseShader(filepath);
 		mHandle = CreateShader(source.VertexSource, source.FragmentSource);
 	}
 
+	Shader::Shader(): GLObject(-1)
+	{
+
+	}
+
+
+
 	Shader::~Shader()
 	{
 		GLCall(glDeleteProgram(mHandle));
+	}
+
+	void Shader::AttachProgram(const std::string& filepath)
+	{
+		mFilePath = filepath;
+		ShaderProgramSource source = ParseShader(filepath);
+		mHandle = CreateShader(source.VertexSource, source.FragmentSource);
 	}
 
 	void Shader::Bind() const

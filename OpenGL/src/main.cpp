@@ -127,6 +127,7 @@ int main(void)
 	GLMesh mesh;
 	mesh.AddMesh("C:\\Users\\xiaoyxue\\Desktop\\Graphics\\mesh\\cube\\cube.obj");
 	mesh.AddTexture(&texture);
+	mesh.SetShader(shader);
 	viewer.Add(&mesh);
 	viewer.Start();
 

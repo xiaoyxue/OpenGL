@@ -6,6 +6,7 @@
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "VertexBufferLayout.h"
+#include "Camera.h"
 
 namespace OpenGL
 {
@@ -21,11 +22,17 @@ namespace OpenGL
 
 	}
 
-	void GLMesh::Draw(const Renderer& renderer, const Shader& shader) const
+	void GLMesh::Draw(const Renderer& renderer, const Shader& shader)
 	{
 		renderer.EnableDepthTest();
-
-		renderer.Draw(*mpVAO, *mpIBO, shader);
+		mShader.Bind();
+		glm::mat4 proj = renderer.GetCamera()->GetProjMatrix();
+		glm::mat4 view = renderer.GetCamera()->GetViewMatrix();
+		glm::mat4 model = glm::mat4(1.f);
+		mShader.SetUniformMat4f("u_Model", model);
+		mShader.SetUniformMat4f("u_View", view);
+		mShader.SetUniformMat4f("u_Proj", proj);
+		renderer.Draw(*mpVAO, *mpIBO, mShader);
 		renderer.DisableDepthTest();
 	}
 
@@ -42,10 +49,16 @@ namespace OpenGL
 		VertexBufferLayout layout;
 		layout.Push<float>(3);
 		layout.Push<float>(2);
+		layout.Push<float>(3);
 		mpVAO->AddBuffer(*mpVBO, layout);
 		mpVAO->UnBind();
 		mpVBO->UnBind();
 		mpIBO->UnBind();
+	}
+
+	void GLMesh::SetShader(const Shader& shader)
+	{
+		mShader = shader;
 	}
 
 }

@@ -18,9 +18,11 @@ namespace OpenGL
 		std::string mFilePath;
 		std::unordered_map<std::string, int> mLocationCache;
 	public:
+		Shader();
 		Shader(const std::string& filepath);
 		~Shader();
 
+		void AttachProgram(const std::string& filepath);
 		void Bind() const;
 		void UnBind() const;
 		void SetUniform1i(const std::string& name, int v0);

@@ -19,7 +19,7 @@ namespace OpenGL
 	{
 	public:
 		virtual ~DrawableObject() = default;
-		virtual void Draw(const Renderer& renderer, const Shader& shader) const = 0;
+		virtual void Draw(const Renderer& renderer, const Shader& shader) = 0;
 	};
 
 }

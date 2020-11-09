@@ -2,6 +2,7 @@
 #include "GLOjbect.h"
 #include <iostream>
 #include <vector>
+#include "Shader.h"
 
 namespace OpenGL 
 {
@@ -23,15 +24,13 @@ namespace OpenGL
 		std::unique_ptr<VertexArray> mpVAO;
 		std::vector<Texture*> mTextures;
 		std::unique_ptr<ObjMesh> mpObjMesh;
+		Shader mShader;
 	public:
 		GLMesh();
 		virtual ~GLMesh();
-		void Draw(const Renderer& renderer, const Shader &shader) const override;
-		//void SetVBO(VertexBuffer* vbo) { mpVBO = vbo; }
-		//void SetIBO(IndexBuffer* ibo) { mpIBO = ibo; }
-		//void SetVAO(VertexArray* vao) { mpVAO = vao; }
+		void Draw(const Renderer& renderer, const Shader &shader) override;
 		void AddTexture(Texture* texture) { mTextures.push_back(texture); }
 		void AddMesh(const std::string& filename);
-		
+		void SetShader(const Shader &shader);
 	};
 }

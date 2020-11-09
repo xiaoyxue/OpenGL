@@ -28,6 +28,9 @@ namespace OpenGL
 
 		bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, inputfile.c_str());
 
+		//Add default material
+		materials.push_back(tinyobj::material_t());
+
 		if (!warn.empty()) {
 			std::cout << warn << std::endl;
 		}
@@ -67,13 +70,23 @@ namespace OpenGL
 					// tinyobj::real_t red = attrib.colors[3*idx.vertex_index+0];
 					// tinyobj::real_t green = attrib.colors[3*idx.vertex_index+1];
 					// tinyobj::real_t blue = attrib.colors[3*idx.vertex_index+2];
-					
+					float normal_factor = 0.2;
+					float diffuse_factor = 1 - normal_factor;
+					float diffuse[3];
+					for (int i = 0; i < 3; ++i)
+						diffuse[i] = materials[materials.size() - 1].diffuse[i];
+					float c[3] = { nx * normal_factor + diffuse[0] * diffuse_factor,
+								   ny * normal_factor + diffuse[1] * diffuse_factor,
+								   nz * normal_factor + diffuse[2] * diffuse_factor };
 					//OpenGL Data
 					mGLVertices.push_back(vx);
 					mGLVertices.push_back(vy);
 					mGLVertices.push_back(vz);
 					mGLVertices.push_back(tx);
 					mGLVertices.push_back(ty);
+					mGLVertices.push_back(c[0] * 0.5 + 0.5);
+					mGLVertices.push_back(c[1] * 0.5 + 0.5);
+					mGLVertices.push_back(c[2] * 0.5 + 0.5);
 					mGLIndices.push_back(nVertices);
 					mVertices.push_back(vec3(vx, vy, vz));
 					mTextureCoords.push_back(vec2(tx, ty));
