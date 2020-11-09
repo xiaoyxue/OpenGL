@@ -88,8 +88,13 @@ namespace OpenGL
 		void Rotate(float dPhi, float dTheta) 
 		{
 			mPhi += dPhi;
-			mTheta = glm::clamp(mTheta + dTheta, 0.f, PI);
+			mTheta = glm::clamp(mTheta + dTheta, 0.f, PI - EPS_F);
 			float sinTheta = std::sin(mTheta);
+			if (sinTheta == 0)
+			{
+				mTheta += EPS_F;
+				sinTheta = std::sin(mTheta);
+			}
 			float x = mR * sinTheta * std::cos(mPhi);
 			float y = mR * std::cos(mTheta);
 			float z = mR * sinTheta * std::sin(mPhi);
@@ -106,6 +111,11 @@ namespace OpenGL
 		void ComputeViewMatrix()
 		{
 			float sinTheta = std::sin(mTheta);
+			if (sinTheta == 0)
+			{
+				mTheta += EPS_F;
+				sinTheta = std::sin(mTheta);
+			}
 			float x = mR * sinTheta * std::cos(mPhi);
 			float y = mR * std::cos(mTheta);
 			float z = mR * sinTheta * std::sin(mPhi);
@@ -115,7 +125,7 @@ namespace OpenGL
 
 		void ComputeSphereCoord()
 		{
-			mR = (mPosition - mLookAt).length();
+			mR = float((mPosition - mLookAt).length());
 			mPhi = std::atan2(mPosition.z, mPosition.x);
 			mPhi = mPhi > 0 ? mPhi : 2.f * PI - mPhi;
 			mTheta = std::acos(mPosition.y / mR);

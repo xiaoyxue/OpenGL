@@ -13,6 +13,11 @@ namespace OpenGL
 		GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), data, GL_STATIC_DRAW));
 	}
 
+	IndexBuffer::IndexBuffer() : GLObject()
+	{
+
+	}
+
 	IndexBuffer::~IndexBuffer()
 	{
 		GLCall(glDeleteBuffers(1, &mHandle));
@@ -27,4 +32,14 @@ namespace OpenGL
 	{
 		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 	}
+
+	void IndexBuffer::SetData(const unsigned int* data, unsigned int count)
+	{
+		if(mHandle == -1)
+			GLCall(glGenBuffers(1, &mHandle));
+		mCount = count;
+		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mHandle));
+		GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), data, GL_STATIC_DRAW));
+	}
+
 }

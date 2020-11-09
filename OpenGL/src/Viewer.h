@@ -8,33 +8,26 @@
 namespace OpenGL 
 {
 	class Renderer;
-	class Camera;
 	class DrawableObject;
 	class Shader;
 
 	class Viewer
 	{
 	private:
-		GLFWwindow* mWindow;
-		static Renderer* mRenderer;
-		static Camera* mCamera;
-		static Shader* mShader;
-		static int mWidth, mHeight;
-		static float mDeltaTime, mLastFrame;
+		GLFWwindow* mpWindow;
 		std::string mTitle;
 		std::vector<DrawableObject*> mMeshes;
+		static Renderer* mpRenderer;
+		static Shader* mpShader;
+		static int mWidth, mHeight;
+		static float mDeltaTime, mLastFrame;
 
-		static bool mMouseLeftDown;
-		static bool mMouseRightDown;
-		static bool mMouseMiddleDown;
-		static float mMouseX, mMouseY;
 	public:
 		Viewer(const std::string &title);
 		~Viewer();
 		void Init();
 		void Start();
 		void SetRenderer(Renderer* renderer);
-		void SetCamera(Camera* camera);
 		void SetSize(int width, int height);
 		void SetShader(Shader* shader);
 		//TO REMOVE
@@ -48,6 +41,5 @@ namespace OpenGL
 		static void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 		static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 
-		static void MouseDrag(float x, float y);
 	};
 }

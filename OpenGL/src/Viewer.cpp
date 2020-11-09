@@ -7,20 +7,10 @@
 namespace OpenGL
 {
 
-	OpenGL::Renderer* Viewer::mRenderer = nullptr;
+	OpenGL::Renderer* Viewer::mpRenderer = nullptr;
 
-	OpenGL::Camera* Viewer::mCamera = nullptr;
-
-	OpenGL::Shader* Viewer::mShader = nullptr;
-
-	bool Viewer::mMouseLeftDown = false;
-
-	bool Viewer::mMouseMiddleDown = false;
+	OpenGL::Shader* Viewer::mpShader = nullptr;
 	
-	float Viewer::mMouseX, Viewer::mMouseY;
-
-	bool Viewer::mMouseRightDown = false;
-		
 	int Viewer::mWidth, Viewer::mHeight;
 
 	float Viewer::mDeltaTime, Viewer::mLastFrame;
@@ -33,7 +23,7 @@ namespace OpenGL
 
 	Viewer::~Viewer()
 	{
-		glfwDestroyWindow(mWindow);
+		glfwDestroyWindow(mpWindow);
 		glfwTerminate();
 	}
 
@@ -48,31 +38,31 @@ namespace OpenGL
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-		mWindow = glfwCreateWindow(mWidth, mHeight, mTitle.c_str(), NULL, NULL);
-		if (!mWindow)
+		mpWindow = glfwCreateWindow(mWidth, mHeight, mTitle.c_str(), NULL, NULL);
+		if (!mpWindow)
 		{
 			glfwTerminate();
 			exit(-1);
 		}
-		glfwMakeContextCurrent(mWindow);
+		glfwMakeContextCurrent(mpWindow);
 		glfwSwapInterval(1);
 
 		//Register callback functions
 		// framebuffer event callbacks
-		glfwSetFramebufferSizeCallback(mWindow, ResizeCallback);
+		glfwSetFramebufferSizeCallback(mpWindow, ResizeCallback);
 
 		// key event callbacks
-		glfwSetKeyCallback(mWindow, KeyCallback);
+		glfwSetKeyCallback(mpWindow, KeyCallback);
 
 		// cursor event callbacks
-		glfwSetCursorPosCallback(mWindow, CursorCallback);
+		glfwSetCursorPosCallback(mpWindow, CursorCallback);
 
 		// wheel event callbacks
-		glfwSetScrollCallback(mWindow, ScrollCallback);
+		glfwSetScrollCallback(mpWindow, ScrollCallback);
 
 		// mouse button callbacks
-		glfwSetInputMode(mWindow, GLFW_STICKY_MOUSE_BUTTONS, 1);
-		glfwSetMouseButtonCallback(mWindow, MouseButtonCallback);
+		glfwSetInputMode(mpWindow, GLFW_STICKY_MOUSE_BUTTONS, 1);
+		glfwSetMouseButtonCallback(mpWindow, MouseButtonCallback);
 
 		// initialize glew
 		if (glewInit() != GLEW_OK) 
@@ -81,13 +71,18 @@ namespace OpenGL
 			glfwTerminate();
 			exit(-1);
 		}
+
+		if (mpRenderer)
+		{
+			mpRenderer->Init();
+		}
 	}
 
 	void Viewer::Start()
 	{
-		while (!glfwWindowShouldClose(mWindow))
+		while (!glfwWindowShouldClose(mpWindow))
 		{
-			float currentFrame = glfwGetTime();
+			float currentFrame = float(glfwGetTime());
 			mDeltaTime = currentFrame - mLastFrame;
 			mLastFrame = currentFrame;
 			Draw();
@@ -97,46 +92,42 @@ namespace OpenGL
 
 	void Viewer::SetRenderer(Renderer* renderer)
 	{
-		mRenderer = renderer;
+		mpRenderer = renderer;
 	}
 
-	void Viewer::SetCamera(Camera* camera)
-	{
-		mCamera = camera;
-	}
 
 	void Viewer::SetSize(int width, int height)
 	{
 		mWidth = width;
 		mHeight = height;
-		mCamera->Resize(mWidth, mHeight);
+		mpRenderer->Resize(width, height);
 	}
 
 	void Viewer::SetShader(Shader* shader)
 	{
-		mShader = shader;
+		mpShader = shader;
 	}
 
 	void Viewer::Draw() const
 	{
-		mRenderer->Clear();
+		mpRenderer->Clear();
 		for (auto it : mMeshes)
 		{
-			mShader->Bind();
+			mpShader->Bind();
 			//mCamera->Rotate(-0.05f, 0.f);
-			glm::mat4 proj = mCamera->GetProjMatrix();
-			glm::mat4 view = mCamera->GetViewMatrix();
+			glm::mat4 proj = mpRenderer->GetCamera()->GetProjMatrix();
+			glm::mat4 view = mpRenderer->GetCamera()->GetViewMatrix();
 			glm::mat4 model = glm::mat4(1.f);
 			//model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
-			mShader->SetUniformMat4f("u_Model", model);
-			mShader->SetUniformMat4f("u_View", view);
-			mShader->SetUniformMat4f("u_Proj", proj);
-			mShader->UnBind();
-			it->Draw(*mRenderer, *mShader);
+			mpShader->SetUniformMat4f("u_Model", model);
+			mpShader->SetUniformMat4f("u_View", view);
+			mpShader->SetUniformMat4f("u_Proj", proj);
+			mpShader->UnBind();
+			it->Draw(*mpRenderer, *mpShader);
 		}
 
 		/* Swap front and back buffers */
-		glfwSwapBuffers(mWindow);
+		glfwSwapBuffers(mpWindow);
 
 		/* Poll for and process events */
 		glfwPollEvents();
@@ -154,18 +145,7 @@ namespace OpenGL
 				glfwSetWindowShouldClose(window, true);
 			}
 		}
-		if (key == GLFW_KEY_W) {
-			mCamera->MoveY(mDeltaTime);
-		}
-		else if (key == GLFW_KEY_S) {
-			mCamera->MoveY(-mDeltaTime);
-		}
-		else if (key == GLFW_KEY_A) {
-			mCamera->MoveX(-mDeltaTime);
-		}
-		else if (key == GLFW_KEY_D) {
-			mCamera->MoveX(mDeltaTime);
-		}
+		mpRenderer->KeyBoardEvent(key, scancode, action, mDeltaTime);
 	}
 
 	void Viewer::ResizeCallback(GLFWwindow* window, int width, int height)
@@ -175,10 +155,7 @@ namespace OpenGL
 
 	void Viewer::CursorCallback(GLFWwindow* window, double xpos, double ypos)
 	{
-		if(!mMouseLeftDown && !mMouseMiddleDown && mMouseRightDown)
-			MouseDrag(xpos, ypos);
-		mMouseX = xpos;
-		mMouseY = ypos;
+		mpRenderer->CursorEvent((float)xpos, (float)ypos);
 	}
 
 	void Viewer::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
@@ -188,37 +165,8 @@ namespace OpenGL
 
 	void Viewer::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 	{
-		if (button == MOUSE_LEFT)
-		{
-			if (action == MOUSE_BUTTON_PRESS)
-				mMouseLeftDown = true;
-			else
-				mMouseLeftDown = false;
-		}
-		else if (button == MOUSE_RIGHT)
-		{
-			if (action == MOUSE_BUTTON_PRESS)
-				mMouseRightDown = true;
-			else
-				mMouseRightDown = false;
-		}
-		else if (button == MOUSE_MIDDLE)
-		{
-			if (action == MOUSE_BUTTON_PRESS)
-				mMouseMiddleDown = true;
-			else
-				mMouseMiddleDown = false;
-		}
+		mpRenderer->MouseButtonEvent(button, action, mods);
 	}
 
-
-	void Viewer::MouseDrag(float x, float y)
-	{
-		float dx = x - mMouseX;
-		float dy = y - mMouseY;
-		float dPhi = dx * (PI / mWidth);
-		float dTheta = dy * (PI / mHeight);
-		mCamera->Rotate(dPhi, -dTheta);
-	}
 
 }

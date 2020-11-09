@@ -156,10 +156,12 @@
     <ClCompile Include="src\glm\detail\glm.cpp" />
     <ClCompile Include="src\IndexBuffer.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\ObjMesh.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\stb_image\stb_image.cpp" />
     <ClCompile Include="src\Texture.cpp" />
+    <ClCompile Include="src\tiny_obj_loader\tiny_obj_loader.cpp" />
     <ClCompile Include="src\VertexArray.cpp" />
     <ClCompile Include="src\VertexBuffer.cpp" />
     <ClCompile Include="src\Viewer.cpp" />
@@ -552,15 +554,17 @@
     <ClInclude Include="src\GLOjbect.h" />
     <ClInclude Include="src\IndexBuffer.h" />
     <ClInclude Include="src\Misc.h" />
+    <ClInclude Include="src\ObjMesh.h" />
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\stb_image\stb_image.h" />
     <ClInclude Include="src\Texture.h" />
+    <ClInclude Include="src\tiny_obj_loader\tiny_obj_loader.h" />
     <ClInclude Include="src\VertexArray.h" />
     <ClInclude Include="src\VertexBuffer.h" />
     <ClInclude Include="src\VertexBufferLayout.h" />
     <ClInclude Include="src\Viewer.h" />
-    <ClInclude Include="src\ViewPort.h" />
+    <ClInclude Include="src\Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -11,6 +11,7 @@
 #include "Camera.h"
 #include "Viewer.h"
 #include "GLMesh.h"
+#include <limits>
 
 using namespace OpenGL;
 
@@ -94,10 +95,10 @@ int main(void)
 		resolutionX,
 		resolutionY
 	);
+	renderer.SetCamera(&camera);
     Viewer viewer("Hello World!");
-	viewer.SetCamera(&camera);
+	viewer.SetRenderer(&renderer);
     viewer.SetSize(resolutionX, resolutionY);
-    viewer.SetRenderer(&renderer);
 	viewer.Init();
 
 	glm::vec3 cubePositions[] = {
@@ -113,17 +114,6 @@ int main(void)
 		glm::vec3(-1.3f,  1.0f, -1.5f)
 	};
 
-
-	VertexArray va;
-	VertexBuffer vb(positions, sizeof(positions));
-	VertexBufferLayout layout;
-	layout.Push<float>(3);
-	layout.Push<float>(2);
-
-	va.AddBuffer(vb, layout);
-
-	IndexBuffer ib(indices, 42);
-
 	Shader shader("res/shaders/Basic.shader");
 	shader.Bind();
 
@@ -133,18 +123,10 @@ int main(void)
 	texture.Bind(0);
 	shader.SetUniform1i("u_Texture", 0);
 
-	va.UnBind();
-	vb.UnBind();
-	ib.UnBind();
-	shader.UnBind();
-
 
 	GLMesh mesh;
-	mesh.SetVAO(&va);
-	mesh.SetIBO(&ib);
-	mesh.SetVBO(&vb);
+	mesh.AddMesh("C:\\Users\\xiaoyxue\\Desktop\\Graphics\\mesh\\cube\\cube.obj");
 	mesh.AddTexture(&texture);
-
 	viewer.Add(&mesh);
 	viewer.Start();
 
