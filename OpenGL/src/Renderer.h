@@ -28,6 +28,7 @@ namespace OpenGL
 		bool mMouseLeftDown;
 		bool mMouseRightDown;
 		bool mMouseMiddleDown;
+        bool mDrawWireFrame;
 		float mMouseX, mMouseY;
     public:
         Renderer();
@@ -38,6 +39,7 @@ namespace OpenGL
         void Clear() const;
         void EnableDepthTest() const;
         void DisableDepthTest() const;
+
         inline Camera* GetCamera() const { return mpCamera; }
 
         void MouseButtonEvent(int button, int action, int mods);

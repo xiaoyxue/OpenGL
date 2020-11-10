@@ -168,7 +168,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />
-    <None Include="res\shaders\Default.shader" />
+    <None Include="res\shaders\DefaultFace.shader" />
+    <None Include="res\shaders\DefaultLine.shader" />
     <None Include="src\glm\detail\func_common.inl" />
     <None Include="src\glm\detail\func_common_simd.inl" />
     <None Include="src\glm\detail\func_exponential.inl" />

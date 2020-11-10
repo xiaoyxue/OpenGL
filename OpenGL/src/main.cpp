@@ -114,20 +114,19 @@ int main(void)
 		glm::vec3(-1.3f,  1.0f, -1.5f)
 	};
 
-	Shader shader("res/shaders/Basic.shader");
-	shader.Bind();
-
-	viewer.SetShader(&shader);
-
+	std::shared_ptr<Shader> faceShader = std::make_shared<Shader>("res/shaders/DefaultFace.shader");
+	faceShader->Bind();
 	Texture texture("res/textures/texture1.png");
 	texture.Bind(0);
-	shader.SetUniform1i("u_Texture", 0);
+	faceShader->SetUniform1i("u_Texture", 0);
+	faceShader->UnBind();
 
-
+	std::shared_ptr<Shader> lineShader = std::make_shared<Shader>("res/shaders/DefaultLine.shader");
 	GLMesh mesh;
 	mesh.AddMesh("C:\\Users\\xiaoyxue\\Desktop\\Graphics\\mesh\\cube\\cube.obj");
 	mesh.AddTexture(&texture);
-	mesh.SetShader(shader);
+	mesh.AddShader("Face", faceShader);
+	mesh.AddShader("WireFrame", lineShader);
 	viewer.Add(&mesh);
 	viewer.Start();
 

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include "Shader.h"
+#include <unordered_map>
 
 namespace OpenGL 
 {
@@ -24,13 +25,16 @@ namespace OpenGL
 		std::unique_ptr<VertexArray> mpVAO;
 		std::vector<Texture*> mTextures;
 		std::unique_ptr<ObjMesh> mpObjMesh;
-		Shader mShader;
+		std::unordered_map<std::string, std::shared_ptr<Shader>> mShaders;
 	public:
 		GLMesh();
 		virtual ~GLMesh();
-		void Draw(const Renderer& renderer, const Shader &shader) override;
+		
+		void DrawFace(const Renderer& renderer) override;
+		void DrawWireFrame(const Renderer& renderer) override;
+
 		void AddTexture(Texture* texture) { mTextures.push_back(texture); }
 		void AddMesh(const std::string& filename);
-		void SetShader(const Shader &shader);
+		void AddShader(const std::string& shaderName, std::shared_ptr<Shader> shader);
 	};
 }

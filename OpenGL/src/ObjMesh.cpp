@@ -25,6 +25,7 @@ namespace OpenGL
 		std::string err;
 
 		mFileName = inputfile;
+		float lineColor[3] = { 0.f, 0.f, 0.3f };
 
 		bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, inputfile.c_str());
 
@@ -70,7 +71,7 @@ namespace OpenGL
 					// tinyobj::real_t red = attrib.colors[3*idx.vertex_index+0];
 					// tinyobj::real_t green = attrib.colors[3*idx.vertex_index+1];
 					// tinyobj::real_t blue = attrib.colors[3*idx.vertex_index+2];
-					float normal_factor = 0.2;
+					float normal_factor = 0.2f;
 					float diffuse_factor = 1 - normal_factor;
 					float diffuse[3];
 					for (int i = 0; i < 3; ++i)
@@ -78,6 +79,14 @@ namespace OpenGL
 					float c[3] = { nx * normal_factor + diffuse[0] * diffuse_factor,
 								   ny * normal_factor + diffuse[1] * diffuse_factor,
 								   nz * normal_factor + diffuse[2] * diffuse_factor };
+					float len2 = c[0] * c[0] + c[1] * c[1] + c[2] * c[2];
+					if(len2 > 0.f)
+					{
+						float len = std::sqrt(len2);
+						c[0] /= len;
+						c[1] /= len;
+						c[2] /= len;
+					}
 					//OpenGL Data
 					mGLVertices.push_back(vx);
 					mGLVertices.push_back(vy);
@@ -87,6 +96,9 @@ namespace OpenGL
 					mGLVertices.push_back(c[0] * 0.5 + 0.5);
 					mGLVertices.push_back(c[1] * 0.5 + 0.5);
 					mGLVertices.push_back(c[2] * 0.5 + 0.5);
+					mGLVertices.push_back(lineColor[0]);
+					mGLVertices.push_back(lineColor[1]);
+					mGLVertices.push_back(lineColor[2]);
 					mGLIndices.push_back(nVertices);
 					mVertices.push_back(vec3(vx, vy, vz));
 					mTextureCoords.push_back(vec2(tx, ty));

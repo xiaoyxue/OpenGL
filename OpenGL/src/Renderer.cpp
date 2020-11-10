@@ -38,11 +38,11 @@ namespace OpenGL
 		mMouseX = false;
 		mMouseY = false;
 		mpCamera = nullptr;
+		mDrawWireFrame = true;
 	}
 
 	void Renderer::Init()
 	{
-
 		GLCall(glEnable(GL_LINE_SMOOTH));
 		GLCall(glEnable(GL_POLYGON_SMOOTH));
 		GLCall(glHint(GL_LINE_SMOOTH_HINT, GL_NICEST));
@@ -61,6 +61,7 @@ namespace OpenGL
 		shader.Bind();
 		va.Bind();
 		ib.Bind();
+
 		GLCall(glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr));
 	}
 

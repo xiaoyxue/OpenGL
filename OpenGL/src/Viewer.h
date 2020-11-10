@@ -18,7 +18,6 @@ namespace OpenGL
 		std::string mTitle;
 		std::vector<DrawableObject*> mMeshes;
 		static Renderer* mpRenderer;
-		static Shader* mpShader;
 		static int mWidth, mHeight;
 		static float mDeltaTime, mLastFrame;
 
@@ -29,7 +28,6 @@ namespace OpenGL
 		void Start();
 		void SetRenderer(Renderer* renderer);
 		void SetSize(int width, int height);
-		void SetShader(Shader* shader);
 		//TO REMOVE
 		void Add(DrawableObject* obj) { mMeshes.push_back(obj); }
 		void Draw() const;

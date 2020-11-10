@@ -22,20 +22,42 @@ namespace OpenGL
 
 	}
 
-	void GLMesh::Draw(const Renderer& renderer, const Shader& shader)
+	void GLMesh::DrawFace(const Renderer& renderer)
 	{
+		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
+		GLCall(glEnable(GL_POLYGON_OFFSET_FILL));
+		GLCall(glPolygonOffset(1.0, 1.0));
+		auto& shader = mShaders["Face"];
 		renderer.EnableDepthTest();
-		mShader.Bind();
+		shader->Bind();
 		glm::mat4 proj = renderer.GetCamera()->GetProjMatrix();
 		glm::mat4 view = renderer.GetCamera()->GetViewMatrix();
 		glm::mat4 model = glm::mat4(1.f);
-		mShader.SetUniformMat4f("u_Model", model);
-		mShader.SetUniformMat4f("u_View", view);
-		mShader.SetUniformMat4f("u_Proj", proj);
-		renderer.Draw(*mpVAO, *mpIBO, mShader);
+		shader->SetUniformMat4f("u_Model", model);
+		shader->SetUniformMat4f("u_View", view);
+		shader->SetUniformMat4f("u_Proj", proj);
+		renderer.Draw(*mpVAO, *mpIBO, *shader);
 		renderer.DisableDepthTest();
 	}
 
+
+	void GLMesh::DrawWireFrame(const Renderer& renderer)
+	{
+		GLCall(glDisable(GL_POLYGON_OFFSET_FILL));
+		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
+		auto& shader = mShaders["WireFrame"];
+		renderer.EnableDepthTest();
+		shader->Bind();
+		glm::mat4 proj = renderer.GetCamera()->GetProjMatrix();
+		glm::mat4 view = renderer.GetCamera()->GetViewMatrix();
+		glm::mat4 model = glm::mat4(1.f);
+		shader->SetUniformMat4f("u_Model", model);
+		shader->SetUniformMat4f("u_View", view);
+		shader->SetUniformMat4f("u_Proj", proj);
+		shader->SetUniform4f("u_LineColor", 0.3f, 0.3f, 0.3f, 0.0f);
+		renderer.Draw(*mpVAO, *mpIBO, *shader);
+		renderer.DisableDepthTest();
+	}
 
 	void GLMesh::AddMesh(const std::string& filename)
 	{
@@ -50,15 +72,16 @@ namespace OpenGL
 		layout.Push<float>(3);
 		layout.Push<float>(2);
 		layout.Push<float>(3);
+		layout.Push<float>(3);
 		mpVAO->AddBuffer(*mpVBO, layout);
 		mpVAO->UnBind();
 		mpVBO->UnBind();
 		mpIBO->UnBind();
 	}
 
-	void GLMesh::SetShader(const Shader& shader)
+	void GLMesh::AddShader(const std::string &shaderName, std::shared_ptr<Shader> shader)
 	{
-		mShader = shader;
+		mShaders[shaderName] = shader;
 	}
 
 }
