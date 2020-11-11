@@ -152,19 +152,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\GLMesh.cpp" />
     <ClCompile Include="src\glm\detail\glm.cpp" />
     <ClCompile Include="src\IndexBuffer.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\ObjMesh.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\stb_image\stb_image.cpp" />
     <ClCompile Include="src\Texture.cpp" />
+    <ClCompile Include="src\tiny_obj_loader\tiny_obj_loader.cpp" />
     <ClCompile Include="src\VertexArray.cpp" />
     <ClCompile Include="src\VertexBuffer.cpp" />
     <ClCompile Include="src\Viewer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />
+    <None Include="res\shaders\DefaultFace.shader" />
+    <None Include="res\shaders\DefaultLine.shader" />
     <None Include="src\glm\detail\func_common.inl" />
     <None Include="src\glm\detail\func_common_simd.inl" />
     <None Include="src\glm\detail\func_exponential.inl" />
@@ -302,6 +307,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\Def.h" />
+    <ClInclude Include="src\GLMesh.h" />
     <ClInclude Include="src\glm\common.hpp" />
     <ClInclude Include="src\glm\detail\compute_common.hpp" />
     <ClInclude Include="src\glm\detail\compute_vector_relational.hpp" />
@@ -548,14 +555,18 @@
     <ClInclude Include="src\glm\vector_relational.hpp" />
     <ClInclude Include="src\GLOjbect.h" />
     <ClInclude Include="src\IndexBuffer.h" />
+    <ClInclude Include="src\Misc.h" />
+    <ClInclude Include="src\ObjMesh.h" />
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\stb_image\stb_image.h" />
     <ClInclude Include="src\Texture.h" />
+    <ClInclude Include="src\tiny_obj_loader\tiny_obj_loader.h" />
     <ClInclude Include="src\VertexArray.h" />
     <ClInclude Include="src\VertexBuffer.h" />
     <ClInclude Include="src\VertexBufferLayout.h" />
     <ClInclude Include="src\Viewer.h" />
+    <ClInclude Include="src\Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
