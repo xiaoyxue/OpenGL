@@ -28,10 +28,10 @@ namespace OpenGL
 		void Start();
 		void SetRenderer(Renderer* renderer);
 		void SetSize(int width, int height);
-		//TO REMOVE
 		void Add(DrawableObject* obj) { mMeshes.push_back(obj); }
-		void Draw() const;
 
+	private:
+		void Draw() const;
 		static void ErrorCallback(int error, const char* description);
 		static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 		static void ResizeCallback(GLFWwindow* window, int width, int height);
