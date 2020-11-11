@@ -1,11 +1,11 @@
 #include "Renderer.h"
-#include <iostream>
 #include "VertexArray.h"
 #include "IndexBuffer.h"
 #include "Shader.h"
 #include "Misc.h"
 #include "Camera.h"
 #include "GLOjbect.h"
+#include <iostream>
 
 namespace OpenGL
 {

@@ -1,6 +1,7 @@
 #pragma once
-#include <vector>
+
 #include <GL/glew.h>
+#include <vector>
 #include "GLOjbect.h"
 
 namespace OpenGL

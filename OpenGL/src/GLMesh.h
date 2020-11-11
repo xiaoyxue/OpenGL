@@ -1,8 +1,8 @@
 #pragma once
 #include "GLOjbect.h"
+#include "Shader.h"
 #include <iostream>
 #include <vector>
-#include "Shader.h"
 #include <unordered_map>
 
 namespace OpenGL 
