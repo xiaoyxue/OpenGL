@@ -25,13 +25,13 @@ namespace OpenGL
 		std::unique_ptr<VertexArray> mpVAO;
 		std::vector<Texture*> mTextures;
 		std::unique_ptr<ObjMesh> mpObjMesh;
-		std::unordered_map<std::string, std::shared_ptr<Shader>> mShaders;
+		mutable std::unordered_map<std::string, std::shared_ptr<Shader>> mShaders;
 	public:
 		GLMesh();
 		virtual ~GLMesh();
 		
-		void DrawFace(const Renderer& renderer) override;
-		void DrawWireFrame(const Renderer& renderer) override;
+		void DrawFace(const Renderer& renderer) const override;
+		void DrawWireFrame(const Renderer& renderer) const override;
 
 		void AddTexture(Texture* texture) { mTextures.push_back(texture); }
 		void AddMesh(const std::string& filename);

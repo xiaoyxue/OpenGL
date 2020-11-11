@@ -14,7 +14,7 @@ namespace OpenGL
 	float Viewer::mDeltaTime, Viewer::mLastFrame;
 
 	Viewer::Viewer(const std::string& title)
-		: mTitle(title)
+		: mTitle(title), mpWindow(nullptr)
 	{
 
 	}
@@ -62,10 +62,10 @@ namespace OpenGL
 		glfwSetInputMode(mpWindow, GLFW_STICKY_MOUSE_BUTTONS, 1);
 		glfwSetMouseButtonCallback(mpWindow, MouseButtonCallback);
 
-		// initialize glew
-		if (glewInit() != GLEW_OK) 
+		// initialize renderer
+		if (Renderer::IsReady() != RENDERER_OK) 
 		{
-			std::cout << "Error: could not initialize GLEW!" << std::endl;
+			std::cout << "Error: could not initialize renderer!" << std::endl;
 			glfwTerminate();
 			exit(-1);
 		}
@@ -98,7 +98,7 @@ namespace OpenGL
 	{
 		mWidth = width;
 		mHeight = height;
-		mpRenderer->Resize(width, height);
+		mpRenderer->SetSize(width, height);
 	}
 
 	void Viewer::Draw() const
@@ -106,8 +106,10 @@ namespace OpenGL
 		mpRenderer->Clear();
 		for (auto it : mMeshes)
 		{
-			it->DrawFace(*mpRenderer);
-			it->DrawWireFrame(*mpRenderer);
+			//it->DrawFace(*mpRenderer);
+			//it->DrawWireFrame(*mpRenderer);
+			mpRenderer->DrawFace(*it);
+			mpRenderer->DrawWireFrame(*it);
 		}
 
 		/* Swap front and back buffers */
@@ -134,7 +136,11 @@ namespace OpenGL
 
 	void Viewer::ResizeCallback(GLFWwindow* window, int width, int height)
 	{
-
+		int w, h;
+		glfwGetFramebufferSize(window, &w, &h);
+		mWidth = w;
+		mHeight = h;
+		mpRenderer->Resize(mWidth, mHeight);
 	}
 
 	void Viewer::CursorCallback(GLFWwindow* window, double xpos, double ypos)

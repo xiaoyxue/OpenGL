@@ -12,6 +12,7 @@ namespace OpenGL
 	public:
 		GLObject() : mHandle(-1) {}
 		GLObject(unsigned int id) : mHandle(id) {}
+		virtual ~GLObject() = default;
 		inline unsigned int GetHandle() const { return mHandle; }
 	};
 
@@ -19,8 +20,8 @@ namespace OpenGL
 	{
 	public:
 		virtual ~DrawableObject() = default;
-		virtual void DrawFace(const Renderer& renderer) {}
-		virtual void DrawWireFrame(const Renderer& renderer) {}
+		virtual void DrawFace(const Renderer& renderer) const {}
+		virtual void DrawWireFrame(const Renderer& renderer) const {}
 	};
 
 }

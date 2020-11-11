@@ -5,6 +5,7 @@
 #include "Shader.h"
 #include "Misc.h"
 #include "Camera.h"
+#include "GLOjbect.h"
 
 namespace OpenGL
 {
@@ -53,7 +54,14 @@ namespace OpenGL
 	{
 		mWidth = width;
 		mHeight = height;
+		GLCall(glViewport(0, 0, mWidth, mHeight));
 		mpCamera->Resize(mWidth, mHeight);
+	}
+
+	void Renderer::SetSize(int width, int height)
+	{
+		mWidth = width;
+		mHeight = height;
 	}
 
 	void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const
@@ -65,7 +73,22 @@ namespace OpenGL
 		GLCall(glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr));
 	}
 
-	void Renderer::SetCamera(Camera *camera)
+	void Renderer::DrawFace(const DrawableObject& object)
+	{
+		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
+		GLCall(glEnable(GL_POLYGON_OFFSET_FILL));
+		GLCall(glPolygonOffset(1.0, 1.0));
+		object.DrawFace(*this);
+	}
+
+	void Renderer::DrawWireFrame(const DrawableObject& object)
+	{
+		GLCall(glDisable(GL_POLYGON_OFFSET_FILL));
+		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
+		object.DrawWireFrame(*this);
+	}
+
+	void Renderer::SetCamera(Camera* camera)
 	{
 		mpCamera = camera;
 	}
@@ -128,14 +151,26 @@ namespace OpenGL
 
 	void Renderer::CursorEvent(float x, float y)
 	{
-		if (!mMouseLeftDown && !mMouseMiddleDown && mMouseRightDown)
+		if (mMouseLeftDown && !mMouseMiddleDown && !mMouseRightDown)
+			MouseLeftDrag(x, y);
+		else if (!mMouseLeftDown && !mMouseMiddleDown && mMouseRightDown)
 			MouseRightDrag(x, y);
+		else if (!mMouseLeftDown && mMouseMiddleDown && !mMouseRightDown)
+			MouseMiddleDrag(x, y);
 
 		mMouseX = x;
 		mMouseY = y;
 	}
 
-	void Renderer::MouseRightDrag(float x, float y)
+	unsigned int Renderer::IsReady()
+	{
+		GLenum status =  glewInit(); //Init glew
+		if(status != GLEW_OK)
+			std::cout << "Error: could not initialize GLEW!" << std::endl;
+		return status;
+	}
+
+	void Renderer::MouseLeftDrag(float x, float y)
 	{
 		float dx = x - mMouseX;
 		float dy = y - mMouseY;
@@ -144,9 +179,14 @@ namespace OpenGL
 		mpCamera->Rotate(dPhi, -dTheta);
 	}
 
-	void Renderer::MouseLegtDrag(float x, float y)
+	void Renderer::MouseMiddleDrag(float x, float y)
 	{
+		mpCamera->Move(-(x - mMouseX) / float(mWidth), (y - mMouseY) / float(mHeight));
+	}
 
+	void Renderer::MouseRightDrag(float x, float y)
+	{
+		mpCamera->Scale((y - mMouseY) / float(mHeight));
 	}
 
 }

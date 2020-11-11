@@ -16,4 +16,6 @@ namespace OpenGL
 
 #define DEFAULT_RESOLUTION_X			1024
 #define DEFAULT_RESOLUTION_Y			768
+
+#define RENDERER_OK						0
 }

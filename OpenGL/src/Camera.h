@@ -4,6 +4,7 @@
 #include "glm/gtx/string_cast.hpp"
 #include "Def.h"
 #include <iostream>
+#include <algorithm>
 
 namespace OpenGL
 {
@@ -22,7 +23,8 @@ namespace OpenGL
 		mat4 mViewMatrix;
 		mat4 mProjMatrix;
 
-		float mMoveSpeed;
+		float mMoveSpeed, mScaleFactor;
+		float mMaxR, mMinR;
 	public:
 		void Init(
 			const vec3& position,
@@ -47,13 +49,12 @@ namespace OpenGL
 			mUp = up;
 
 			mMoveSpeed = 2.5f;
+			mScaleFactor = 2.0f;
+			mMinR = 0.001f;
+			mMaxR = 100000.f;
 
-			mCz = glm::normalize(mPosition - mLookAt); // -1 * dir in raytracer
-			mCx = glm::normalize(glm::cross(mUp, mCz));
-			mCy = glm::cross(mCz, mCx);
-			
 			ComputeSphereCoord();
-
+			ComputePosition();
 			ComputeViewMatrix();
 			ComputeProjMatrix();
 		}
@@ -71,17 +72,34 @@ namespace OpenGL
 			ComputeProjMatrix();
 		}
 
-		void MoveX(float scale)
+		void Scale(float d)
 		{
-			mPosition = mPosition + scale * mMoveSpeed * mCx;
-			ComputeSphereCoord();
+			mR = std::min(mMaxR, std::max(mMinR, mR + d * mScaleFactor));
+			ComputePosition();
 			ComputeViewMatrix();
 		}
 
-		void MoveY(float scale)
+		void Move(float dx, float dy)
 		{
-			mPosition = mPosition + scale * mMoveSpeed * mCy;
-			ComputeSphereCoord();
+			vec3 moveDir = dx * mMoveSpeed * mCx + dy * mMoveSpeed * mCy;
+			mPosition += moveDir;
+			mLookAt += moveDir;
+			ComputeViewMatrix();
+		}
+
+		void MoveX(float dx)
+		{
+			vec3 moveDir = dx * mMoveSpeed * mCx;
+			mPosition += moveDir;
+			mLookAt += moveDir;
+			ComputeViewMatrix();
+		}
+
+		void MoveY(float dy)
+		{
+			vec3 moveDir = dy * mMoveSpeed * mCy;
+			mPosition += moveDir;
+			mLookAt += moveDir;
 			ComputeViewMatrix();
 		}
 
@@ -89,17 +107,7 @@ namespace OpenGL
 		{
 			mPhi += dPhi;
 			mTheta = glm::clamp(mTheta + dTheta, 0.f, PI - EPS_F);
-			float sinTheta = std::sin(mTheta);
-			if (sinTheta == 0)
-			{
-				mTheta += EPS_F;
-				sinTheta = std::sin(mTheta);
-			}
-			float x = mR * sinTheta * std::cos(mPhi);
-			float y = mR * std::cos(mTheta);
-			float z = mR * sinTheta * std::sin(mPhi);
-			mPosition = vec3(x, y, z);
-			ComputeDirction();
+			ComputePosition();
 			ComputeViewMatrix();
 		}
 
@@ -108,7 +116,8 @@ namespace OpenGL
 		inline mat4 GetProjMatrix() const { return mProjMatrix; }
 
 	private:
-		void ComputeViewMatrix()
+		
+		void ComputePosition()
 		{
 			float sinTheta = std::sin(mTheta);
 			if (sinTheta == 0)
@@ -116,11 +125,14 @@ namespace OpenGL
 				mTheta += EPS_F;
 				sinTheta = std::sin(mTheta);
 			}
-			float x = mR * sinTheta * std::cos(mPhi);
-			float y = mR * std::cos(mTheta);
-			float z = mR * sinTheta * std::sin(mPhi);
-			mPosition = vec3(x, y, z);
-			mViewMatrix = glm::lookAt(mPosition, mPosition + (-1.f) * mCz, mUp);
+			vec3 dirToCam(
+				mR * sinTheta * std::cos(mPhi),
+				mR * std::cos(mTheta),
+				mR * sinTheta * std::sin(mPhi));
+			mPosition = mLookAt + dirToCam;
+			mCz = glm::normalize(mPosition - mLookAt); // -1 * dir in raytracer
+			mCx = glm::normalize(glm::cross(mUp, mCz));
+			mCy = glm::cross(mCz, mCx);
 		}
 
 		void ComputeSphereCoord()
@@ -131,11 +143,9 @@ namespace OpenGL
 			mTheta = std::acos(mPosition.y / mR);
 		}
 
-		void ComputeDirction()
+		void ComputeViewMatrix()
 		{
-			mCz = glm::normalize(mPosition - mLookAt); // -1 * dir in raytracer
-			mCx = glm::normalize(glm::cross(mUp, mCz));
-			mCy = glm::cross(mCz, mCx);
+			mViewMatrix = glm::lookAt(mPosition, mLookAt, mUp);
 		}
 
 		void ComputeProjMatrix()

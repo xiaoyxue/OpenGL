@@ -22,12 +22,9 @@ namespace OpenGL
 
 	}
 
-	void GLMesh::DrawFace(const Renderer& renderer)
+	void GLMesh::DrawFace(const Renderer& renderer) const
 	{
-		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
-		GLCall(glEnable(GL_POLYGON_OFFSET_FILL));
-		GLCall(glPolygonOffset(1.0, 1.0));
-		auto& shader = mShaders["Face"];
+		auto shader = mShaders["Face"];
 		renderer.EnableDepthTest();
 		shader->Bind();
 		glm::mat4 proj = renderer.GetCamera()->GetProjMatrix();
@@ -41,11 +38,9 @@ namespace OpenGL
 	}
 
 
-	void GLMesh::DrawWireFrame(const Renderer& renderer)
+	void GLMesh::DrawWireFrame(const Renderer& renderer) const
 	{
-		GLCall(glDisable(GL_POLYGON_OFFSET_FILL));
-		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
-		auto& shader = mShaders["WireFrame"];
+		auto shader = mShaders["WireFrame"];
 		renderer.EnableDepthTest();
 		shader->Bind();
 		glm::mat4 proj = renderer.GetCamera()->GetProjMatrix();
