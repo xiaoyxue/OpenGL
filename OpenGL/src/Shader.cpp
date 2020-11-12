@@ -1,5 +1,6 @@
 #include "Shader.h"
 #include "Renderer.h"
+#include "math/Lingal.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -8,6 +9,16 @@
 
 namespace OpenGL
 {
+	void ConvertToGLMatrix(const Matrix4& mat, float* buf)
+	{
+		int idx = 0;
+		for (int i = 0; i < 4; i++) 
+		{
+			const Vector4& col = mat[i];
+			buf[idx++] = col[0]; buf[idx++] = col[1]; buf[idx++] = col[2]; buf[idx++] = col[3];
+		}
+	}
+
 	Shader::Shader(const std::string& filepath) : mFilePath(filepath), GLObject(-1)
 	{
 		ShaderProgramSource source = ParseShader(filepath);
@@ -18,8 +29,6 @@ namespace OpenGL
 	{
 
 	}
-
-
 
 	Shader::~Shader()
 	{
@@ -72,6 +81,13 @@ namespace OpenGL
 	void Shader::SetUniformMat4f(const std::string& name, const glm::mat4& mat)
 	{
 		GLCall(glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &mat[0][0]));
+	}
+
+	void Shader::SetUniformMat4f(const std::string& name, const Matrix4& mat)
+	{
+		float buf[16];
+		ConvertToGLMatrix(mat, buf);
+		GLCall(glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, buf));
 	}
 
 	unsigned int Shader::GetUniformLocation(const std::string& name)
