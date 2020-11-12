@@ -139,7 +139,7 @@ namespace OpenGL
 			//mCx = glm::normalize(glm::cross(mUp, mCz));
 			//mCy = glm::cross(mCz, mCx);
 
-			mCz = -(mPosition - mLookAt).Norm(); // -1 * dir in raytracer
+			mCz = (mPosition - mLookAt).Norm(); // -1 * dir in raytracer
 			mCx = Cross(mUp, mCz).Norm();
 			mCy = Cross(mCz, mCx);
 		}
