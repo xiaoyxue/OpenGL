@@ -11,7 +11,6 @@
 #include "Camera.h"
 #include "Viewer.h"
 #include "GLMesh.h"
-#include <limits>
 
 using namespace OpenGL;
 using namespace Math;

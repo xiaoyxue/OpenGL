@@ -115,7 +115,7 @@ namespace Math
 
 	Transform Transform::Perspective(real fovy, real aspect, real dis, real n, real f) {
 
-		real t = dis * std::tan(Radians(fovy) * 0.5);
+		real t = dis * std::tan(Radians(fovy) * 0.5f);
 		real r = t * aspect;
 		//NDC x in [-1, 1], y in [-1, 1], z in [-1, 1]
 		Matrix4 persp(dis / r, 0, 0, 0,

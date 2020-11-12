@@ -59,11 +59,11 @@ namespace Math
 			return Transform(t.mat.Transpose(), t.invMat.Transpose());
 		}
 
-		const Matrix4& GetMatrix() const {
+		FORCE_INLINE const Matrix4& GetMatrix() const {
 			return mat;
 		}
 
-		const Matrix4& GetInverseMatrix() const {
+		FORCE_INLINE const Matrix4& GetInverseMatrix() const {
 			return invMat;
 		}
 
