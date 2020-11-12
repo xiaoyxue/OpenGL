@@ -56,6 +56,7 @@ namespace OpenGL
         void MouseRightDrag(float x, float y);
         void MouseLeftDrag(float x, float y);
         void MouseMiddleDrag(float x, float y);
+        void MouseLeftRightDrag(float x, float y);
     };
 
 }

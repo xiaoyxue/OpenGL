@@ -44,9 +44,9 @@ namespace OpenGL
 
 	void Renderer::Init()
 	{
-		GLCall(glEnable(GL_LINE_SMOOTH));
+		//GLCall(glEnable(GL_LINE_SMOOTH));
+		//GLCall(glHint(GL_LINE_SMOOTH_HINT, GL_NICEST));
 		GLCall(glEnable(GL_POLYGON_SMOOTH));
-		GLCall(glHint(GL_LINE_SMOOTH_HINT, GL_NICEST));
 		GLCall(glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST));
 	}
 
@@ -157,6 +157,8 @@ namespace OpenGL
 			MouseRightDrag(x, y);
 		else if (!mMouseLeftDown && mMouseMiddleDown && !mMouseRightDown)
 			MouseMiddleDrag(x, y);
+		else if (mMouseLeftDown && !mMouseMiddleDown && mMouseRightDown)
+			MouseLeftRightDrag(x, y);
 
 		mMouseX = x;
 		mMouseY = y;
@@ -180,6 +182,11 @@ namespace OpenGL
 	}
 
 	void Renderer::MouseMiddleDrag(float x, float y)
+	{
+		mpCamera->Move(-(x - mMouseX) / float(mWidth), (y - mMouseY) / float(mHeight));
+	}
+
+	void Renderer::MouseLeftRightDrag(float x, float y)
 	{
 		mpCamera->Move(-(x - mMouseX) / float(mWidth), (y - mMouseY) / float(mHeight));
 	}
