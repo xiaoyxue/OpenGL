@@ -21,13 +21,6 @@ int main(void)
     Renderer renderer;
     int resolutionX = 1024, resolutionY = 768;
 	Camera camera;
-	//camera.Init(
-	//	glm::vec3(0, 0, 3),
-	//	glm::vec3(0, 0, 0),
-	//	glm::vec3(0, 1, 0),
-	//	resolutionX,
-	//	resolutionY
-	//);
 	camera.Init(
 		Vec3(0, 0, 3),
 		Vec3(0, 0, 0),

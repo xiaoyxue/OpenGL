@@ -80,32 +80,32 @@ namespace Math
 	Transform Transform::LookAt(const Vector3& pos, const Vector3& look, const Vector3& up) {
 		Matrix4 cameraToWorld;
 		// Initialize fourth column of viewing matrix
-		//cameraToWorld(0, 3) = pos.x;
-		//cameraToWorld(1, 3) = pos.y;
-		//cameraToWorld(2, 3) = pos.z;
-		//cameraToWorld(3, 3) = 1;
+		cameraToWorld(0, 3) = pos.x;
+		cameraToWorld(1, 3) = pos.y;
+		cameraToWorld(2, 3) = pos.z;
+		cameraToWorld(3, 3) = 1;
 
 		// Initialize first three columns of viewing matrix
 		Vector3 dir = (look - pos).Norm();
 
-		Vector3 right = Cross(up.Norm(), dir).Norm();
+		Vector3 right = Cross(up, dir).Norm();
 		Vector3 newUp = Cross(dir, right);
-		cameraToWorld(0, 0) = right.x;
-		cameraToWorld(1, 0) = right.y;
-		cameraToWorld(2, 0) = right.z;
+		cameraToWorld(0, 0) = -right.x;
+		cameraToWorld(1, 0) = -right.y;
+		cameraToWorld(2, 0) = -right.z;
 		cameraToWorld(3, 0) = 0.;
 		cameraToWorld(0, 1) = newUp.x;
 		cameraToWorld(1, 1) = newUp.y;
 		cameraToWorld(2, 1) = newUp.z;
 		cameraToWorld(3, 1) = 0.;
-		cameraToWorld(0, 2) = -dir.x;
-		cameraToWorld(1, 2) = -dir.y;
-		cameraToWorld(2, 2) = -dir.z;
+		cameraToWorld(0, 2) = dir.x;
+		cameraToWorld(1, 2) = dir.y;
+		cameraToWorld(2, 2) = dir.z;
 		cameraToWorld(3, 2) = 0.;
-		cameraToWorld(0, 3) = -Dot(right, pos);
-		cameraToWorld(1, 3) = -Dot(newUp, pos);
-		cameraToWorld(2, 3) = Dot(dir, pos);
-		cameraToWorld(3, 3) = 1;
+		//cameraToWorld(0, 3) = -Dot(right, pos);
+		//cameraToWorld(1, 3) = -Dot(newUp, pos);
+		//cameraToWorld(2, 3) = Dot(dir, pos);
+		//cameraToWorld(3, 3) = 1;
 		return Transform(Inverse(cameraToWorld), cameraToWorld);
 	}
 
@@ -118,14 +118,10 @@ namespace Math
 		real t = dis * std::tan(Radians(fovy) * 0.5);
 		real r = t * aspect;
 		//NDC x in [-1, 1], y in [-1, 1], z in [-1, 1]
-		//Matrix4 persp(dis / r, 0, 0, 0,
-		//	0, dis / t, 0, 0,
-		//	0, 0, (f + n) / (f - n), -2 * f * n / (f - n),
-		//	0, 0, 1, 0);
 		Matrix4 persp(dis / r, 0, 0, 0,
 			0, dis / t, 0, 0,
-			0, 0, -(f + n) / (f - n), -1,
-			0, 0, -2 * f * n / (f - n), 0);
+			0, 0, (f + n) / (f - n), -2 * f * n / (f - n),
+			0, 0, 1, 0);
 
 		//NDC x in [-1, 1], y in [-1, 1], z in [0, 1]
 		//We use unstandardized NDC since z in [0, 1] is more natural

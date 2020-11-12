@@ -27,9 +27,6 @@ namespace OpenGL
 		auto shader = mShaders["Face"];
 		renderer.EnableDepthTest();
 		shader->Bind();
-		//glm::mat4 proj = renderer.GetCamera()->GetProjMatrix();
-		//glm::mat4 view = renderer.GetCamera()->GetViewMatrix();
-		//glm::mat4 model = glm::mat4(1.f);
 		Matrix4 proj = renderer.GetCamera()->GetProjMatrix();
 		Matrix4 view = renderer.GetCamera()->GetViewMatrix();
 		Matrix4 model = Matrix4(1.f);
@@ -46,9 +43,6 @@ namespace OpenGL
 		auto shader = mShaders["WireFrame"];
 		renderer.EnableDepthTest();
 		shader->Bind();
-		//glm::mat4 proj = renderer.GetCamera()->GetProjMatrix();
-		//glm::mat4 view = renderer.GetCamera()->GetViewMatrix();
-		//glm::mat4 model = glm::mat4(1.f);
 		Matrix4 proj = renderer.GetCamera()->GetProjMatrix();
 		Matrix4 view = renderer.GetCamera()->GetViewMatrix();
 		Matrix4 model = Matrix4(1.f);

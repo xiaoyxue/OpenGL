@@ -78,11 +78,6 @@ namespace OpenGL
 		GLCall(glUniform4f(GetUniformLocation(name), v0, v1, v2, v3));
 	}
 
-	void Shader::SetUniformMat4f(const std::string& name, const glm::mat4& mat)
-	{
-		GLCall(glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &mat[0][0]));
-	}
-
 	void Shader::SetUniformMat4f(const std::string& name, const Matrix4& mat)
 	{
 		float buf[16];

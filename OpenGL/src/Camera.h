@@ -14,8 +14,6 @@ namespace OpenGL
 	using namespace Math;
 	class Camera 
 	{
-		//using Vec3 = glm::vec3;
-		//using Matrix4 = glm::mat4;
 	private:
 		float mFovy;
 		float mDistanceToFilm;
@@ -110,7 +108,6 @@ namespace OpenGL
 		void Rotate(float dPhi, float dTheta) 
 		{
 			mPhi += dPhi;
-			/*mTheta = glm::clamp(mTheta + dTheta, 0.f, PI - EPS_F);*/
 			mTheta = Clamp(mTheta + dTheta, 0.f, PI - EPS_F);
 			ComputePosition();
 			ComputeViewMatrix();
@@ -135,9 +132,6 @@ namespace OpenGL
 				mR * std::cos(mTheta),
 				mR * sinTheta * std::sin(mPhi));
 			mPosition = mLookAt + dirToCam;
-			//mCz = glm::normalize(mPosition - mLookAt); // -1 * dir in raytracer
-			//mCx = glm::normalize(glm::cross(mUp, mCz));
-			//mCy = glm::cross(mCz, mCx);
 
 			mCz = (mPosition - mLookAt).Norm(); // -1 * dir in raytracer
 			mCx = Cross(mUp, mCz).Norm();
@@ -146,7 +140,6 @@ namespace OpenGL
 
 		void ComputeSphereCoord()
 		{
-			/*mR = float((mPosition - mLookAt).length());*/
 			mR = float((mPosition - mLookAt).Length());
 			mPhi = std::atan2(mPosition.z, mPosition.x);
 			mPhi = mPhi > 0 ? mPhi : 2.f * PI - mPhi;
@@ -155,13 +148,11 @@ namespace OpenGL
 
 		void ComputeViewMatrix()
 		{
-			/*mViewMatrix = glm::lookAt(mPosition, mLookAt, mUp);*/
 			mViewMatrix = Transform::LookAt(mPosition, mLookAt, mUp).GetMatrix();
 		}
 
 		void ComputeProjMatrix()
 		{
-			/*mProjMatrix = glm::perspective(mFovy, (float)mWidth / (float)mHeight, mNear, mFar);*/
 			mProjMatrix = Transform::Perspective(mFovy, (float)mWidth / (float)mHeight, mDistanceToFilm, mNear, mFar).GetMatrix();
 		}
 	};

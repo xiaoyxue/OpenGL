@@ -32,7 +32,6 @@ namespace OpenGL
 		void SetUniform2f(const std::string& name, float v0, float v1);
 		void SetUniform3f(const std::string& name, float v0, float v1, float v2);
 		void SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3);
-		void SetUniformMat4f(const std::string& name, const glm::mat4 &mat);
 		void SetUniformMat4f(const std::string& name, const Matrix4& mat);
 	private:
 		unsigned int GetUniformLocation(const std::string& name);
