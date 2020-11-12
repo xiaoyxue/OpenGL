@@ -24,7 +24,7 @@ namespace OpenGL
 
 	void GLMesh::DrawFace(const Renderer& renderer) const
 	{
-		auto shader = mShaders["Face"];
+		auto& shader = mShaders["Face"];
 		renderer.EnableDepthTest();
 		shader->Bind();
 		Matrix4 proj = renderer.GetCamera()->GetProjMatrix();
@@ -40,7 +40,7 @@ namespace OpenGL
 
 	void GLMesh::DrawWireFrame(const Renderer& renderer) const
 	{
-		auto shader = mShaders["WireFrame"];
+		auto& shader = mShaders["WireFrame"];
 		renderer.EnableDepthTest();
 		shader->Bind();
 		Matrix4 proj = renderer.GetCamera()->GetProjMatrix();
