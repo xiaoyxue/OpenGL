@@ -5,6 +5,7 @@
 #include "Misc.h"
 #include "Camera.h"
 #include "GLOjbect.h"
+#include "Scene.h"
 #include <iostream>
 
 namespace OpenGL
@@ -39,6 +40,7 @@ namespace OpenGL
 		mMouseX = false;
 		mMouseY = false;
 		mpCamera = nullptr;
+		mpScene = nullptr;
 		mDrawWireFrame = true;
 	}
 
@@ -64,6 +66,11 @@ namespace OpenGL
 		mHeight = height;
 	}
 
+	void Renderer::SetScene(Scene *pScene)
+	{
+		mpScene = pScene;
+	}
+
 	void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const
 	{
 		shader.Bind();
@@ -73,7 +80,7 @@ namespace OpenGL
 		GLCall(glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr));
 	}
 
-	void Renderer::DrawFace(const DrawableObject& object)
+	void Renderer::DrawFaces(const DrawableObject& object) const
 	{
 		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
 		GLCall(glEnable(GL_POLYGON_OFFSET_FILL));
@@ -81,11 +88,34 @@ namespace OpenGL
 		object.DrawFace(*this);
 	}
 
-	void Renderer::DrawWireFrame(const DrawableObject& object)
+	void Renderer::DrawWireFrame(const DrawableObject& object) const
 	{
 		GLCall(glDisable(GL_POLYGON_OFFSET_FILL));
 		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
 		object.DrawWireFrame(*this);
+	}
+
+	void Renderer::DrawFaces() const
+	{
+		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
+		GLCall(glEnable(GL_POLYGON_OFFSET_FILL));
+		GLCall(glPolygonOffset(1.0, 1.0));
+		const auto& drawObjects = mpScene->GetDrawObjects();
+		for (DrawableObject* pObject : drawObjects)
+		{
+			pObject->DrawFace(*this);
+		}
+	}
+
+	void Renderer::DrawWireFrame() const 
+	{
+		GLCall(glDisable(GL_POLYGON_OFFSET_FILL));
+		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
+		const auto& drawObjects = mpScene->GetDrawObjects();
+		for (DrawableObject* pObject : drawObjects)
+		{
+			pObject->DrawWireFrame(*this);
+		}
 	}
 
 	void Renderer::SetCamera(Camera* camera)

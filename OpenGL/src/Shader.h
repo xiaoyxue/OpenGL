@@ -8,6 +8,7 @@
 namespace OpenGL
 {
 	using namespace Math;
+
 	struct ShaderProgramSource
 	{
 		std::string VertexSource;

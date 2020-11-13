@@ -158,6 +158,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\math\Transform.cpp" />
     <ClCompile Include="src\ObjMesh.cpp" />
+    <ClCompile Include="src\Previewer.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\stb_image\stb_image.cpp" />
@@ -166,6 +167,7 @@
     <ClCompile Include="src\VertexArray.cpp" />
     <ClCompile Include="src\VertexBuffer.cpp" />
     <ClCompile Include="src\Viewer.cpp" />
+    <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />
@@ -309,6 +311,7 @@
   <ItemGroup>
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Def.h" />
+    <ClInclude Include="src\ForwardDecl.h" />
     <ClInclude Include="src\GLMesh.h" />
     <ClInclude Include="src\glm\common.hpp" />
     <ClInclude Include="src\glm\detail\compute_common.hpp" />
@@ -560,7 +563,10 @@
     <ClInclude Include="src\math\Transform.h" />
     <ClInclude Include="src\Misc.h" />
     <ClInclude Include="src\ObjMesh.h" />
+    <ClInclude Include="src\OpenGL.h" />
+    <ClInclude Include="src\Previewer.h" />
     <ClInclude Include="src\Renderer.h" />
+    <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\simd\AVX.h" />
     <ClInclude Include="src\simd\SSE.h" />

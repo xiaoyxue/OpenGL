@@ -1,11 +1,9 @@
 #pragma once
 #include "GLOjbect.h"
+#include "ForwardDecl.h"
 
 namespace OpenGL
 {
-	class VertexBuffer;
-	class VertexBufferLayout;
-
 	class VertexArray : public GLObject
 	{
 	public:

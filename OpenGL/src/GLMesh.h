@@ -1,22 +1,13 @@
 #pragma once
 #include "GLOjbect.h"
 #include "Shader.h"
+#include "ForwardDecl.h"
 #include <iostream>
 #include <vector>
 #include <unordered_map>
 
 namespace OpenGL 
 {
-	class Renderer;
-	class Shader;
-	class Texture;
-	class VertexBuffer;
-	class IndexBuffer;
-	class VertexArray;
-	class Texture;
-	class Shader;
-	class ObjMesh;
-
 	class GLMesh: public DrawableObject
 	{
 	private:

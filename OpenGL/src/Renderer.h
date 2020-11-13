@@ -20,11 +20,13 @@ namespace OpenGL
     class Shader;
     class Camera;
     class DrawableObject;
+    class Scene;
 
     class Renderer
     {
     private:
         Camera* mpCamera;
+        Scene* mpScene;
         int mWidth, mHeight;
 		bool mMouseLeftDown;
 		bool mMouseRightDown;
@@ -36,9 +38,12 @@ namespace OpenGL
         void Init();
         void Resize(int width, int height);
         void SetSize(int width, int height);
+        void SetScene(Scene *scene);
         void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
-        void DrawFace(const DrawableObject &object);
-        void DrawWireFrame(const DrawableObject& object);
+        void DrawFaces(const DrawableObject &object) const;
+        void DrawWireFrame(const DrawableObject& object) const;
+        void DrawFaces() const;
+        void DrawWireFrame() const;
         void SetCamera(Camera *camera);
         void Clear() const;
         void EnableDepthTest() const;

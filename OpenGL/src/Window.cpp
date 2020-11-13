@@ -1,32 +1,38 @@
-#include "Viewer.h"
-#include "Camera.h"
-#include "Shader.h"
-#include "Renderer.h"
-#include "Misc.h"
+#include "Window.h"
 #include <iostream>
+#include "Misc.h"
+#include "Renderer.h"
 
-namespace OpenGL
+namespace GLFW
 {
+	int Window::mWidth;
 
-	Renderer* Viewer::mpRenderer = nullptr;
-	
-	int Viewer::mWidth, Viewer::mHeight;
+	int Window::mHeight;
 
-	float Viewer::mDeltaTime, Viewer::mLastFrame;
+	void Window::SetSize(int w, int h)
+	{
+		mWidth = w;
+		mHeight = h;
+	}
 
-	Viewer::Viewer(const std::string& title)
-		: mTitle(title), mpWindow(nullptr)
+	float GLFWWindow::mDeltaTime;
+	float GLFWWindow::mLastFrame;
+
+	Renderer* GLFWWindow::mpRenderer;
+
+	GLFWWindow::GLFWWindow(const std::string& title, int w /*= 1024*/, int h /*= 760*/)
+		:Window(title, w, h), mpWindow(nullptr)
 	{
 
 	}
 
-	Viewer::~Viewer()
+	GLFWWindow::~GLFWWindow()
 	{
 		glfwDestroyWindow(mpWindow);
 		glfwTerminate();
 	}
 
-	void Viewer::Init()
+	void GLFWWindow::Init()
 	{
 		if (!glfwInit())
 		{
@@ -64,69 +70,45 @@ namespace OpenGL
 		glfwSetMouseButtonCallback(mpWindow, MouseButtonCallback);
 
 		// initialize renderer
-		if (Renderer::IsReady() != RENDERER_OK) 
+		if (Renderer::IsReady() != RENDERER_OK)
 		{
 			std::cout << "Error: could not initialize renderer!" << std::endl;
 			glfwTerminate();
 			exit(-1);
 		}
 
-
 		if (mpRenderer)
-		{
 			mpRenderer->Init();
-		}
 	}
 
-	void Viewer::Start()
+	void GLFWWindow::MainLoop()
 	{
 		while (!glfwWindowShouldClose(mpWindow))
 		{
 			float currentFrame = float(glfwGetTime());
 			mDeltaTime = currentFrame - mLastFrame;
 			mLastFrame = currentFrame;
-			Draw();
+			DrawAll();
+
+
+			glfwSwapBuffers(mpWindow);
+
+			/* Poll for and process events */
+			glfwPollEvents();
 		}
 	}
 
-
-	void Viewer::SetRenderer(Renderer* renderer)
+	void GLFWWindow::SetRenderer(OpenGL::Renderer* pRenderer)
 	{
-		mpRenderer = renderer;
+		mpRenderer = pRenderer;
 	}
 
-
-	void Viewer::SetSize(int width, int height)
-	{
-		mWidth = width;
-		mHeight = height;
-		mpRenderer->SetSize(width, height);
-	}
-
-	void Viewer::Draw() const
-	{
-		mpRenderer->Clear();
-		for (auto it : mMeshes)
-		{
-			//it->DrawFace(*mpRenderer);
-			//it->DrawWireFrame(*mpRenderer);
-			mpRenderer->DrawFaces(*it);
-			mpRenderer->DrawWireFrame(*it);
-		}
-
-		/* Swap front and back buffers */
-		glfwSwapBuffers(mpWindow);
-
-		/* Poll for and process events */
-		glfwPollEvents();
-	}
-
-	void Viewer::ErrorCallback(int error, const char* description)
+	void GLFWWindow::ErrorCallback(int error, const char* description)
 	{
 
 	}
 
-	void Viewer::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+	void GLFWWindow::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
 		if (action == GLFW_PRESS) {
 			if (key == GLFW_KEY_ESCAPE) {
@@ -136,7 +118,7 @@ namespace OpenGL
 		mpRenderer->KeyBoardEvent(key, scancode, action, mDeltaTime);
 	}
 
-	void Viewer::ResizeCallback(GLFWwindow* window, int width, int height)
+	void GLFWWindow::ResizeCallback(GLFWwindow* window, int width, int height)
 	{
 		int w, h;
 		glfwGetFramebufferSize(window, &w, &h);
@@ -145,20 +127,20 @@ namespace OpenGL
 		mpRenderer->Resize(mWidth, mHeight);
 	}
 
-	void Viewer::CursorCallback(GLFWwindow* window, double xpos, double ypos)
+	void GLFWWindow::CursorCallback(GLFWwindow* window, double xpos, double ypos)
 	{
 		mpRenderer->CursorEvent((float)xpos, (float)ypos);
 	}
 
-	void Viewer::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
-	{
-
-	}
-
-	void Viewer::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+	void GLFWWindow::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 	{
 		mpRenderer->MouseButtonEvent(button, action, mods);
 	}
 
+	void GLFWWindow::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
+	{
+
+	}
 
 }
+

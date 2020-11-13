@@ -9,8 +9,6 @@ namespace OpenGL
 	using namespace Math;
 	class ObjMesh
 	{
-		//using Vec3 = glm::vec3;
-		//using Vec2 = glm::vec2;
 	public:
 		std::vector<float> mGLVertices;
 		std::vector<unsigned int> mGLIndices;
