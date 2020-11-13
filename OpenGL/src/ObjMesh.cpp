@@ -100,9 +100,9 @@ namespace OpenGL
 					mGLVertices.push_back(lineColor[1]);
 					mGLVertices.push_back(lineColor[2]);
 					mGLIndices.push_back(nVertices);
-					mVertices.push_back(vec3(vx, vy, vz));
-					mTextureCoords.push_back(vec2(tx, ty));
-					mNormals.push_back(vec3(nx, ny, nz));
+					mVertices.push_back(Vec3(vx, vy, vz));
+					mTextureCoords.push_back(Vec2(tx, ty));
+					mNormals.push_back(Vec3(nx, ny, nz));
 					nVertices++;
 				}
 

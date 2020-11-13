@@ -3,37 +3,39 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtx/string_cast.hpp"
 #include "Def.h"
+#include "math/Lingal.h"
+#include "math/Transform.h"
+#include "Utils.h"
 #include <iostream>
 #include <algorithm>
 
 namespace OpenGL
 {
+	using namespace Math;
 	class Camera 
 	{
-		using vec3 = glm::vec3;
-		using mat4 = glm::mat4;
 	private:
 		float mFovy;
-		float mFocusDistance;
+		float mDistanceToFilm;
 		float mNear, mFar;
 		int mWidth, mHeight;
 		float mR, mTheta, mPhi;
-		vec3 mPosition, mLookAt, mUp;
-		vec3 mCx, mCy, mCz;
-		mat4 mViewMatrix;
-		mat4 mProjMatrix;
+		Vec3 mPosition, mLookAt, mUp;
+		Vec3 mCx, mCy, mCz;
+		Matrix4 mViewMatrix;
+		Matrix4 mProjMatrix;
 
 		float mMoveSpeed, mScaleFactor;
 		float mMaxR, mMinR;
 	public:
 		void Init(
-			const vec3& position,
-			const vec3& lookat,
-			const vec3& up,
+			const Vec3& position,
+			const Vec3& lookat,
+			const Vec3& up,
 			int width,
 			int height,
 			float fovy = 45.f,
-			float focusDistance = 1.0f,
+			float disToFilm = 1.0f,
 			float nClip = 0.01f,
 			float fClip = 1000.0f
 		)
@@ -43,7 +45,7 @@ namespace OpenGL
 			mWidth = width;
 			mHeight = height;
 			mFovy = fovy;
-			mFocusDistance = focusDistance;
+			mDistanceToFilm = disToFilm;
 			mNear = nClip;
 			mFar = fClip;
 			mUp = up;
@@ -59,7 +61,7 @@ namespace OpenGL
 			ComputeProjMatrix();
 		}
 
-		void Place(const vec3& position)
+		void Place(const Vec3& position)
 		{
 			mPosition = position;
 			ComputeViewMatrix();
@@ -81,7 +83,7 @@ namespace OpenGL
 
 		void Move(float dx, float dy)
 		{
-			vec3 moveDir = dx * mMoveSpeed * mCx + dy * mMoveSpeed * mCy;
+			Vec3 moveDir = dx * mMoveSpeed * mCx + dy * mMoveSpeed * mCy;
 			mPosition += moveDir;
 			mLookAt += moveDir;
 			ComputeViewMatrix();
@@ -89,7 +91,7 @@ namespace OpenGL
 
 		void MoveX(float dx)
 		{
-			vec3 moveDir = dx * mMoveSpeed * mCx;
+			Vec3 moveDir = dx * mMoveSpeed * mCx;
 			mPosition += moveDir;
 			mLookAt += moveDir;
 			ComputeViewMatrix();
@@ -97,7 +99,7 @@ namespace OpenGL
 
 		void MoveY(float dy)
 		{
-			vec3 moveDir = dy * mMoveSpeed * mCy;
+			Vec3 moveDir = dy * mMoveSpeed * mCy;
 			mPosition += moveDir;
 			mLookAt += moveDir;
 			ComputeViewMatrix();
@@ -106,14 +108,14 @@ namespace OpenGL
 		void Rotate(float dPhi, float dTheta) 
 		{
 			mPhi += dPhi;
-			mTheta = glm::clamp(mTheta + dTheta, 0.f, PI - EPS_F);
+			mTheta = Clamp(mTheta + dTheta, 0.f, PI - EPS_F);
 			ComputePosition();
 			ComputeViewMatrix();
 		}
 
-		inline mat4 GetViewMatrix() const { return mViewMatrix; }
+		inline Matrix4 GetViewMatrix() const { return mViewMatrix; }
 
-		inline mat4 GetProjMatrix() const { return mProjMatrix; }
+		inline Matrix4 GetProjMatrix() const { return mProjMatrix; }
 
 	private:
 		
@@ -125,19 +127,20 @@ namespace OpenGL
 				mTheta += EPS_F;
 				sinTheta = std::sin(mTheta);
 			}
-			vec3 dirToCam(
+			Vec3 dirToCam(
 				mR * sinTheta * std::cos(mPhi),
 				mR * std::cos(mTheta),
 				mR * sinTheta * std::sin(mPhi));
 			mPosition = mLookAt + dirToCam;
-			mCz = glm::normalize(mPosition - mLookAt); // -1 * dir in raytracer
-			mCx = glm::normalize(glm::cross(mUp, mCz));
-			mCy = glm::cross(mCz, mCx);
+
+			mCz = (mPosition - mLookAt).Norm(); // -1 * dir in raytracer
+			mCx = Cross(mUp, mCz).Norm();
+			mCy = Cross(mCz, mCx);
 		}
 
 		void ComputeSphereCoord()
 		{
-			mR = float((mPosition - mLookAt).length());
+			mR = float((mPosition - mLookAt).Length());
 			mPhi = std::atan2(mPosition.z, mPosition.x);
 			mPhi = mPhi > 0 ? mPhi : 2.f * PI - mPhi;
 			mTheta = std::acos(mPosition.y / mR);
@@ -145,12 +148,12 @@ namespace OpenGL
 
 		void ComputeViewMatrix()
 		{
-			mViewMatrix = glm::lookAt(mPosition, mLookAt, mUp);
+			mViewMatrix = Transform::LookAt(mPosition, mLookAt, mUp).GetMatrix();
 		}
 
 		void ComputeProjMatrix()
 		{
-			mProjMatrix = glm::perspective(mFovy, (float)mWidth / (float)mHeight, mNear, mFar);
+			mProjMatrix = Transform::Perspective(mFovy, (float)mWidth / (float)mHeight, mDistanceToFilm, mNear, mFar).GetMatrix();
 		}
 	};
 }
