@@ -14,11 +14,11 @@ namespace OpenGL
 	class Scene;
 	class Renderer;
 	class DrawableObject;
+	class Shader;
 }
 
 namespace GLFW
 {
-	class Preview;
 	class Window;
-	class GLFWWindow;
+	class GLWindow;
 }

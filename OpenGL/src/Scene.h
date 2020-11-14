@@ -16,8 +16,6 @@ namespace OpenGL
 		void AddDrawableObject(DrawableObject* pObject) 
 		{ 
 			mDrawableObjects.push_back(pObject); 
-			std::cout << mDrawableObjects.size() << std::endl;
-			std::cout << mDrawableObjects.size() << std::endl;
 		}
 	};
 

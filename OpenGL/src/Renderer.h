@@ -1,6 +1,7 @@
 #pragma once
 
 #include <GL/glew.h>
+#include "ForwardDecl.h"
 
 namespace OpenGL
 {
@@ -13,14 +14,6 @@ namespace OpenGL
 
     void GLClearError();
     bool GLLogCall(const char* function, const char* file, int line);
-
-
-    class VertexArray;
-    class IndexBuffer;
-    class Shader;
-    class Camera;
-    class DrawableObject;
-    class Scene;
 
     class Renderer
     {
@@ -56,8 +49,8 @@ namespace OpenGL
 		void CursorEvent(float x, float y);
 
         static unsigned int IsReady();
-    private:
 
+    private:
         void MouseRightDrag(float x, float y);
         void MouseLeftDrag(float x, float y);
         void MouseMiddleDrag(float x, float y);
