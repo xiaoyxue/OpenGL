@@ -3,7 +3,6 @@
 #include <unordered_map>
 #include "math/Lingal.h"
 #include "GLOjbect.h"
-#include "glm/glm.hpp"
 
 namespace OpenGL
 {

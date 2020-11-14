@@ -6,23 +6,15 @@
 #include "VertexBufferLayout.h"
 #include "Shader.h"
 #include "Texture.h"
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
 #include "Camera.h"
 #include "Viewer.h"
 #include "GLMesh.h"
 #include "Previewer.h"
-#include "Scene.h"
-#include <functional>
+
 
 using namespace OpenGL;
 using namespace Math;
 using namespace GLFW;
-
-void Func()
-{
-	std::cout << "fun" << std::endl;
-}
 
 int main(void)
 {

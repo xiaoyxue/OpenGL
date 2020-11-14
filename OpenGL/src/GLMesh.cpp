@@ -10,8 +10,6 @@
 
 namespace OpenGL
 {
-
-
 	GLMesh::GLMesh()
 	{
 

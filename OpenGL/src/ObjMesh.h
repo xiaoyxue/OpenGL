@@ -1,5 +1,4 @@
 #pragma once
-#include "glm/glm.hpp"
 #include "math/Lingal.h"
 #include <vector>
 #include <string>
