@@ -10,8 +10,6 @@
 
 namespace OpenGL
 {
-
-
 	GLMesh::GLMesh()
 	{
 
@@ -24,12 +22,12 @@ namespace OpenGL
 
 	void GLMesh::DrawFace(const Renderer& renderer) const
 	{
-		auto shader = mShaders["Face"];
+		auto& shader = mShaders["Face"];
 		renderer.EnableDepthTest();
 		shader->Bind();
-		glm::mat4 proj = renderer.GetCamera()->GetProjMatrix();
-		glm::mat4 view = renderer.GetCamera()->GetViewMatrix();
-		glm::mat4 model = glm::mat4(1.f);
+		Matrix4 proj = renderer.GetCamera()->GetProjMatrix();
+		Matrix4 view = renderer.GetCamera()->GetViewMatrix();
+		Matrix4 model = Matrix4(1.f);
 		shader->SetUniformMat4f("u_Model", model);
 		shader->SetUniformMat4f("u_View", view);
 		shader->SetUniformMat4f("u_Proj", proj);
@@ -40,12 +38,12 @@ namespace OpenGL
 
 	void GLMesh::DrawWireFrame(const Renderer& renderer) const
 	{
-		auto shader = mShaders["WireFrame"];
+		auto& shader = mShaders["WireFrame"];
 		renderer.EnableDepthTest();
 		shader->Bind();
-		glm::mat4 proj = renderer.GetCamera()->GetProjMatrix();
-		glm::mat4 view = renderer.GetCamera()->GetViewMatrix();
-		glm::mat4 model = glm::mat4(1.f);
+		Matrix4 proj = renderer.GetCamera()->GetProjMatrix();
+		Matrix4 view = renderer.GetCamera()->GetViewMatrix();
+		Matrix4 model = Matrix4(1.f);
 		shader->SetUniformMat4f("u_Model", model);
 		shader->SetUniformMat4f("u_View", view);
 		shader->SetUniformMat4f("u_Proj", proj);
@@ -64,6 +62,7 @@ namespace OpenGL
 		mpIBO = std::make_unique<IndexBuffer>();
 		mpIBO->SetData(&(mpObjMesh->mGLIndices[0]), mpObjMesh->mGLIndices.size());
 		VertexBufferLayout layout;
+		layout.Push<float>(3);
 		layout.Push<float>(3);
 		layout.Push<float>(2);
 		layout.Push<float>(3);

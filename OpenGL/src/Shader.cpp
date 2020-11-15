@@ -1,5 +1,6 @@
 #include "Shader.h"
 #include "Renderer.h"
+#include "math/Lingal.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -8,18 +9,47 @@
 
 namespace OpenGL
 {
+	void ConvertToGLMatrix(const Matrix2& mat, float* buf)
+	{
+		int idx = 0;
+		for (int i = 0; i < 2; i++)
+		{
+			const Vector2& col = mat[i];
+			buf[idx++] = col[0]; buf[idx++] = col[1];
+		}
+	}
+
+	void ConvertToGLMatrix(const Matrix3& mat, float* buf)
+	{
+		int idx = 0;
+		for (int i = 0; i < 3; i++)
+		{
+			const Vector3& col = mat[i];
+			buf[idx++] = col[0]; buf[idx++] = col[1]; buf[idx++] = col[2];
+		}
+	}
+
+	void ConvertToGLMatrix(const Matrix4& mat, float* buf)
+	{
+		int idx = 0;
+		for (int i = 0; i < 4; i++) 
+		{
+			const Vector4& col = mat[i];
+			buf[idx++] = col[0]; buf[idx++] = col[1]; buf[idx++] = col[2]; buf[idx++] = col[3];
+		}
+	}
+
 	Shader::Shader(const std::string& filepath) : mFilePath(filepath), GLObject(-1)
 	{
 		ShaderProgramSource source = ParseShader(filepath);
 		mHandle = CreateShader(source.VertexSource, source.FragmentSource);
 	}
 
-	Shader::Shader(): GLObject(-1)
+	Shader::Shader()
+		: GLObject(-1)
 	{
 
 	}
-
-
 
 	Shader::~Shader()
 	{
@@ -69,9 +99,25 @@ namespace OpenGL
 		GLCall(glUniform4f(GetUniformLocation(name), v0, v1, v2, v3));
 	}
 
-	void Shader::SetUniformMat4f(const std::string& name, const glm::mat4& mat)
+	void Shader::SetUniformMat2f(const std::string& name, const Matrix2& mat)
 	{
-		GLCall(glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &mat[0][0]));
+		float buf[4];
+		ConvertToGLMatrix(mat, buf);
+		GLCall(glUniformMatrix2fv(GetUniformLocation(name), 1, GL_FALSE, buf));
+	}
+
+	void Shader::SetUniformMat3f(const std::string& name, const Matrix3& mat)
+	{
+		float buf[9];
+		ConvertToGLMatrix(mat, buf);
+		GLCall(glUniformMatrix3fv(GetUniformLocation(name), 1, GL_FALSE, buf));
+	}
+
+	void Shader::SetUniformMat4f(const std::string& name, const Matrix4& mat)
+	{
+		float buf[16];
+		ConvertToGLMatrix(mat, buf);
+		GLCall(glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, buf));
 	}
 
 	unsigned int Shader::GetUniformLocation(const std::string& name)

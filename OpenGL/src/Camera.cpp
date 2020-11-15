@@ -1,4 +1,1 @@
-namespace OpenGL
-{
-
-}
+#include "Camera.h"
