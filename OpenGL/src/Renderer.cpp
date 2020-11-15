@@ -125,6 +125,7 @@ namespace OpenGL
 
 	void Renderer::Clear() const
 	{
+		//GLCall(glClearColor(0.45f, 0.55f, 0.60f, 1.00f));
 		GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 	}
 
@@ -204,26 +205,32 @@ namespace OpenGL
 
 	void Renderer::MouseLeftDrag(float x, float y)
 	{
-		float dx = x - mMouseX;
-		float dy = y - mMouseY;
-		float dPhi = dx * (PI / mWidth);
-		float dTheta = dy * (PI / mHeight);
-		mpCamera->Rotate(dPhi, -dTheta);
+		if (!mLockCamera)
+		{
+			float dx = x - mMouseX;
+			float dy = y - mMouseY;
+			float dPhi = dx * (PI / mWidth);
+			float dTheta = dy * (PI / mHeight);
+			mpCamera->Rotate(dPhi, -dTheta);
+		}
 	}
 
 	void Renderer::MouseMiddleDrag(float x, float y)
 	{
-		mpCamera->Move(-(x - mMouseX) / float(mWidth), (y - mMouseY) / float(mHeight));
+		if (!mLockCamera)
+			mpCamera->Move(-(x - mMouseX) / float(mWidth), (y - mMouseY) / float(mHeight));
 	}
 
 	void Renderer::MouseLeftRightDrag(float x, float y)
 	{
-		mpCamera->Move(-(x - mMouseX) / float(mWidth), (y - mMouseY) / float(mHeight));
+		if (!mLockCamera)
+			mpCamera->Move(-(x - mMouseX) / float(mWidth), (y - mMouseY) / float(mHeight));
 	}
 
 	void Renderer::MouseRightDrag(float x, float y)
 	{
-		mpCamera->Scale((y - mMouseY) / float(mHeight));
+		if(!mLockCamera)
+			mpCamera->Scale((y - mMouseY) / float(mHeight));
 	}
 
 }

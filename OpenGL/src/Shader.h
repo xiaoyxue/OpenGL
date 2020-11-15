@@ -35,6 +35,7 @@ namespace OpenGL
 		void SetUniformMat2f(const std::string& name, const Matrix2& mat);
 		void SetUniformMat3f(const std::string& name, const Matrix3& mat);
 		void SetUniformMat4f(const std::string& name, const Matrix4& mat);
+
 	private:
 		unsigned int GetUniformLocation(const std::string& name);
 		ShaderProgramSource ParseShader(const std::string& filepath);

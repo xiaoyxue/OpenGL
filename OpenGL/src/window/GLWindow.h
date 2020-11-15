@@ -24,7 +24,7 @@ namespace GLFW
 		virtual void DrawAll() const;
 
 	protected:
-		virtual bool HandleMouseEvent() { return false; }
+		virtual bool HandleGLMouseEvent() const { return true; }
 
 	private:
 		void SetErrorCallback();

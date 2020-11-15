@@ -34,7 +34,7 @@ namespace OpenGL
 			float fovy = 45.f,
 			float disToFilm = 1.0f,
 			float nClip = 0.01f,
-			float fClip = 1000.0f
+			float fClip = 100000.0f
 		)
 		{
 			mPosition = position;
@@ -50,7 +50,7 @@ namespace OpenGL
 			mMoveSpeed = 2.5f;
 			mScaleFactor = 2.0f;
 			mMinR = 0.001f;
-			mMaxR = 100000.f;
+			mMaxR = 10000000.f;
 
 			ComputeSphereCoord();
 			ComputePosition();

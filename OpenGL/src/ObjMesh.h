@@ -15,7 +15,7 @@ namespace OpenGL
 		std::vector<Vec2> mTextureCoords;
 		std::vector<Vec3> mNormals;
 		std::string mFileName;
-
+		bool mHasNormal = false;
 	public:
 		ObjMesh();
 		~ObjMesh();

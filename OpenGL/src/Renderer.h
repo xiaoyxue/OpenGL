@@ -49,12 +49,15 @@ namespace OpenGL
 		void CursorEvent(float x, float y);
 
         static unsigned int IsReady();
-
+    private:
+		bool mLockCamera;
     private:
         void MouseRightDrag(float x, float y);
         void MouseLeftDrag(float x, float y);
         void MouseMiddleDrag(float x, float y);
         void MouseLeftRightDrag(float x, float y);
+
+        friend class GLFW::Previewer;
     };
 
 }

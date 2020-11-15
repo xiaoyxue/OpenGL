@@ -1,9 +1,9 @@
 #include "GLWindow.h"
 #include "../Renderer.h"
 #include "../Misc.h"
+#include "imgui/imgui.h"
 #include <iostream>
 #include <unordered_map>
-#include "imgui/imgui.h"
 namespace GLFW
 {
 	std::unordered_map<GLFWwindow*, GLWindow*> __GLWindows;
@@ -72,6 +72,7 @@ namespace GLFW
 
 	void GLWindow::MainLoop()
 	{
+		mpRenderer->EnableDepthTest();
 		while (!glfwWindowShouldClose(mpWindow))
 		{
 			float currentFrame = float(glfwGetTime());
@@ -169,7 +170,7 @@ namespace GLFW
 					return;
 				auto it = __GLWindows[window];
 
-				if (it->HandleMouseEvent())
+				if (!it->HandleGLMouseEvent())
 					return;
 				it->mpRenderer->MouseButtonEvent(button, action, mods);
 			});
