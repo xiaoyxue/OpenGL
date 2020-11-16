@@ -6,10 +6,13 @@
 #include "Camera.h"
 #include "GLOjbect.h"
 #include "Scene.h"
+#include "math/Lingal.h"
 #include <iostream>
 
 namespace OpenGL
 {
+	using namespace Math;
+
 	void GLClearError()
 	{
 		int err;
@@ -82,6 +85,7 @@ namespace OpenGL
 
 	void Renderer::DrawFaces(const DrawableObject& object) const
 	{
+		GLCall(glDisable(GL_BLEND));
 		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
 		GLCall(glEnable(GL_POLYGON_OFFSET_FILL));
 		GLCall(glPolygonOffset(1.0, 1.0));
@@ -90,14 +94,16 @@ namespace OpenGL
 
 	void Renderer::DrawWireFrame(const DrawableObject& object) const
 	{
+		GLCall(glDisable(GL_BLEND));
 		GLCall(glDisable(GL_POLYGON_OFFSET_FILL));
 		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
-		//GLCall(glLineWidth(0.5));
+		GLCall(glLineWidth(0.5));
 		object.DrawWireFrame(*this);
 	}
 
 	void Renderer::DrawFaces() const
 	{
+		GLCall(glDisable(GL_BLEND));
 		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
 		GLCall(glEnable(GL_POLYGON_OFFSET_FILL));
 		GLCall(glPolygonOffset(1.0, 1.0));
@@ -110,6 +116,7 @@ namespace OpenGL
 
 	void Renderer::DrawWireFrame() const 
 	{
+		GLCall(glDisable(GL_BLEND));
 		GLCall(glDisable(GL_POLYGON_OFFSET_FILL));
 		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
 		const auto& drawObjects = mpScene->GetDrawObjects();
@@ -138,6 +145,51 @@ namespace OpenGL
 	void Renderer::DisableDepthTest() const
 	{
 		GLCall(glDisable(GL_DEPTH_TEST));
+	}
+
+	void Renderer::DrawCoordinates() const
+	{
+		GLCall(glDisable(GL_DEPTH_TEST));
+		GLCall(glEnable(GL_BLEND));
+		GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE));
+		GLCall(glLineWidth(2.0));
+		Matrix4 model(1);
+		Matrix4 view = mpCamera->GetViewMatrix();
+		Matrix4 proj = mpCamera->GetProjMatrix();
+		mCoords.mCoordShader.Bind();
+		mCoords.mCoordShader.SetUniformMat4f("u_Model", model);
+		mCoords.mCoordShader.SetUniformMat4f("u_View", view);
+		mCoords.mCoordShader.SetUniformMat4f("u_Proj", proj);
+		mCoords.mCoordShader.SetUniform4f("u_LineColor", 1.0f, 0.0f, 0.0f, 0.5f);
+		mCoords.mVAX.Bind();
+		mCoords.mIB.Bind();
+		GLCall(glDrawElements(GL_LINES, mCoords.mIB.GetCount(), GL_UNSIGNED_INT, nullptr));
+		mCoords.mIB.UnBind();
+		mCoords.mVAX.UnBind();
+
+		mCoords.mVAY.Bind();
+		mCoords.mIB.Bind();
+		mCoords.mCoordShader.SetUniform4f("u_LineColor", 0.0f, 1.0f, 0.0f, 0.5f);
+		GLCall(glDrawElements(GL_LINES, mCoords.mIB.GetCount(), GL_UNSIGNED_INT, nullptr));
+		mCoords.mIB.UnBind();
+		mCoords.mVAY.UnBind();
+
+		mCoords.mVAZ.Bind();
+		mCoords.mIB.Bind();
+		mCoords.mCoordShader.SetUniform4f("u_LineColor", 0.0f, 0.0f, 1.0f, 0.5f);
+		GLCall(glDrawElements(GL_LINES, mCoords.mIB.GetCount(), GL_UNSIGNED_INT, nullptr));
+		mCoords.mIB.UnBind();
+		mCoords.mVAZ.UnBind();
+
+		mCoords.mVAXZ.Bind();
+		mCoords.mIBXZ.Bind();
+		mCoords.mCoordShader.SetUniform4f("u_LineColor", 0.5f, 0.5f, 0.5f, 0.5f);
+		GLCall(glDrawElements(GL_LINES, mCoords.mIBXZ.GetCount(), GL_UNSIGNED_INT, nullptr));
+		mCoords.mIBXZ.UnBind();
+		mCoords.mVAXZ.UnBind();
+
+		mCoords.mCoordShader.UnBind();
+		GLCall(glEnable(GL_DEPTH_TEST));
 	}
 
 	void Renderer::MouseButtonEvent(int button, int action, int mods)

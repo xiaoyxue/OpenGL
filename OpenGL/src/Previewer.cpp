@@ -1,6 +1,6 @@
 #include "Previewer.h"
 #include "Renderer.h"
-
+#include "Scene.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
@@ -26,18 +26,28 @@ namespace GLFW
 	void Previewer::Init()
 	{
 		GLWindow::Init();
+		InitState();
 		InitImGui();
 	}
 
 	void Previewer::DrawAll() const
 	{
+		mpRenderer->Clear();
+		if(mShowCoordnates)
+			mpRenderer->DrawCoordinates();
 		DrawObjects();
 		DrawGui();
 	}
 
+	void Previewer::SetScene(Scene* pScene)
+	{
+		mpScene = pScene;
+	}
+
 	void Previewer::AddDrawableObject(DrawableObject* pObject)
 	{
-		mDrawableObjects.push_back(pObject);
+		if(mpScene)
+			mpScene->GetDrawObjects().push_back(pObject);
 	}
 
 	bool Previewer::HandleGLMouseEvent() const
@@ -56,6 +66,12 @@ namespace GLFW
 		ImGui_ImplGlfw_InitForOpenGL(mpWindow, true);
 		const char* glsl_version = "#version 330";
 		ImGui_ImplOpenGL3_Init(glsl_version);
+
+	}
+
+	void Previewer::InitState()
+	{
+		mShowCoordnates = false;
 	}
 
 	void Previewer::ReleaseImGui() const
@@ -107,6 +123,7 @@ namespace GLFW
 				ImGui::SetNextItemWidth(150);
 				ImGui::Combo("Display Mode", (int*)(&mDisplayMode), displayModeItem, IM_ARRAYSIZE(displayModeItem));
 				ImGui::Checkbox("  LockCamera", &mpRenderer->mLockCamera);
+				ImGui::Checkbox("  ShowCoordinates", &mShowCoordnates);
 				if (ImGui::IsMousePosValid())
 					ImGui::Text("Mouse Position: (%.1f,%.1f)", io.MousePos.x, io.MousePos.y);
 				else
@@ -121,17 +138,16 @@ namespace GLFW
 
 	void Previewer::DrawObjects() const
 	{
-		mpRenderer->Clear();
 		if (mDisplayMode == DispayMode::Face)
 		{
-			for (auto it : mDrawableObjects)
+			for (auto it : mpScene->GetDrawObjects())
 			{
 				mpRenderer->DrawFaces(*it);
 			}
 		}
 		else if (mDisplayMode == DispayMode::Mesh)
 		{
-			for (auto it : mDrawableObjects)
+			for (auto it : mpScene->GetDrawObjects())
 			{
 				mpRenderer->DrawFaces(*it);
 				mpRenderer->DrawWireFrame(*it);

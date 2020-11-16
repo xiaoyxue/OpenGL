@@ -8,6 +8,7 @@
 
 namespace OpenGL 
 {
+	using namespace Math;
 	class GLMesh: public DrawableObject
 	{
 	private:
@@ -23,6 +24,7 @@ namespace OpenGL
 		
 		void DrawFace(const Renderer& renderer) const override;
 		void DrawWireFrame(const Renderer& renderer) const override;
+		BBox GetBBox() const override;
 
 		void AddTexture(Texture* texture) { mTextures.push_back(texture); }
 		void AddMesh(const std::string& filename);

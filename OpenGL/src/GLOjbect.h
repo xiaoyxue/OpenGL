@@ -1,9 +1,12 @@
 #pragma once
 
 #include "ForwardDecl.h"
+#include "math/AABB.h"
+#include "math/Transform.h"
 
 namespace OpenGL 
 {
+	using namespace Math;
 	class GLObject
 	{
 	protected:
@@ -21,6 +24,8 @@ namespace OpenGL
 		virtual ~DrawableObject() = default;
 		virtual void DrawFace(const Renderer& renderer) const {}
 		virtual void DrawWireFrame(const Renderer& renderer) const {}
+		virtual BBox GetBBox() const = 0;
+		Transform WorldToLocal, LocalToWorld;
 	};
 
 }

@@ -10,6 +10,7 @@
 #include "Viewer.h"
 #include "GLMesh.h"
 #include "Previewer.h"
+#include "Scene.h"
 
 
 using namespace OpenGL;
@@ -46,7 +47,8 @@ int main(void)
 	mesh.AddTexture(&texture);
 	mesh.AddShader("Face", faceShader);
 	mesh.AddShader("WireFrame", lineShader);
-
+	Scene scene;
+	previewer.SetScene(&scene);
 	previewer.AddDrawableObject(&mesh);
 	renderer.SetCamera(&camera);
 	previewer.SetRenderer(&renderer);

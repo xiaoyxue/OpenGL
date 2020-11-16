@@ -90,6 +90,12 @@
     <ClCompile Include="src\imgui\imgui_utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\math\AABB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />
@@ -497,6 +503,7 @@
     </None>
     <None Include="res\shaders\DefaultFace.shader" />
     <None Include="res\shaders\DefaultLine.shader" />
+    <None Include="res\shaders\DefaultCoord.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Renderer.h">
@@ -1337,6 +1344,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\imgui\imgui_utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\math\AABB.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

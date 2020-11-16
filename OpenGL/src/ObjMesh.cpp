@@ -68,7 +68,9 @@ namespace OpenGL
 						vx = attrib.vertices[3 * idx.vertex_index + 0];
 						vy = attrib.vertices[3 * idx.vertex_index + 1];
 						vz = attrib.vertices[3 * idx.vertex_index + 2];
-						mVertices.push_back(Vec3(vx, vy, vz));
+						Vec3 vertex(vx, vy, vz);
+						mVertices.push_back(vertex);
+						mBBox.Fit(vertex);
 					}
 					if (idx.normal_index != -1)
 					{

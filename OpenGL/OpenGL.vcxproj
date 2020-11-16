@@ -163,10 +163,12 @@
     <ClCompile Include="src\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\IndexBuffer.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\math\AABB.cpp" />
     <ClCompile Include="src\math\Transform.cpp" />
     <ClCompile Include="src\ObjMesh.cpp" />
     <ClCompile Include="src\Previewer.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
+    <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\stb_image\stb_image.cpp" />
     <ClCompile Include="src\Texture.cpp" />
@@ -179,6 +181,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />
+    <None Include="res\shaders\DefaultCoord.shader" />
     <None Include="res\shaders\DefaultFace.shader" />
     <None Include="res\shaders\DefaultLine.shader" />
     <None Include="src\glm\detail\func_common.inl" />
@@ -567,6 +570,7 @@
     <ClInclude Include="src\glm\vector_relational.hpp" />
     <ClInclude Include="src\GLOjbect.h" />
     <ClInclude Include="src\imgui\imgui_utils.h" />
+    <ClInclude Include="src\math\AABB.h" />
     <ClInclude Include="src\window\GLWindow.h" />
     <ClInclude Include="src\imgui\imconfig.h" />
     <ClInclude Include="src\imgui\imgui.h" />

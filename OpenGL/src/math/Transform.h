@@ -1,6 +1,7 @@
 #pragma once
 #include "Utils.h"
 #include "Lingal.h"
+#include "AABB.h"
 
 namespace Math
 {
@@ -71,6 +72,31 @@ namespace Math
 			return Transform(mat * t.mat, t.invMat * invMat);
 		}
 
+		FORCE_INLINE Vector3 operator()(const Vector3& p) const {
+			Vector4 pp(p.x, p.y, p.z, 1.0);
+			pp = mat * pp;
+			if (pp.w == 1 || pp.w == 0) {
+				return Vector3(pp.x, pp.y, pp.z);
+			}
+			else {
+				return Vector3(pp.x, pp.y, pp.z) / pp.w;
+			}
+		}
+
+		FORCE_INLINE AABB operator()(const AABB& bound) const{
+			const Transform& transform = *this;
+			AABB ret;
+			ret = Union(ret, transform(Vec3(bound.minPoint.x, bound.minPoint.y, bound.minPoint.z)));
+			ret = Union(ret, transform(Vec3(bound.maxPoint.x, bound.minPoint.y, bound.minPoint.z)));
+			ret = Union(ret, transform(Vec3(bound.minPoint.x, bound.maxPoint.y, bound.minPoint.z)));
+			ret = Union(ret, transform(Vec3(bound.minPoint.x, bound.minPoint.y, bound.maxPoint.z)));
+			ret = Union(ret, transform(Vec3(bound.minPoint.x, bound.maxPoint.y, bound.maxPoint.z)));
+			ret = Union(ret, transform(Vec3(bound.maxPoint.x, bound.maxPoint.y, bound.minPoint.z)));
+			ret = Union(ret, transform(Vec3(bound.maxPoint.x, bound.minPoint.y, bound.maxPoint.z)));
+			ret = Union(ret, transform(Vec3(bound.maxPoint.x, bound.maxPoint.y, bound.maxPoint.z)));
+			return ret;
+		}
+
 		static Transform Translate(const Vector3& v);
 		static Transform Scale(real sx, real sy, real sz);
 		static Transform RotateX(real theta);
@@ -80,6 +106,8 @@ namespace Math
 		static Transform LookAt(const Vector3& pos, const Vector3& look, const Vector3& up);
 		static Transform Orthographic(real znear, real zfar);
 		static Transform Perspective(real fovy, real aspect, real dis, real znear, real zfar);
+
+		
 	private:
 		Matrix4 mat, invMat;
 	};

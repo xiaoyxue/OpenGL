@@ -8,6 +8,8 @@
 #include "VertexBufferLayout.h"
 #include "Camera.h"
 
+#include <GLFW/glfw3.h>
+
 namespace OpenGL
 {
 	GLMesh::GLMesh()
@@ -27,7 +29,7 @@ namespace OpenGL
 		shader->Bind();
 		Matrix4 proj = renderer.GetCamera()->GetProjMatrix();
 		Matrix4 view = renderer.GetCamera()->GetViewMatrix();
-		Matrix4 model = Matrix4(1.f);
+		Matrix4 model = LocalToWorld.GetInverseMatrix();
 		shader->SetUniformMat4f("u_Model", model);
 		shader->SetUniformMat4f("u_View", view);
 		shader->SetUniformMat4f("u_Proj", proj);
@@ -43,13 +45,18 @@ namespace OpenGL
 		shader->Bind();
 		Matrix4 proj = renderer.GetCamera()->GetProjMatrix();
 		Matrix4 view = renderer.GetCamera()->GetViewMatrix();
-		Matrix4 model = Matrix4(1.f);
+		Matrix4 model = LocalToWorld.GetInverseMatrix();
 		shader->SetUniformMat4f("u_Model", model);
 		shader->SetUniformMat4f("u_View", view);
 		shader->SetUniformMat4f("u_Proj", proj);
 		shader->SetUniform4f("u_LineColor", 0.3f, 0.3f, 0.3f, 0.0f);
 		renderer.Draw(*mpVAO, *mpIBO, *shader);
 		renderer.DisableDepthTest();
+	}
+
+	BBox GLMesh::GetBBox() const
+	{
+		return LocalToWorld(mpObjMesh->mBBox); 
 	}
 
 	void GLMesh::AddMesh(const std::string& filename)
@@ -71,6 +78,8 @@ namespace OpenGL
 		mpVAO->UnBind();
 		mpVBO->UnBind();
 		mpIBO->UnBind();
+		LocalToWorld = Transform::Translate(mpObjMesh->mBBox.Center());
+		WorldToLocal = Inverse(LocalToWorld);
 	}
 
 	void GLMesh::AddShader(const std::string &shaderName, std::shared_ptr<Shader> shader)

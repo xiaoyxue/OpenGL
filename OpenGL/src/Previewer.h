@@ -17,7 +17,8 @@ namespace GLFW
 			Mesh = 1
 		};
 	private:
-		std::vector<DrawableObject*> mDrawableObjects;
+		//std::vector<DrawableObject*> mDrawableObjects;
+		Scene* mpScene;
 	public:
 		Previewer() = default;
 		Previewer(const std::string& title, int w = 1024, int h = 768);
@@ -25,6 +26,7 @@ namespace GLFW
 
 		void Init();
 		void DrawAll() const override;
+		void SetScene(Scene* pScene);
 		void AddDrawableObject(DrawableObject* pObject);
 
 	protected:
@@ -34,9 +36,11 @@ namespace GLFW
 		static const ImVec2 mButtonSize;
 		mutable DispayMode mDisplayMode;
 		mutable bool mRendering;
+		mutable bool mShowCoordnates;
 		
 	private:
 		void InitImGui() const;
+		void InitState();
 		void ReleaseImGui()const;
 		void DrawGui() const;
 		void DrawObjects() const;
