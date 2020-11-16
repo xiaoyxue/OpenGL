@@ -92,6 +92,7 @@ namespace OpenGL
 	{
 		GLCall(glDisable(GL_POLYGON_OFFSET_FILL));
 		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
+		//GLCall(glLineWidth(0.5));
 		object.DrawWireFrame(*this);
 	}
 
@@ -166,18 +167,22 @@ namespace OpenGL
 
 	void Renderer::KeyBoardEvent(int key, int event, int mods, float deltaTime)
 	{
-		if (key == KEYBOARD_W) {
-			mpCamera->MoveY(deltaTime);
+		if (!mLockCamera)
+		{
+			if (key == KEYBOARD_W) {
+				mpCamera->MoveY(deltaTime);
+			}
+			else if (key == KEYBOARD_S) {
+				mpCamera->MoveY(-deltaTime);
+			}
+			else if (key == KEYBOARD_A) {
+				mpCamera->MoveX(-deltaTime);
+			}
+			else if (key == KEYBOARD_D) {
+				mpCamera->MoveX(deltaTime);
+			}
 		}
-		else if (key == KEYBOARD_S) {
-			mpCamera->MoveY(-deltaTime);
-		}
-		else if (key == KEYBOARD_A) {
-			mpCamera->MoveX(-deltaTime);
-		}
-		else if (key == KEYBOARD_D) {
-			mpCamera->MoveX(deltaTime);
-		}
+
 	}
 
 	void Renderer::CursorEvent(float x, float y)
