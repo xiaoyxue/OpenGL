@@ -90,6 +90,7 @@ namespace Math
 
 		Vector3 right = Cross(up, dir).Norm();
 		Vector3 newUp = Cross(dir, right);
+		//correct right direction
 		cameraToWorld(0, 0) = -right.x;
 		cameraToWorld(1, 0) = -right.y;
 		cameraToWorld(2, 0) = -right.z;
@@ -102,10 +103,6 @@ namespace Math
 		cameraToWorld(1, 2) = dir.y;
 		cameraToWorld(2, 2) = dir.z;
 		cameraToWorld(3, 2) = 0.;
-		//cameraToWorld(0, 3) = -Dot(right, pos);
-		//cameraToWorld(1, 3) = -Dot(newUp, pos);
-		//cameraToWorld(2, 3) = Dot(dir, pos);
-		//cameraToWorld(3, 3) = 1;
 		return Transform(Inverse(cameraToWorld), cameraToWorld);
 	}
 

@@ -3,11 +3,11 @@
 #include <unordered_map>
 #include "math/Lingal.h"
 #include "GLOjbect.h"
-#include "glm/glm.hpp"
 
 namespace OpenGL
 {
 	using namespace Math;
+
 	struct ShaderProgramSource
 	{
 		std::string VertexSource;
@@ -35,6 +35,7 @@ namespace OpenGL
 		void SetUniformMat2f(const std::string& name, const Matrix2& mat);
 		void SetUniformMat3f(const std::string& name, const Matrix3& mat);
 		void SetUniformMat4f(const std::string& name, const Matrix4& mat);
+
 	private:
 		unsigned int GetUniformLocation(const std::string& name);
 		ShaderProgramSource ParseShader(const std::string& filepath);

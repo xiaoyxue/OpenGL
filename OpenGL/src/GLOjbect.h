@@ -1,10 +1,9 @@
 #pragma once
 
+#include "ForwardDecl.h"
+
 namespace OpenGL 
 {
-	class Renderer;
-	class Shader;
-
 	class GLObject
 	{
 	protected:

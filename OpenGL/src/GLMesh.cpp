@@ -10,8 +10,6 @@
 
 namespace OpenGL
 {
-
-
 	GLMesh::GLMesh()
 	{
 
@@ -64,6 +62,7 @@ namespace OpenGL
 		mpIBO = std::make_unique<IndexBuffer>();
 		mpIBO->SetData(&(mpObjMesh->mGLIndices[0]), mpObjMesh->mGLIndices.size());
 		VertexBufferLayout layout;
+		layout.Push<float>(3);
 		layout.Push<float>(3);
 		layout.Push<float>(2);
 		layout.Push<float>(3);

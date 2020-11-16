@@ -8,7 +8,7 @@
 namespace OpenGL
 {
 
-	OpenGL::Renderer* Viewer::mpRenderer = nullptr;
+	Renderer* Viewer::mpRenderer = nullptr;
 	
 	int Viewer::mWidth, Viewer::mHeight;
 
@@ -71,6 +71,7 @@ namespace OpenGL
 			exit(-1);
 		}
 
+
 		if (mpRenderer)
 		{
 			mpRenderer->Init();
@@ -109,7 +110,7 @@ namespace OpenGL
 		{
 			//it->DrawFace(*mpRenderer);
 			//it->DrawWireFrame(*mpRenderer);
-			mpRenderer->DrawFace(*it);
+			mpRenderer->DrawFaces(*it);
 			mpRenderer->DrawWireFrame(*it);
 		}
 

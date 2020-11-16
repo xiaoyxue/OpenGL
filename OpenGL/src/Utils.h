@@ -3,7 +3,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 
-#include <stdint.h>
+#include <cstdint>
 #include <algorithm>
 #include "Def.h"
 /***************** Type ******************/

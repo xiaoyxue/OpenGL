@@ -58,54 +58,87 @@ namespace OpenGL
 				for (size_t v = 0; v < fv; v++) 
 				{
 					// access to vertex
+					tinyobj::real_t 
+						vx, vy, vz,
+						nx, ny, nz,
+						tx, ty;
 					tinyobj::index_t idx = shapes[s].mesh.indices[index_offset + v];
-					tinyobj::real_t vx = attrib.vertices[3 * idx.vertex_index + 0];
-					tinyobj::real_t vy = attrib.vertices[3 * idx.vertex_index + 1];
-					tinyobj::real_t vz = attrib.vertices[3 * idx.vertex_index + 2];
-					tinyobj::real_t nx = attrib.normals[3 * idx.normal_index + 0];
-					tinyobj::real_t ny = attrib.normals[3 * idx.normal_index + 1];
-					tinyobj::real_t nz = attrib.normals[3 * idx.normal_index + 2];
-					tinyobj::real_t tx = attrib.texcoords[2 * idx.texcoord_index + 0];
-					tinyobj::real_t ty = attrib.texcoords[2 * idx.texcoord_index + 1];
+					if (idx.vertex_index != -1)
+					{
+						vx = attrib.vertices[3 * idx.vertex_index + 0];
+						vy = attrib.vertices[3 * idx.vertex_index + 1];
+						vz = attrib.vertices[3 * idx.vertex_index + 2];
+						mVertices.push_back(Vec3(vx, vy, vz));
+					}
+					if (idx.normal_index != -1)
+					{
+						nx = attrib.normals[3 * idx.normal_index + 0];
+						ny = attrib.normals[3 * idx.normal_index + 1];
+						nz = attrib.normals[3 * idx.normal_index + 2];
+						mNormals.push_back(Vec3(nx, ny, nz));
+						mHasNormal = true;
+					}
+					if (idx.texcoord_index != -1)
+					{
+						tx = attrib.texcoords[2 * idx.texcoord_index + 0];
+						ty = attrib.texcoords[2 * idx.texcoord_index + 1];
+						mTextureCoords.push_back(Vec2(tx, ty));
+					}
+					else
+					{
+						mTextureCoords.push_back(Vec2(0, 0));
+					}
 					// Optional: vertex colors
 					// tinyobj::real_t red = attrib.colors[3*idx.vertex_index+0];
 					// tinyobj::real_t green = attrib.colors[3*idx.vertex_index+1];
 					// tinyobj::real_t blue = attrib.colors[3*idx.vertex_index+2];
+
+					mGLIndices.push_back(nVertices);
+					nVertices++;
+				}
+				if (!mHasNormal) {
+					Vec3* a = &mVertices[mVertices.size() - 1] - 2;
+					Vec3 generatedNormal = Cross(a[1] - a[0], a[2] - a[0]);
+					if (generatedNormal.Length() > 1e-6f) {
+						generatedNormal = generatedNormal.Norm();
+					}
+					for (int v = 0; v < fv; v++) {
+						mNormals.push_back(generatedNormal);
+					}
+				}
+				for (int v = 0; v < fv; ++v)
+				{
 					float normal_factor = 0.2f;
 					float diffuse_factor = 1 - normal_factor;
 					float diffuse[3];
 					for (int i = 0; i < 3; ++i)
 						diffuse[i] = materials[materials.size() - 1].diffuse[i];
-					float c[3] = { nx * normal_factor + diffuse[0] * diffuse_factor,
-								   ny * normal_factor + diffuse[1] * diffuse_factor,
-								   nz * normal_factor + diffuse[2] * diffuse_factor };
+					float c[3] = { mNormals[nVertices - fv + v][0] * normal_factor + diffuse[0] * diffuse_factor,
+								   mNormals[nVertices - fv + v][1] * normal_factor + diffuse[1] * diffuse_factor,
+								   mNormals[nVertices - fv + v][2] * normal_factor + diffuse[2] * diffuse_factor };
 					float len2 = c[0] * c[0] + c[1] * c[1] + c[2] * c[2];
-					if(len2 > 0.f)
+					if (len2 > 0.f)
 					{
 						float len = std::sqrt(len2);
 						c[0] /= len;
 						c[1] /= len;
 						c[2] /= len;
 					}
-					//OpenGL Data
-					mGLVertices.push_back(vx);
-					mGLVertices.push_back(vy);
-					mGLVertices.push_back(vz);
-					mGLVertices.push_back(tx);
-					mGLVertices.push_back(ty);
+					mGLVertices.push_back(mVertices[nVertices - fv + v].x);
+					mGLVertices.push_back(mVertices[nVertices - fv + v].y);
+					mGLVertices.push_back(mVertices[nVertices - fv + v].z);
+					mGLVertices.push_back(mNormals[nVertices - fv + v].x);
+					mGLVertices.push_back(mNormals[nVertices - fv + v].y);
+					mGLVertices.push_back(mNormals[nVertices - fv + v].z);
+					mGLVertices.push_back(mTextureCoords[nVertices - fv + v].x);
+					mGLVertices.push_back(mTextureCoords[nVertices - fv + v].y);
 					mGLVertices.push_back(c[0] * 0.5 + 0.5);
 					mGLVertices.push_back(c[1] * 0.5 + 0.5);
 					mGLVertices.push_back(c[2] * 0.5 + 0.5);
 					mGLVertices.push_back(lineColor[0]);
 					mGLVertices.push_back(lineColor[1]);
 					mGLVertices.push_back(lineColor[2]);
-					mGLIndices.push_back(nVertices);
-					mVertices.push_back(Vec3(vx, vy, vz));
-					mTextureCoords.push_back(Vec2(tx, ty));
-					mNormals.push_back(Vec3(nx, ny, nz));
-					nVertices++;
 				}
-
 				index_offset += fv;
 
 				// per-face material

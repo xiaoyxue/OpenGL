@@ -1,6 +1,7 @@
 #pragma once
 
 #include <GL/glew.h>
+#include "ForwardDecl.h"
 
 namespace OpenGL
 {
@@ -14,17 +15,11 @@ namespace OpenGL
     void GLClearError();
     bool GLLogCall(const char* function, const char* file, int line);
 
-
-    class VertexArray;
-    class IndexBuffer;
-    class Shader;
-    class Camera;
-    class DrawableObject;
-
     class Renderer
     {
     private:
         Camera* mpCamera;
+        Scene* mpScene;
         int mWidth, mHeight;
 		bool mMouseLeftDown;
 		bool mMouseRightDown;
@@ -36,9 +31,12 @@ namespace OpenGL
         void Init();
         void Resize(int width, int height);
         void SetSize(int width, int height);
+        void SetScene(Scene *scene);
         void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
-        void DrawFace(const DrawableObject &object);
-        void DrawWireFrame(const DrawableObject& object);
+        void DrawFaces(const DrawableObject &object) const;
+        void DrawWireFrame(const DrawableObject& object) const;
+        void DrawFaces() const;
+        void DrawWireFrame() const;
         void SetCamera(Camera *camera);
         void Clear() const;
         void EnableDepthTest() const;
@@ -52,11 +50,14 @@ namespace OpenGL
 
         static unsigned int IsReady();
     private:
-
+		bool mLockCamera;
+    private:
         void MouseRightDrag(float x, float y);
         void MouseLeftDrag(float x, float y);
         void MouseMiddleDrag(float x, float y);
         void MouseLeftRightDrag(float x, float y);
+
+        friend class GLFW::Previewer;
     };
 
 }
