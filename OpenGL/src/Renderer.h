@@ -16,6 +16,16 @@ namespace OpenGL
     x;\
     ASSERT(GLLogCall(#x, __FILE__, __LINE__))
 
+#define GLCallNoError(x) \
+    do \
+    {\
+        x; \
+        glGetError();\
+    } while (0)
+
+    
+    
+
 
     void GLClearError();
     bool GLLogCall(const char* function, const char* file, int line);
@@ -24,9 +34,9 @@ namespace OpenGL
     {
         struct Coordinates
         {
-            float mX[6] = { -1000000, 0, 0, 1000000, 0, 0 };
-            float mY[6] = { 0, -1000000, 0, 0, 10000000, 0 };
-            float mZ[6] = { 0, 0, -1000000, 0, 0, 1000000 };
+            float mX[6] = { 0, 0, 0, 100000, 0, 0 };
+            float mY[6] = { 0, 0, 0, 0, 100000, 0 };
+            float mZ[6] = { 0, 0, 0, 0, 0, 100000 };
             std::vector<float> mXZ;
             std::vector<unsigned int> mIndexXZ;
             unsigned int mIndex[2] = { 0, 1 };

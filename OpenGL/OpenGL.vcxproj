@@ -154,6 +154,7 @@
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\GLMesh.cpp" />
     <ClCompile Include="src\glm\detail\glm.cpp" />
+    <ClCompile Include="src\GLOjbect.cpp" />
     <ClCompile Include="src\imgui\imgui.cpp" />
     <ClCompile Include="src\imgui\imgui_demo.cpp" />
     <ClCompile Include="src\imgui\imgui_draw.cpp" />
@@ -585,7 +586,6 @@
     <ClInclude Include="src\math\Transform.h" />
     <ClInclude Include="src\Misc.h" />
     <ClInclude Include="src\ObjMesh.h" />
-    <ClInclude Include="src\OpenGL.h" />
     <ClInclude Include="src\Previewer.h" />
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\Scene.h" />

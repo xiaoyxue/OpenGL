@@ -142,6 +142,8 @@ namespace GLFW
 		{
 			for (auto it : mpScene->GetDrawObjects())
 			{
+				//it->Rotate(0.5, 0);
+				//it->Translate(0.01, 0, 0);
 				mpRenderer->DrawFaces(*it);
 			}
 		}

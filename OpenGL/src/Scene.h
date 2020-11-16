@@ -11,7 +11,10 @@ namespace OpenGL
 	private:
 		std::vector<DrawableObject*> mDrawableObjects;
 		BBox mBBox;
+		unsigned int mObjectCount;
+		unsigned int mSelectionId;
 	public:
+		Scene() : mObjectCount(0) {}
 		inline std::vector<DrawableObject*>& GetDrawObjects() 
 		{ 
 			return mDrawableObjects; 

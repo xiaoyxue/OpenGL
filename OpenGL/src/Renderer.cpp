@@ -190,6 +190,7 @@ namespace OpenGL
 
 		mCoords.mCoordShader.UnBind();
 		GLCall(glEnable(GL_DEPTH_TEST));
+
 	}
 
 	void Renderer::MouseButtonEvent(int button, int action, int mods)

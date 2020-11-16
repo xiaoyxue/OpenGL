@@ -25,7 +25,16 @@ namespace OpenGL
 		virtual void DrawFace(const Renderer& renderer) const {}
 		virtual void DrawWireFrame(const Renderer& renderer) const {}
 		virtual BBox GetBBox() const = 0;
+
+		virtual void Rotate(float dPhi, float dTheta);
+		virtual void Translate(float dx, float dy, float dz);
+		virtual void Scale(float scale);
+		virtual inline unsigned int GetObjectId() const { return mObjectId; }
+		virtual inline void SetObjectId(unsigned int id) { mObjectId = id; }
+	public:
 		Transform WorldToLocal, LocalToWorld;
+	private:
+		unsigned int mObjectId;
 	};
 
 }

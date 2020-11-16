@@ -29,12 +29,13 @@ namespace OpenGL
 		shader->Bind();
 		Matrix4 proj = renderer.GetCamera()->GetProjMatrix();
 		Matrix4 view = renderer.GetCamera()->GetViewMatrix();
-		Matrix4 model = LocalToWorld.GetInverseMatrix();
+		Matrix4 model = LocalToWorld.GetMatrix();
 		shader->SetUniformMat4f("u_Model", model);
 		shader->SetUniformMat4f("u_View", view);
 		shader->SetUniformMat4f("u_Proj", proj);
 		renderer.Draw(*mpVAO, *mpIBO, *shader);
 		renderer.DisableDepthTest();
+		shader->UnBind();
 	}
 
 
@@ -45,13 +46,14 @@ namespace OpenGL
 		shader->Bind();
 		Matrix4 proj = renderer.GetCamera()->GetProjMatrix();
 		Matrix4 view = renderer.GetCamera()->GetViewMatrix();
-		Matrix4 model = LocalToWorld.GetInverseMatrix();
+		Matrix4 model = LocalToWorld.GetMatrix();
 		shader->SetUniformMat4f("u_Model", model);
 		shader->SetUniformMat4f("u_View", view);
 		shader->SetUniformMat4f("u_Proj", proj);
 		shader->SetUniform4f("u_LineColor", 0.3f, 0.3f, 0.3f, 0.0f);
 		renderer.Draw(*mpVAO, *mpIBO, *shader);
 		renderer.DisableDepthTest();
+		shader->UnBind();
 	}
 
 	BBox GLMesh::GetBBox() const
@@ -78,8 +80,11 @@ namespace OpenGL
 		mpVAO->UnBind();
 		mpVBO->UnBind();
 		mpIBO->UnBind();
-		LocalToWorld = Transform::Translate(mpObjMesh->mBBox.Center());
-		WorldToLocal = Inverse(LocalToWorld);
+		//LocalToWorld = Inverse(Transform::Translate(mpObjMesh->mBBox.Center()));
+		//WorldToLocal = Inverse(LocalToWorld);
+		WorldToLocal = Transform::Translate(mpObjMesh->mBBox.Center());
+		LocalToWorld = Inverse(WorldToLocal);
+
 	}
 
 	void GLMesh::AddShader(const std::string &shaderName, std::shared_ptr<Shader> shader)
