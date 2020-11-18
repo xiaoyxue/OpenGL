@@ -7,31 +7,12 @@
 #include "GLOjbect.h"
 #include "Scene.h"
 #include "math/Lingal.h"
+#include "DrawableObject.h"
 #include <iostream>
 
 namespace OpenGL
 {
 	using namespace Math;
-
-	void GLClearError()
-	{
-		int err;
-		while ((err = glGetError()) != GL_NO_ERROR)
-		{
-			std::cout << std::hex << err << std::endl;
-		};
-	}
-
-	bool GLLogCall(const char* function, const char* file, int line)
-	{
-		while (GLenum error = glGetError())
-		{
-			std::cout << "[OpenGL Error] (" << error << ") " <<
-				function << " " << file << ": " << line << std::endl;
-			return false;
-		}
-		return true;
-	}
 
 	Renderer::Renderer()
 	{
@@ -99,6 +80,12 @@ namespace OpenGL
 		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
 		GLCall(glLineWidth(0.5));
 		object.DrawWireFrame(*this);
+	}
+
+	void Renderer::DrawObjectId(const DrawableObject& obejct) const
+	{
+		mPicker.Bind();
+		obejct.DrawObjectId(*this);
 	}
 
 	void Renderer::DrawFaces() const
@@ -193,6 +180,11 @@ namespace OpenGL
 
 	}
 
+	unsigned int Renderer::GetObjectId(int x, int y)
+	{
+		return 0;
+	}
+
 	void Renderer::MouseButtonEvent(int button, int action, int mods)
 	{
 		if (button == MOUSE_LEFT)
@@ -253,6 +245,19 @@ namespace OpenGL
 		mMouseY = y;
 	}
 
+	void Renderer::TestPick(const DrawableObject &object)
+	{
+		GLCall(glDisable(GL_BLEND));
+		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
+		//GLCall(glEnable(GL_POLYGON_OFFSET_FILL));
+		//GLCall(glPolygonOffset(1.0, 1.0));
+		object.DrawObjectId(*this);
+		glFlush();
+		glFinish();
+	}
+
+
+
 	unsigned int Renderer::IsReady()
 	{
 		GLenum status =  glewInit(); //Init glew
@@ -283,6 +288,30 @@ namespace OpenGL
 	{
 		if (!mLockCamera)
 			mpCamera->Move(-(x - mMouseX) / float(mWidth), (y - mMouseY) / float(mHeight));
+	}
+
+	void Renderer::MousePick()
+	{
+
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		unsigned char data[4];
+		glReadPixels((int)mMouseX, mHeight - int(mMouseY) - 1, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+		// Convert the color back to an integer ID
+		int pickedID =
+			data[0] +
+			data[1] * 256 +
+			data[2] * 256 * 256;
+
+		std::cout << mMouseX << " " << mMouseY << std::endl;
+		if (pickedID == 0) { // Full white, must be the background !
+			std::cout << "background" << std::endl;
+		}
+		else {
+
+			std::cout << "mesh " << pickedID - 1000 << std::endl;
+
+		}
 	}
 
 	void Renderer::MouseRightDrag(float x, float y)

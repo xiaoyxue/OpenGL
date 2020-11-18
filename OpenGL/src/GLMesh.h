@@ -1,5 +1,5 @@
 #pragma once
-#include "GLOjbect.h"
+#include "DrawableObject.h"
 #include "Shader.h"
 #include "ForwardDecl.h"
 #include <iostream>
@@ -24,6 +24,7 @@ namespace OpenGL
 		
 		void DrawFace(const Renderer& renderer) const override;
 		void DrawWireFrame(const Renderer& renderer) const override;
+		void DrawObjectId(const Renderer& renderer) const override;
 		BBox GetBBox() const override;
 
 		void AddTexture(Texture* texture) { mTextures.push_back(texture); }

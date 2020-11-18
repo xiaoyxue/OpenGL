@@ -1,35 +1,15 @@
 #pragma once
-
-#include <GL/glew.h>
+#include "OpenGL.h"
 #include "ForwardDecl.h"
 #include "IndexBuffer.h"
 #include "VertexArray.h"
 #include "VertexBuffer.h"
 #include "VertexBufferLayout.h"
+#include "Picker.h"
 #include "Shader.h"
 
 namespace OpenGL
 {
-
-#define ASSERT(x) if(!(x)) __debugbreak();
-#define GLCall(x) GLClearError();\
-    x;\
-    ASSERT(GLLogCall(#x, __FILE__, __LINE__))
-
-#define GLCallNoError(x) \
-    do \
-    {\
-        x; \
-        glGetError();\
-    } while (0)
-
-    
-    
-
-
-    void GLClearError();
-    bool GLLogCall(const char* function, const char* file, int line);
-
     class Renderer
     {
         struct Coordinates
@@ -101,6 +81,8 @@ namespace OpenGL
         bool mDrawWireFrame;
 		float mMouseX, mMouseY;
         Coordinates mCoords;
+        mutable Picker mPicker;
+        
     public:
         Renderer();
         void Init();
@@ -110,6 +92,7 @@ namespace OpenGL
         void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
         void DrawFaces(const DrawableObject &object) const;
         void DrawWireFrame(const DrawableObject& object) const;
+        void DrawObjectId(const DrawableObject& obejct) const;
         void DrawFaces() const;
         void DrawWireFrame() const;
         void SetCamera(Camera *camera);
@@ -118,11 +101,14 @@ namespace OpenGL
         void DisableDepthTest() const;
         void DrawCoordinates() const;
         inline Camera* GetCamera() const { return mpCamera; }
+        unsigned int GetObjectId(int x, int y);
 
 		void MouseButtonEvent(int button, int action, int mods);
 		void KeyBoardEvent(int key, int event, int mods, float deltaTime);
 		void CursorEvent(float x, float y);
 
+
+        void TestPick(const DrawableObject &object);
         static unsigned int IsReady();
     private:
 		bool mLockCamera;
@@ -131,7 +117,7 @@ namespace OpenGL
         void MouseLeftDrag(float x, float y);
         void MouseMiddleDrag(float x, float y);
         void MouseLeftRightDrag(float x, float y);
-
+        void MousePick();
         friend class GLFW::Previewer;
     };
 

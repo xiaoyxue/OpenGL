@@ -15,6 +15,9 @@ namespace OpenGL
 	class Renderer;
 	class DrawableObject;
 	class Shader;
+	class FrameBuffer;
+	enum class ImageDataType;
+	enum class ImageFormat;
 }
 
 namespace GLFW

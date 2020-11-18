@@ -43,7 +43,7 @@ int main(void)
 	std::shared_ptr<Shader> lineShader = std::make_shared<Shader>("res/shaders/DefaultLine.shader");
 
 	GLMesh mesh;
-	mesh.AddMesh("..\\models\\bunny\\bunny.obj");
+	mesh.AddMesh("..\\models\\cube\\cube.obj");
 	mesh.AddTexture(&texture);
 	mesh.AddShader("Face", faceShader);
 	mesh.AddShader("WireFrame", lineShader);

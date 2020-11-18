@@ -1,5 +1,5 @@
 #include "Scene.h"
-#include "GLOjbect.h"
+#include "DrawableObject.h"
 
 namespace OpenGL
 {

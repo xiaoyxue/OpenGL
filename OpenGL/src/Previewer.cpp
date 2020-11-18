@@ -33,9 +33,9 @@ namespace GLFW
 	void Previewer::DrawAll() const
 	{
 		mpRenderer->Clear();
-		if(mShowCoordnates)
-			mpRenderer->DrawCoordinates();
 		DrawObjects();
+		if (mShowCoordnates)
+			mpRenderer->DrawCoordinates();
 		DrawGui();
 	}
 
@@ -119,7 +119,7 @@ namespace GLFW
 					
 				}
 				ImGui::Separator();
-				const char* displayModeItem[] = { "Face", "Mesh" };
+				const char* displayModeItem[] = { "Face", "Mesh", "Edit" };
 				ImGui::SetNextItemWidth(150);
 				ImGui::Combo("Display Mode", (int*)(&mDisplayMode), displayModeItem, IM_ARRAYSIZE(displayModeItem));
 				ImGui::Checkbox("  LockCamera", &mpRenderer->mLockCamera);
@@ -142,9 +142,8 @@ namespace GLFW
 		{
 			for (auto it : mpScene->GetDrawObjects())
 			{
-				//it->Rotate(0.5, 0);
-				//it->Translate(0.01, 0, 0);
 				mpRenderer->DrawFaces(*it);
+				
 			}
 		}
 		else if (mDisplayMode == DispayMode::Mesh)
@@ -155,7 +154,48 @@ namespace GLFW
 				mpRenderer->DrawWireFrame(*it);
 			}
 		}
+		else if (mDisplayMode == DispayMode::Edit)
+		{
+			for (auto it : mpScene->GetDrawObjects())
+			{
+				mpRenderer->TestPick(*it);
+			}
+		}
+	}
 
+	void Previewer::MouseButtonCallbackFunc(int button, int action, int mods)
+	{
+		if (!HandleGLMouseEvent())
+			return;
+		if(mDisplayMode != DispayMode::Edit)
+			mpRenderer->MouseButtonEvent(button, action, mods);
+		else
+		{
+			if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS)
+				mpRenderer->MousePick();
+		}
+
+
+	}
+
+	void Previewer::ScrollCallbackFunc(double xoffset, double yoffset)
+	{
+
+	}
+
+	void Previewer::CursorCallbackFunc(double xpos, double ypos)
+	{
+		mpRenderer->CursorEvent((float)xpos, (float)ypos);
+	}
+
+	void Previewer::ResizeCallbackFunc(int width, int height)
+	{
+		mpRenderer->Resize(mWidth, mHeight);
+	}
+
+	void Previewer::KeyCallbackFunc(int key, int scancode, int action, int mods)
+	{
+		mpRenderer->KeyBoardEvent(key, scancode, action, mDeltaTime);
 	}
 
 }

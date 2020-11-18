@@ -56,6 +56,26 @@ namespace OpenGL
 		shader->UnBind();
 	}
 
+	void GLMesh::DrawObjectId(const Renderer& renderer) const
+	{
+		auto& shader = mSelectorShader;
+		renderer.EnableDepthTest();
+		shader.Bind();
+		Matrix4 proj = renderer.GetCamera()->GetProjMatrix();
+		Matrix4 view = renderer.GetCamera()->GetViewMatrix();
+		Matrix4 model = LocalToWorld.GetMatrix();
+		shader.SetUniformMat4f("u_Model", model);
+		shader.SetUniformMat4f("u_View", view);
+		shader.SetUniformMat4f("u_Proj", proj);
+		int r = ((mObjectId + 1000) & 0x000000FF) >> 0;
+		int g = ((mObjectId + 1000) & 0x0000FF00) >> 8;
+		int b = ((mObjectId + 1000) & 0x00FF0000) >> 16;
+		shader.SetUniform4f("u_Id", r / 255.f, g / 255.f, b / 255.f, 1.0f);
+		renderer.Draw(*mpVAO, *mpIBO, shader);
+		renderer.DisableDepthTest();
+		shader.UnBind();
+	}
+
 	BBox GLMesh::GetBBox() const
 	{
 		return LocalToWorld(mpObjMesh->mBBox); 

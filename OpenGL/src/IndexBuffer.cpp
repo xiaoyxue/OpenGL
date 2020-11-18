@@ -1,5 +1,5 @@
 #include "IndexBuffer.h"
-#include "Renderer.h"
+#include "OpenGL.h"
 
 namespace OpenGL
 {
