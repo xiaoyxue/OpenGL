@@ -5,12 +5,16 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_utils.h"
+#include "Camera.h"
+#include "Misc.h"
 #include <iostream>
+#include "Picker.h"
 
 
 namespace GLFW
 {
 	const ImVec2 Previewer::mButtonSize = ImVec2(200, 20);
+
 
 	Previewer::Previewer(const std::string& title, int w /*= 1024*/, int h /*= 760*/)
 		:GLWindow(title, w, h)
@@ -44,10 +48,28 @@ namespace GLFW
 		mpScene = pScene;
 	}
 
+	void Previewer::SetCamera(Camera* pCamera)
+	{
+		mpCamera = pCamera;
+	}
+
 	void Previewer::AddDrawableObject(DrawableObject* pObject)
 	{
 		if(mpScene)
-			mpScene->GetDrawObjects().push_back(pObject);
+			mpScene->AddDrawableObject(pObject);
+	}
+
+	unsigned int Previewer::Pick(int x, int y)
+	{
+		int id = -1;
+		mpPicker->Bind();
+		mpRenderer->Clear();
+		DrawIdMap();
+		glFlush();
+		glFinish();
+		id = mpPicker->Pick(x, y);
+		mpPicker->UnBind();
+		return id;
 	}
 
 	bool Previewer::HandleGLMouseEvent() const
@@ -122,7 +144,7 @@ namespace GLFW
 				const char* displayModeItem[] = { "Face", "Mesh", "Edit" };
 				ImGui::SetNextItemWidth(150);
 				ImGui::Combo("Display Mode", (int*)(&mDisplayMode), displayModeItem, IM_ARRAYSIZE(displayModeItem));
-				ImGui::Checkbox("  LockCamera", &mpRenderer->mLockCamera);
+				ImGui::Checkbox("  LockCamera", &mLockCamera);
 				ImGui::Checkbox("  ShowCoordinates", &mShowCoordnates);
 				if (ImGui::IsMousePosValid())
 					ImGui::Text("Mouse Position: (%.1f,%.1f)", io.MousePos.x, io.MousePos.y);
@@ -158,9 +180,14 @@ namespace GLFW
 		{
 			for (auto it : mpScene->GetDrawObjects())
 			{
-				mpRenderer->TestPick(*it);
+				mpRenderer->DrawFaces(*it);
 			}
 		}
+	}
+
+	void Previewer::DrawIdMap()
+	{
+		mpRenderer->DrawObjectsId(*mpScene);
 	}
 
 	void Previewer::MouseButtonCallbackFunc(int button, int action, int mods)
@@ -168,11 +195,15 @@ namespace GLFW
 		if (!HandleGLMouseEvent())
 			return;
 		if(mDisplayMode != DispayMode::Edit)
-			mpRenderer->MouseButtonEvent(button, action, mods);
+			MouseButtonEvent(button, action, mods);
 		else
 		{
 			if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS)
-				mpRenderer->MousePick();
+			{
+				Pick(mMouseX, mMouseY);
+				//mpRenderer->MousePick();
+			}
+				
 		}
 
 
@@ -185,7 +216,7 @@ namespace GLFW
 
 	void Previewer::CursorCallbackFunc(double xpos, double ypos)
 	{
-		mpRenderer->CursorEvent((float)xpos, (float)ypos);
+		CursorEvent((float)xpos, (float)ypos);
 	}
 
 	void Previewer::ResizeCallbackFunc(int width, int height)
@@ -195,8 +226,98 @@ namespace GLFW
 
 	void Previewer::KeyCallbackFunc(int key, int scancode, int action, int mods)
 	{
-		mpRenderer->KeyBoardEvent(key, scancode, action, mDeltaTime);
+		KeyBoardEvent(key, scancode, action, mDeltaTime);
 	}
 
+	void Previewer::MouseLeftDrag(float x, float y)
+	{
+		if (!mLockCamera)
+		{
+			float dx = x - mMouseX;
+			float dy = y - mMouseY;
+			float dPhi = dx * (PI / mWidth);
+			float dTheta = dy * (PI / mHeight);
+			mpCamera->Rotate(dPhi, -dTheta);
+		}
+	}
+
+	void Previewer::MouseMiddleDrag(float x, float y)
+	{
+		if (!mLockCamera)
+			mpCamera->Move(-(x - mMouseX) / float(mWidth), (y - mMouseY) / float(mHeight));
+	}
+
+	void Previewer::MouseLeftRightDrag(float x, float y)
+	{
+		if (!mLockCamera)
+			mpCamera->Move(-(x - mMouseX) / float(mWidth), (y - mMouseY) / float(mHeight));
+	}
+
+	void Previewer::MouseRightDrag(float x, float y)
+	{
+		if (!mLockCamera)
+			mpCamera->Scale((y - mMouseY) / float(mHeight));
+	}
+
+	void Previewer::MouseButtonEvent(int button, int action, int mods)
+	{
+		if (button == MOUSE_LEFT)
+		{
+			if (action == MOUSE_BUTTON_PRESS)
+				mMouseLeftDown = true;
+			else
+				mMouseLeftDown = false;
+		}
+		else if (button == MOUSE_RIGHT)
+		{
+			if (action == MOUSE_BUTTON_PRESS)
+				mMouseRightDown = true;
+			else
+				mMouseRightDown = false;
+		}
+		else if (button == MOUSE_MIDDLE)
+		{
+			if (action == MOUSE_BUTTON_PRESS)
+				mMouseMiddleDown = true;
+			else
+				mMouseMiddleDown = false;
+		}
+	}
+
+	void Previewer::KeyBoardEvent(int key, int event, int mods, float deltaTime)
+	{
+		if (!mLockCamera)
+		{
+			if (key == KEYBOARD_W) {
+				mpCamera->MoveY(deltaTime);
+			}
+			else if (key == KEYBOARD_S) {
+				mpCamera->MoveY(-deltaTime);
+			}
+			else if (key == KEYBOARD_A) {
+				mpCamera->MoveX(-deltaTime);
+			}
+			else if (key == KEYBOARD_D) {
+				mpCamera->MoveX(deltaTime);
+			}
+		}
+
+	}
+
+	void Previewer::CursorEvent(float x, float y)
+	{
+		if (mMouseLeftDown && !mMouseMiddleDown && !mMouseRightDown)
+			MouseLeftDrag(x, y);
+		else if (!mMouseLeftDown && !mMouseMiddleDown && mMouseRightDown)
+			MouseRightDrag(x, y);
+		else if (!mMouseLeftDown && mMouseMiddleDown && !mMouseRightDown)
+			MouseMiddleDrag(x, y);
+		else if (mMouseLeftDown && !mMouseMiddleDown && mMouseRightDown)
+			MouseLeftRightDrag(x, y);
+
+		mMouseX = x;
+		mMouseY = y;
+		mpRenderer->SetMousePoseition(mMouseX, mMouseY);
+	}
 }
 

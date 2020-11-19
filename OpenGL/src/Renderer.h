@@ -73,50 +73,35 @@ namespace OpenGL
         };
     private:
         Camera* mpCamera;
-        Scene* mpScene;
-        int mWidth, mHeight;
-		bool mMouseLeftDown;
-		bool mMouseRightDown;
-		bool mMouseMiddleDown;
-        bool mDrawWireFrame;
-		float mMouseX, mMouseY;
         Coordinates mCoords;
-        mutable Picker mPicker;
+        //Picker* mPicker;
+        int mWidth, mHeight;
+        float mMouseX, mMouseY;
         
     public:
         Renderer();
         void Init();
         void Resize(int width, int height);
         void SetSize(int width, int height);
-        void SetScene(Scene *scene);
+        void SetCamera(Camera* pCamera);
         void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
         void DrawFaces(const DrawableObject &object) const;
         void DrawWireFrame(const DrawableObject& object) const;
         void DrawObjectId(const DrawableObject& obejct) const;
-        void DrawFaces() const;
-        void DrawWireFrame() const;
-        void SetCamera(Camera *camera);
+        void DrawObjectsId(Scene& scene) const;
         void Clear() const;
         void EnableDepthTest() const;
         void DisableDepthTest() const;
         void DrawCoordinates() const;
-        inline Camera* GetCamera() const { return mpCamera; }
+        void SetMousePoseition(float x, float y);
         unsigned int GetObjectId(int x, int y);
-
-		void MouseButtonEvent(int button, int action, int mods);
-		void KeyBoardEvent(int key, int event, int mods, float deltaTime);
-		void CursorEvent(float x, float y);
-
+        inline Camera* GetCamera() const { return mpCamera; }
 
         void TestPick(const DrawableObject &object);
         static unsigned int IsReady();
     private:
-		bool mLockCamera;
+		
     private:
-        void MouseRightDrag(float x, float y);
-        void MouseLeftDrag(float x, float y);
-        void MouseMiddleDrag(float x, float y);
-        void MouseLeftRightDrag(float x, float y);
         void MousePick();
         friend class GLFW::Previewer;
     };

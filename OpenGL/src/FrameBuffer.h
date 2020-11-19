@@ -9,7 +9,8 @@ namespace OpenGL
 	enum class FrameBufferTarget
 	{
 		Draw = GL_DRAW_FRAMEBUFFER,
-		Read = GL_READ_FRAMEBUFFER
+		Read = GL_READ_FRAMEBUFFER,
+		FRAME = GL_FRAMEBUFFER
 	};
 
 	enum class FrameBufferAttachment

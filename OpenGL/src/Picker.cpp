@@ -1,14 +1,30 @@
 #include "Picker.h"
 #include "Texture.h"
 #include "GLImage.h"
+#include <iostream>
 
 namespace OpenGL
 {
 	
+	void Picker::Resize(int w, int h)
+	{
+		mWidth = w;
+		mHeight = h;
+		mpTexture = std::make_unique<Texture>(mWidth, mHeight);
+		mRenderBuffer.SetStorage(mWidth, mHeight, ImageFormat::Depth32);
+		mFrameBuffer.Attach(FrameBufferAttachment::Color0, mpTexture.get());
+		mFrameBuffer.Attach(FrameBufferAttachment::Depth, &mRenderBuffer);
+		mIdBuffer.resize(mWidth * mHeight);
+	}
+
 	Picker::Picker(int width, int height)
 	{
+		mWidth = width;
+		mHeight = height;
 		mpTexture = std::make_unique<Texture>(width, height);
+		mRenderBuffer.SetStorage(mWidth, mHeight, ImageFormat::Depth32);
 		mFrameBuffer.Attach(FrameBufferAttachment::Color0, mpTexture.get());
+		mFrameBuffer.Attach(FrameBufferAttachment::Depth, &mRenderBuffer);
 		mIdBuffer.resize(width * height);
 	}
 
@@ -22,10 +38,30 @@ namespace OpenGL
 		mFrameBuffer.UnBind();
 	}
 
-	unsigned int Picker::ReadObjectId(int x, int y)
+
+
+	unsigned int Picker::Pick(float x, float y)
 	{
-		mpTexture->ReadPixels(ImageFormat::RGBA_INT, ImageDataType::UnsignedInt, &mIdBuffer);
-		return 0;
+
+		unsigned char data[4];
+		glReadPixels((int)x, mHeight - int(y) - 1, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+		// Convert the color back to an integer ID
+		int pickedID =
+			data[0] +
+			data[1] * 256 +
+			data[2] * 256 * 256;
+
+		std::cout << x << " " << y << std::endl;
+		if (pickedID == 0) { // Full white, must be the background !
+			std::cout << "background" << std::endl;
+		}
+		else {
+
+			std::cout << "mesh " << pickedID - 1000 << std::endl;
+
+		}
+		return pickedID - 1000;
 	}
 
 }

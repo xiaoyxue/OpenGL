@@ -18,14 +18,7 @@ namespace OpenGL
 	{
 		mWidth = DEFAULT_RESOLUTION_X;
 		mHeight = DEFAULT_RESOLUTION_Y;
-		mMouseLeftDown = false;
-		mMouseRightDown = false;
-		mMouseMiddleDown = false;
-		mMouseX = false;
-		mMouseY = false;
-		mpCamera = nullptr;
-		mpScene = nullptr;
-		mDrawWireFrame = true;
+
 	}
 
 	void Renderer::Init()
@@ -41,18 +34,13 @@ namespace OpenGL
 		mWidth = width;
 		mHeight = height;
 		GLCall(glViewport(0, 0, mWidth, mHeight));
-		mpCamera->Resize(mWidth, mHeight);
+
 	}
 
 	void Renderer::SetSize(int width, int height)
 	{
 		mWidth = width;
 		mHeight = height;
-	}
-
-	void Renderer::SetScene(Scene *pScene)
-	{
-		mpScene = pScene;
 	}
 
 	void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const
@@ -84,38 +72,19 @@ namespace OpenGL
 
 	void Renderer::DrawObjectId(const DrawableObject& obejct) const
 	{
-		mPicker.Bind();
 		obejct.DrawObjectId(*this);
 	}
 
-	void Renderer::DrawFaces() const
+	void Renderer::DrawObjectsId(Scene& scene) const
 	{
 		GLCall(glDisable(GL_BLEND));
 		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
 		GLCall(glEnable(GL_POLYGON_OFFSET_FILL));
 		GLCall(glPolygonOffset(1.0, 1.0));
-		const auto& drawObjects = mpScene->GetDrawObjects();
-		for (DrawableObject* pObject : drawObjects)
+		for (auto it : scene.GetDrawObjects()) 
 		{
-			pObject->DrawFace(*this);
+			it->DrawObjectId(*this);
 		}
-	}
-
-	void Renderer::DrawWireFrame() const 
-	{
-		GLCall(glDisable(GL_BLEND));
-		GLCall(glDisable(GL_POLYGON_OFFSET_FILL));
-		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
-		const auto& drawObjects = mpScene->GetDrawObjects();
-		for (DrawableObject* pObject : drawObjects)
-		{
-			pObject->DrawWireFrame(*this);
-		}
-	}
-
-	void Renderer::SetCamera(Camera* camera)
-	{
-		mpCamera = camera;
 	}
 
 	void Renderer::Clear() const
@@ -177,7 +146,18 @@ namespace OpenGL
 
 		mCoords.mCoordShader.UnBind();
 		GLCall(glEnable(GL_DEPTH_TEST));
+		GLCall(glDisable(GL_BLEND));
+	}
 
+	void Renderer::SetMousePoseition(float x, float y)
+	{
+		mMouseX = x;
+		mMouseY = y;
+	}
+
+	void Renderer::SetCamera(Camera* pCamera)
+	{
+		mpCamera = pCamera;
 	}
 
 	unsigned int Renderer::GetObjectId(int x, int y)
@@ -185,72 +165,14 @@ namespace OpenGL
 		return 0;
 	}
 
-	void Renderer::MouseButtonEvent(int button, int action, int mods)
-	{
-		if (button == MOUSE_LEFT)
-		{
-			if (action == MOUSE_BUTTON_PRESS)
-				mMouseLeftDown = true;
-			else
-				mMouseLeftDown = false;
-		}
-		else if (button == MOUSE_RIGHT)
-		{
-			if (action == MOUSE_BUTTON_PRESS)
-				mMouseRightDown = true;
-			else
-				mMouseRightDown = false;
-		}
-		else if (button == MOUSE_MIDDLE)
-		{
-			if (action == MOUSE_BUTTON_PRESS)
-				mMouseMiddleDown = true;
-			else
-				mMouseMiddleDown = false;
-		}
-	}
 
-	void Renderer::KeyBoardEvent(int key, int event, int mods, float deltaTime)
-	{
-		if (!mLockCamera)
-		{
-			if (key == KEYBOARD_W) {
-				mpCamera->MoveY(deltaTime);
-			}
-			else if (key == KEYBOARD_S) {
-				mpCamera->MoveY(-deltaTime);
-			}
-			else if (key == KEYBOARD_A) {
-				mpCamera->MoveX(-deltaTime);
-			}
-			else if (key == KEYBOARD_D) {
-				mpCamera->MoveX(deltaTime);
-			}
-		}
-
-	}
-
-	void Renderer::CursorEvent(float x, float y)
-	{
-		if (mMouseLeftDown && !mMouseMiddleDown && !mMouseRightDown)
-			MouseLeftDrag(x, y);
-		else if (!mMouseLeftDown && !mMouseMiddleDown && mMouseRightDown)
-			MouseRightDrag(x, y);
-		else if (!mMouseLeftDown && mMouseMiddleDown && !mMouseRightDown)
-			MouseMiddleDrag(x, y);
-		else if (mMouseLeftDown && !mMouseMiddleDown && mMouseRightDown)
-			MouseLeftRightDrag(x, y);
-
-		mMouseX = x;
-		mMouseY = y;
-	}
 
 	void Renderer::TestPick(const DrawableObject &object)
 	{
 		GLCall(glDisable(GL_BLEND));
 		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
-		//GLCall(glEnable(GL_POLYGON_OFFSET_FILL));
-		//GLCall(glPolygonOffset(1.0, 1.0));
+		GLCall(glEnable(GL_POLYGON_OFFSET_FILL));
+		GLCall(glPolygonOffset(1.0, 1.0));
 		object.DrawObjectId(*this);
 		glFlush();
 		glFinish();
@@ -266,29 +188,6 @@ namespace OpenGL
 		return status;
 	}
 
-	void Renderer::MouseLeftDrag(float x, float y)
-	{
-		if (!mLockCamera)
-		{
-			float dx = x - mMouseX;
-			float dy = y - mMouseY;
-			float dPhi = dx * (PI / mWidth);
-			float dTheta = dy * (PI / mHeight);
-			mpCamera->Rotate(dPhi, -dTheta);
-		}
-	}
-
-	void Renderer::MouseMiddleDrag(float x, float y)
-	{
-		if (!mLockCamera)
-			mpCamera->Move(-(x - mMouseX) / float(mWidth), (y - mMouseY) / float(mHeight));
-	}
-
-	void Renderer::MouseLeftRightDrag(float x, float y)
-	{
-		if (!mLockCamera)
-			mpCamera->Move(-(x - mMouseX) / float(mWidth), (y - mMouseY) / float(mHeight));
-	}
 
 	void Renderer::MousePick()
 	{
@@ -314,10 +213,5 @@ namespace OpenGL
 		}
 	}
 
-	void Renderer::MouseRightDrag(float x, float y)
-	{
-		if(!mLockCamera)
-			mpCamera->Scale((y - mMouseY) / float(mHeight));
-	}
 
 }

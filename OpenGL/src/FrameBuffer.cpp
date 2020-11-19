@@ -16,15 +16,15 @@ namespace OpenGL
 
 	void RenderBuffer::SetStorage(int w, int h, ImageFormat format, int multiSampleCount)
 	{
-		glBindRenderbuffer(GL_RENDERBUFFER, mHandle);
-		glRenderbufferStorageMultisample(GL_RENDERBUFFER, multiSampleCount, (int)format, w, h);
-		glBindRenderbuffer(GL_RENDERBUFFER, 0);
+		GLCall(glBindRenderbuffer(GL_RENDERBUFFER, mHandle));
+		GLCall(glRenderbufferStorageMultisample(GL_RENDERBUFFER, multiSampleCount, (int)format, w, h));
+		GLCall(glBindRenderbuffer(GL_RENDERBUFFER, 0));
 	}
 
 	FrameBuffer::FrameBuffer()
 	{
-		mTarget = (int)FrameBufferTarget::Draw;
-		glGenFramebuffers(1, &mHandle);
+		mTarget = (int)FrameBufferTarget::FRAME;
+		GLCall(glGenFramebuffers(1, &mHandle));
 	}
 
 	FrameBuffer::~FrameBuffer()
@@ -35,14 +35,14 @@ namespace OpenGL
 	void FrameBuffer::Attach(FrameBufferAttachment attachment, RenderBuffer* renderBuffer)
 	{
 		Bind();
-		glFramebufferRenderbuffer(mTarget, (int)attachment, GL_RENDERBUFFER, renderBuffer->GetHandle());
+		GLCall(glFramebufferRenderbuffer(mTarget, (int)attachment, GL_RENDERBUFFER, renderBuffer->GetHandle()));
 		UnBind();
 	}
 
 	void FrameBuffer::Attach(FrameBufferAttachment attachment, Texture* texture, int level)
 	{
 		Bind();
-		glFramebufferTexture2D(mTarget, (int)attachment, GL_TEXTURE_2D, texture->GetHandle(), level);
+		GLCall(glFramebufferTexture2D(mTarget, (int)attachment, GL_TEXTURE_2D, texture->GetHandle(), level));
 		UnBind();
 	}
 
@@ -53,12 +53,12 @@ namespace OpenGL
 
 	void FrameBuffer::Bind()
 	{
-		glBindFramebuffer(mTarget, mHandle);
+		GLCall(glBindFramebuffer(mTarget, mHandle));
 	}
 
 	void FrameBuffer::UnBind()
 	{
-		glBindFramebuffer(mTarget, 0);
+		GLCall(glBindFramebuffer(mTarget, 0));
 	}
 }
 

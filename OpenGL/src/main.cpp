@@ -7,7 +7,6 @@
 #include "Shader.h"
 #include "Texture.h"
 #include "Camera.h"
-#include "Viewer.h"
 #include "GLMesh.h"
 #include "Previewer.h"
 #include "Scene.h"
@@ -22,7 +21,7 @@ int main(void)
 	int resolutionX = 1280, resolutionY = 800;
 	Previewer previewer("Hello World!", resolutionX, resolutionY);
 	previewer.Init();
-
+	Picker picker(resolutionX, resolutionY);
 	Renderer renderer;
 	Camera camera;
 	camera.Init(
@@ -32,7 +31,7 @@ int main(void)
 		resolutionX,
 		resolutionY
 	);
-
+	renderer.SetCamera(&camera);
 	//model and shader
 	std::shared_ptr<Shader> faceShader = std::make_shared<Shader>("res/shaders/DefaultFace.shader");
 	faceShader->Bind();
@@ -47,10 +46,17 @@ int main(void)
 	mesh.AddTexture(&texture);
 	mesh.AddShader("Face", faceShader);
 	mesh.AddShader("WireFrame", lineShader);
+	GLMesh mesh2;
+	mesh2.AddMesh("..\\models\\bunny\\bunny.obj");
+	mesh2.AddTexture(&texture);
+	mesh2.AddShader("Face", faceShader);
+	mesh2.AddShader("WireFrame", lineShader);
 	Scene scene;
+	previewer.SetPicker(&picker);
 	previewer.SetScene(&scene);
 	previewer.AddDrawableObject(&mesh);
-	renderer.SetCamera(&camera);
+	previewer.AddDrawableObject(&mesh2);
+	previewer.SetCamera(&camera);
 	previewer.SetRenderer(&renderer);
 	previewer.MainLoop();
 
