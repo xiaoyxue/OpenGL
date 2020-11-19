@@ -8,6 +8,7 @@
 #include "Scene.h"
 #include "math/Lingal.h"
 #include "DrawableObject.h"
+#include "math/AABB.h"
 #include <iostream>
 
 namespace OpenGL
@@ -61,6 +62,18 @@ namespace OpenGL
 		object.DrawFace(*this);
 	}
 
+	void Renderer::DrawFaces(const Scene& scene) const
+	{
+		GLCall(glDisable(GL_BLEND));
+		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
+		GLCall(glEnable(GL_POLYGON_OFFSET_FILL));
+		GLCall(glPolygonOffset(1.0, 1.0));
+		for (auto it : scene.GetDrawObjects())
+		{
+			it->DrawFace(*this);
+		}
+	}
+
 	void Renderer::DrawWireFrame(const DrawableObject& object) const
 	{
 		GLCall(glDisable(GL_BLEND));
@@ -70,12 +83,28 @@ namespace OpenGL
 		object.DrawWireFrame(*this);
 	}
 
+	void Renderer::DrawWireFrame(const Scene& scene) const
+	{
+		GLCall(glDisable(GL_BLEND));
+		GLCall(glDisable(GL_POLYGON_OFFSET_FILL));
+		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
+		GLCall(glLineWidth(0.5));
+		for (auto it : scene.GetDrawObjects())
+		{
+			it->DrawWireFrame(*this);
+		}
+	}
+
 	void Renderer::DrawObjectId(const DrawableObject& obejct) const
 	{
+		GLCall(glDisable(GL_BLEND));
+		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
+		GLCall(glEnable(GL_POLYGON_OFFSET_FILL));
+		GLCall(glPolygonOffset(1.0, 1.0));
 		obejct.DrawObjectId(*this);
 	}
 
-	void Renderer::DrawObjectsId(Scene& scene) const
+	void Renderer::DrawObjectId(const Scene& scene) const
 	{
 		GLCall(glDisable(GL_BLEND));
 		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
@@ -85,6 +114,51 @@ namespace OpenGL
 		{
 			it->DrawObjectId(*this);
 		}
+	}
+
+	void Renderer::DrawBBox(const DrawableObject& object) const
+	{
+		BBoxDrawer bboxDrawer(object.GetBBox());
+		GLCall(glDisable(GL_DEPTH_TEST));
+		GLCall(glEnable(GL_BLEND));
+		GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE));
+		GLCall(glLineWidth(1.5));
+		Matrix4 model(1);
+		Matrix4 view = mpCamera->GetViewMatrix();
+		Matrix4 proj = mpCamera->GetProjMatrix();
+		bboxDrawer.mBBoxShader.Bind();
+		bboxDrawer.mBBoxShader.SetUniformMat4f("u_Model", model);
+		bboxDrawer.mBBoxShader.SetUniformMat4f("u_View", view);
+		bboxDrawer.mBBoxShader.SetUniformMat4f("u_Proj", proj);
+		bboxDrawer.mBBoxShader.SetUniform4f("u_LineColor", 1.0f, 0.0f, 0.0f, 0.5f);
+		bboxDrawer.mVa.Bind();
+		bboxDrawer.mIb.Bind();
+		GLCall(glDrawElements(GL_LINES, bboxDrawer.mIb.GetCount(), GL_UNSIGNED_INT, nullptr));
+		bboxDrawer.mIb.UnBind();
+		bboxDrawer.mVa.UnBind();
+		bboxDrawer.mBBoxShader.UnBind();
+	}
+
+	void Renderer::DrawBBox(const Scene& scene) const
+	{
+		BBoxDrawer bboxDrawer(scene.GetBBox());
+		GLCall(glDisable(GL_DEPTH_TEST));
+		GLCall(glEnable(GL_BLEND));
+		GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE));
+		GLCall(glLineWidth(1.0));
+		Matrix4 model(1);
+		Matrix4 view = mpCamera->GetViewMatrix();
+		Matrix4 proj = mpCamera->GetProjMatrix();
+		bboxDrawer.mBBoxShader.Bind();
+		bboxDrawer.mBBoxShader.SetUniformMat4f("u_Model", model);
+		bboxDrawer.mBBoxShader.SetUniformMat4f("u_View", view);
+		bboxDrawer.mBBoxShader.SetUniformMat4f("u_Proj", proj);
+		bboxDrawer.mBBoxShader.SetUniform4f("u_LineColor", 1.0f, 0.0f, 0.0f, 0.5f);
+		bboxDrawer.mVa.Bind();
+		bboxDrawer.mIb.Bind();
+		GLCall(glDrawElements(GL_LINES, bboxDrawer.mIb.GetCount(), GL_UNSIGNED_INT, nullptr));
+		mCoords.mIb.UnBind();
+		mCoords.mVaX.UnBind();
 	}
 
 	void Renderer::Clear() const
@@ -117,42 +191,36 @@ namespace OpenGL
 		mCoords.mCoordShader.SetUniformMat4f("u_View", view);
 		mCoords.mCoordShader.SetUniformMat4f("u_Proj", proj);
 		mCoords.mCoordShader.SetUniform4f("u_LineColor", 1.0f, 0.0f, 0.0f, 0.5f);
-		mCoords.mVAX.Bind();
-		mCoords.mIB.Bind();
-		GLCall(glDrawElements(GL_LINES, mCoords.mIB.GetCount(), GL_UNSIGNED_INT, nullptr));
-		mCoords.mIB.UnBind();
-		mCoords.mVAX.UnBind();
+		mCoords.mVaX.Bind();
+		mCoords.mIb.Bind();
+		GLCall(glDrawElements(GL_LINES, mCoords.mIb.GetCount(), GL_UNSIGNED_INT, nullptr));
+		mCoords.mIb.UnBind();
+		mCoords.mVaX.UnBind();
 
-		mCoords.mVAY.Bind();
-		mCoords.mIB.Bind();
+		mCoords.mVaY.Bind();
+		mCoords.mIb.Bind();
 		mCoords.mCoordShader.SetUniform4f("u_LineColor", 0.0f, 1.0f, 0.0f, 0.5f);
-		GLCall(glDrawElements(GL_LINES, mCoords.mIB.GetCount(), GL_UNSIGNED_INT, nullptr));
-		mCoords.mIB.UnBind();
-		mCoords.mVAY.UnBind();
+		GLCall(glDrawElements(GL_LINES, mCoords.mIb.GetCount(), GL_UNSIGNED_INT, nullptr));
+		mCoords.mIb.UnBind();
+		mCoords.mVaY.UnBind();
 
-		mCoords.mVAZ.Bind();
-		mCoords.mIB.Bind();
+		mCoords.mVaZ.Bind();
+		mCoords.mIb.Bind();
 		mCoords.mCoordShader.SetUniform4f("u_LineColor", 0.0f, 0.0f, 1.0f, 0.5f);
-		GLCall(glDrawElements(GL_LINES, mCoords.mIB.GetCount(), GL_UNSIGNED_INT, nullptr));
-		mCoords.mIB.UnBind();
-		mCoords.mVAZ.UnBind();
+		GLCall(glDrawElements(GL_LINES, mCoords.mIb.GetCount(), GL_UNSIGNED_INT, nullptr));
+		mCoords.mIb.UnBind();
+		mCoords.mVaZ.UnBind();
 
-		mCoords.mVAXZ.Bind();
+		mCoords.mVaXZ.Bind();
 		mCoords.mIBXZ.Bind();
 		mCoords.mCoordShader.SetUniform4f("u_LineColor", 0.5f, 0.5f, 0.5f, 0.5f);
 		GLCall(glDrawElements(GL_LINES, mCoords.mIBXZ.GetCount(), GL_UNSIGNED_INT, nullptr));
 		mCoords.mIBXZ.UnBind();
-		mCoords.mVAXZ.UnBind();
+		mCoords.mVaXZ.UnBind();
 
 		mCoords.mCoordShader.UnBind();
 		GLCall(glEnable(GL_DEPTH_TEST));
 		GLCall(glDisable(GL_BLEND));
-	}
-
-	void Renderer::SetMousePoseition(float x, float y)
-	{
-		mMouseX = x;
-		mMouseY = y;
 	}
 
 	void Renderer::SetCamera(Camera* pCamera)
@@ -160,57 +228,12 @@ namespace OpenGL
 		mpCamera = pCamera;
 	}
 
-	unsigned int Renderer::GetObjectId(int x, int y)
-	{
-		return 0;
-	}
-
-
-
-	void Renderer::TestPick(const DrawableObject &object)
-	{
-		GLCall(glDisable(GL_BLEND));
-		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
-		GLCall(glEnable(GL_POLYGON_OFFSET_FILL));
-		GLCall(glPolygonOffset(1.0, 1.0));
-		object.DrawObjectId(*this);
-		glFlush();
-		glFinish();
-	}
-
-
-
 	unsigned int Renderer::IsReady()
 	{
 		GLenum status =  glewInit(); //Init glew
 		if(status != GLEW_OK)
 			std::cout << "Error: could not initialize GLEW!" << std::endl;
 		return status;
-	}
-
-
-	void Renderer::MousePick()
-	{
-
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		unsigned char data[4];
-		glReadPixels((int)mMouseX, mHeight - int(mMouseY) - 1, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, data);
-
-		// Convert the color back to an integer ID
-		int pickedID =
-			data[0] +
-			data[1] * 256 +
-			data[2] * 256 * 256;
-
-		std::cout << mMouseX << " " << mMouseY << std::endl;
-		if (pickedID == 0) { // Full white, must be the background !
-			std::cout << "background" << std::endl;
-		}
-		else {
-
-			std::cout << "mesh " << pickedID - 1000 << std::endl;
-
-		}
 	}
 
 

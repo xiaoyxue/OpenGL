@@ -22,7 +22,8 @@ namespace OpenGL
 
 namespace GLFW
 {
-	class Window;
 	class GLWindow;
-	class Previewer;
 }
+
+class Window;
+class Previewer;

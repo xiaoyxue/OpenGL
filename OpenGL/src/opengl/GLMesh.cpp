@@ -8,8 +8,6 @@
 #include "VertexBufferLayout.h"
 #include "Camera.h"
 
-#include <GLFW/glfw3.h>
-
 namespace OpenGL
 {
 	GLMesh::GLMesh()
@@ -67,9 +65,9 @@ namespace OpenGL
 		shader.SetUniformMat4f("u_Model", model);
 		shader.SetUniformMat4f("u_View", view);
 		shader.SetUniformMat4f("u_Proj", proj);
-		int r = ((mObjectId + 1000) & 0x000000FF) >> 0;
-		int g = ((mObjectId + 1000) & 0x0000FF00) >> 8;
-		int b = ((mObjectId + 1000) & 0x00FF0000) >> 16;
+		int r = ((mObjectId + 1) & 0x000000FF) >> 0;
+		int g = ((mObjectId + 1) & 0x0000FF00) >> 8;
+		int b = ((mObjectId + 1) & 0x00FF0000) >> 16;
 		shader.SetUniform4f("u_Id", r / 255.f, g / 255.f, b / 255.f, 1.0f);
 		renderer.Draw(*mpVAO, *mpIBO, shader);
 		renderer.DisableDepthTest();

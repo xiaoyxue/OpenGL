@@ -1,9 +1,11 @@
 #include "GLWindow.h"
-#include "../Renderer.h"
-#include "../Misc.h"
+#include "opengl/Renderer.h"
+#include "opengl/Misc.h"
 #include "imgui/imgui.h"
 #include <iostream>
 #include <unordered_map>
+
+
 namespace GLFW
 {
 	std::unordered_map<GLFWwindow*, GLWindow*> __window_to_instances__;

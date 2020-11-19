@@ -26,8 +26,28 @@ namespace OpenGL
 	}
 
 
+	void DrawableObject::RotateLocal(float dPhi, float dTheta)
+	{
+		LocalToWorld =  LocalToWorld * Transform::RotateX(dTheta) * Transform::RotateY(dPhi);
+		WorldToLocal = Inverse(LocalToWorld);
+	}
+
+	void DrawableObject::ScaleLocal(float scale)
+	{
+		LocalToWorld =  LocalToWorld * Transform::Scale(scale, scale, scale);
+		WorldToLocal = Inverse(LocalToWorld);
+	}
+
+
+	void DrawableObject::TranslateLocal(float dx, float dy, float dz)
+	{
+		LocalToWorld = LocalToWorld * Transform::Translate(Vec3(dx, dy, dz));
+		WorldToLocal = Inverse(LocalToWorld);
+	}
+
+
 	DrawableObject::DrawableObject()
-		: mSelectorShader("res/shaders/ObjectPicker.shader")
+		: mObjectId(-1), mSelectorShader("res/shaders/ObjectPicker.shader")
 	{
 
 	}

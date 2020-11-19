@@ -19,6 +19,9 @@ namespace OpenGL
 		virtual void Rotate(float dPhi, float dTheta);
 		virtual void Translate(float dx, float dy, float dz);
 		virtual void Scale(float scale);
+		virtual void RotateLocal(float dPhi, float dTheta);
+		virtual void ScaleLocal(float scale);
+		virtual void TranslateLocal(float dx, float dy, float dz);
 		virtual inline unsigned int GetObjectId() const { return mObjectId; }
 		virtual inline void SetObjectId(unsigned int id) { mObjectId = id; }
 		virtual BBox GetBBox() const = 0;
