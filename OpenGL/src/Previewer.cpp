@@ -202,8 +202,8 @@ void Previewer::DrawObjects() const
 	}
 	else if (mDisplayMode == DispayMode::Edit)
 	{
-		DrawPickedBBox();
 		mpRenderer->DrawFaces(*mpScene);
+		DrawPickedBBox();
 	}
 }
 
