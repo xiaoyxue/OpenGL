@@ -11,7 +11,7 @@ namespace OpenGL
 	public:
 		IndexBuffer();
 		IndexBuffer(const unsigned int* data, unsigned int count);
-		~IndexBuffer();
+		virtual ~IndexBuffer();
 
 		void Bind() const;
 		void UnBind() const;

@@ -159,11 +159,11 @@ void Previewer::DrawGui() const
 			ImGui::Checkbox("  ShowCoordinates", &mShowCoordnates);
 			if (mDisplayMode == DispayMode::Edit)
 			{
-				ImGui::Text("Edit model");
+				ImGui::Text("Edit mode");
 
 				const char* transformModelItem[] = { "Local", "Global"};
 				ImGui::SetNextItemWidth(150);
-				ImGui::Combo("Transform model", (int*)(&mTransformMode), transformModelItem, IM_ARRAYSIZE(transformModelItem));
+				ImGui::Combo("Transform mode", (int*)(&mTransformMode), transformModelItem, IM_ARRAYSIZE(transformModelItem));
 				ImGui::Separator();
 				ImGui::RadioButton("Translate ", (int*)&mEditMode, 1); ImGui::SameLine();
 				ImGui::RadioButton("Rotate", (int*)&mEditMode, 2); ImGui::SameLine();
@@ -172,9 +172,9 @@ void Previewer::DrawGui() const
 				if (mEditMode == EditMode::Rotate)
 				{
 					ImGui::SetCursorPosX(30); ImGui::Text("Rotate model");
-					ImGui::SetCursorPosX(30); ImGui::RadioButton("Rotate along Y ", (int*)&mRotateMode, 0);
-					ImGui::SetCursorPosX(30); ImGui::RadioButton("Rotate along X", (int*)&mRotateMode, 1);
-					ImGui::SetCursorPosX(30); ImGui::RadioButton("Rotate along XY", (int*)&mRotateMode, 2);
+					ImGui::SetCursorPosX(30); ImGui::RadioButton("Rotate around Y ", (int*)&mRotateMode, 0);
+					ImGui::SetCursorPosX(30); ImGui::RadioButton("Rotate around X", (int*)&mRotateMode, 1);
+					ImGui::SetCursorPosX(30); ImGui::RadioButton("Rotate around XY", (int*)&mRotateMode, 2);
 				}
 			}
 			if (ImGui::IsMousePosValid())
