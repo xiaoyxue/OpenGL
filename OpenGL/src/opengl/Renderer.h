@@ -148,7 +148,6 @@ namespace OpenGL
 
         static unsigned int IsReady();
 
-        friend class Previewer;
     };
 
 }

@@ -228,7 +228,7 @@ void Previewer::MouseButtonCallbackFunc(int button, int action, int mods)
 	}
 	else if(mDisplayMode == DispayMode::Edit)
 	{
-		if (mEditMode == EditMode::Select && button == MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+		if (mEditMode == EditMode::Select && button == MOUSE_BUTTON_LEFT && action == MOUSE_BUTTON_PRESS)
 		{
 			if (Pick(mMouseX, mMouseY) >= 0)
 				mIsPicked = true;
