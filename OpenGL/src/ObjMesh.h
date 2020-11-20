@@ -1,5 +1,6 @@
 #pragma once
 #include "math/Lingal.h"
+#include "math/AABB.h"
 #include <vector>
 #include <string>
 
@@ -16,6 +17,7 @@ namespace OpenGL
 		std::vector<Vec3> mNormals;
 		std::string mFileName;
 		bool mHasNormal = false;
+		BBox mBBox;
 	public:
 		ObjMesh();
 		~ObjMesh();

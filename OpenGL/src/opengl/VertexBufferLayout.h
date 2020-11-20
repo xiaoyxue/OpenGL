@@ -1,6 +1,6 @@
 #pragma once
 
-#include <GL/glew.h>
+#include "OpenGL.h"
 #include <vector>
 #include "GLOjbect.h"
 

@@ -1,5 +1,5 @@
 #include "Shader.h"
-#include "Renderer.h"
+#include "OpenGL.h"
 #include "math/Lingal.h"
 #include <iostream>
 #include <fstream>
@@ -71,6 +71,11 @@ namespace OpenGL
 	void Shader::UnBind() const
 	{
 		GLCall(glUseProgram(0));
+	}
+
+	void Shader::SetUniform1ui(const std::string& name, unsigned int v0)
+	{
+		GLCall(glUniform1ui(GetUniformLocation(name), v0));
 	}
 
 	void Shader::SetUniform1i(const std::string& name, int v0)

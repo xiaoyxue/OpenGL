@@ -8,7 +8,7 @@ namespace OpenGL
 	public:
 		VertexBuffer();
 		VertexBuffer(const void* data, unsigned int size);
-		~VertexBuffer();
+		virtual ~VertexBuffer();
 
 		void SetData(const void* data, unsigned int size);
 		void Bind() const;

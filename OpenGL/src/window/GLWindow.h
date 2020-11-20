@@ -1,5 +1,6 @@
 #pragma once
 #include "Window.h"
+#include <functional>
 #include "../ForwardDecl.h"
 
 
@@ -23,9 +24,6 @@ namespace GLFW
 		void SetRenderer(Renderer* pRenderer);
 		virtual void DrawAll() const;
 
-	protected:
-		virtual bool HandleGLMouseEvent() const { return true; }
-
 	private:
 		void SetErrorCallback();
 		void SetKeyCallback();
@@ -34,5 +32,18 @@ namespace GLFW
 		void SetScrollCallback();
 		void SetMouseButtonCallback();
 
+		static void ErrorCallback(int error, const char* description);
+		static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+		static void ResizeCallback(GLFWwindow* window, int width, int height);
+		static void CursorCallback(GLFWwindow* window, double xpos, double ypos);
+		static void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+		static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+
+	protected:
+		virtual void MouseButtonCallbackFunc(int button, int action, int mods) {}
+		virtual void ScrollCallbackFunc(double xoffset, double yoffset) {}
+		virtual void CursorCallbackFunc(double xpos, double ypos) {}
+		virtual void ResizeCallbackFunc(int width, int height) {}
+		virtual void KeyCallbackFunc(int key, int scancode, int action, int mods) {}
 	};
 }

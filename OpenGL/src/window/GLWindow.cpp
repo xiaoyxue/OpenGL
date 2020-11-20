@@ -1,12 +1,14 @@
 #include "GLWindow.h"
-#include "../Renderer.h"
-#include "../Misc.h"
+#include "opengl/Renderer.h"
+#include "opengl/Misc.h"
 #include "imgui/imgui.h"
 #include <iostream>
 #include <unordered_map>
+
+
 namespace GLFW
 {
-	std::unordered_map<GLFWwindow*, GLWindow*> __GLWindows;
+	std::unordered_map<GLFWwindow*, GLWindow*> __window_to_instances__;
 
 	GLWindow::GLWindow(const std::string& title, int w /*= 1024*/, int h /*= 760*/)
 		:Window(title, w, h), mpWindow(nullptr), mpRenderer(nullptr), mLastFrame(0), mDeltaTime(0)
@@ -29,7 +31,7 @@ namespace GLFW
 		}
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 
 		mpWindow = glfwCreateWindow(mWidth, mHeight, mTitle.c_str(), NULL, NULL);
 		if (!mpWindow)
@@ -37,7 +39,7 @@ namespace GLFW
 			glfwTerminate();
 			exit(-1);
 		}
-		__GLWindows[mpWindow] = this;
+		__window_to_instances__[mpWindow] = this;
 		glfwMakeContextCurrent(mpWindow);
 		glfwSwapInterval(1);
 
@@ -100,82 +102,92 @@ namespace GLFW
 
 	void GLWindow::SetErrorCallback()
 	{
-		glfwSetErrorCallback(
-			[](int error, const char* description)
-			{
-				std::cout << "GLFW error: " << error << ", " << description << std::endl;
-			});
+		glfwSetErrorCallback(ErrorCallback);
 	}
 
 	void GLWindow::SetKeyCallback()
 	{
-		glfwSetKeyCallback(mpWindow, 
-			[](GLFWwindow* window, int key, int scancode, int action, int mods)
-			{
-				if (__GLWindows.find(window) == __GLWindows.end())
-					return;
-				auto it = __GLWindows[window];
-				if (action == GLFW_PRESS) {
-					if (key == GLFW_KEY_ESCAPE) {
-						glfwSetWindowShouldClose(window, true);
-					}
-				}
-				it->mpRenderer->KeyBoardEvent(key, scancode, action, it->mDeltaTime);
-			});
+		glfwSetKeyCallback(mpWindow, KeyCallback);
+
 	}
 
 	void GLWindow::SetResizeCallback()
 	{
-		glfwSetFramebufferSizeCallback(mpWindow, 
-			[](GLFWwindow* window, int width, int height)
-			{
-				if (__GLWindows.find(window) == __GLWindows.end())
-					return;
-				auto it = __GLWindows[window];
-				int w, h;
-				glfwGetFramebufferSize(window, &w, &h);
-				it->mWidth = w;
-				it->mHeight = h;
-				it->mpRenderer->Resize(it->mWidth, it->mHeight);
-			});
+		glfwSetFramebufferSizeCallback(mpWindow, ResizeCallback);
+
 	}
 
 	void GLWindow::SetCursorCallback()
 	{
-		glfwSetCursorPosCallback(mpWindow, 
-			[](GLFWwindow* window, double xpos, double ypos)
-			{
-				if (__GLWindows.find(window) == __GLWindows.end())
-					return;
-				auto it = __GLWindows[window];
-				it->mpRenderer->CursorEvent((float)xpos, (float)ypos);
-			});
+		glfwSetCursorPosCallback(mpWindow, CursorCallback);
+
 	}
 
 	void GLWindow::SetScrollCallback()
 	{
-		glfwSetScrollCallback(mpWindow, 
-			[](GLFWwindow* window, double xoffset, double yoffset)
-			{
+		glfwSetScrollCallback(mpWindow, ScrollCallback);
 
-			});
 	}
 
 	void GLWindow::SetMouseButtonCallback()
 	{
-		glfwSetMouseButtonCallback(mpWindow, 
-			[](GLFWwindow* window, int button, int action, int mods)
-			{
-				if (__GLWindows.find(window) == __GLWindows.end())
-					return;
-				auto it = __GLWindows[window];
+		glfwSetMouseButtonCallback(mpWindow, MouseButtonCallback);
 
-				if (!it->HandleGLMouseEvent())
-					return;
-				it->mpRenderer->MouseButtonEvent(button, action, mods);
-			});
 	}
 
+	void GLWindow::ErrorCallback(int error, const char* description)
+	{
+		std::cout << "GLFW error: " << error << ", " << description << std::endl;
+	}
+
+	void GLWindow::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+	{
+		if (__window_to_instances__.find(window) == __window_to_instances__.end())
+			return;
+		auto it = __window_to_instances__[window];
+		if (action == GLFW_PRESS) {
+			if (key == GLFW_KEY_ESCAPE) {
+				glfwSetWindowShouldClose(window, true);
+			}
+		}
+		it->KeyCallbackFunc(key, scancode, action, mods);
+	}
+
+	void GLWindow::ResizeCallback(GLFWwindow* window, int width, int height)
+	{
+		if (__window_to_instances__.find(window) == __window_to_instances__.end())
+			return;
+		auto it = __window_to_instances__[window];
+		int w, h;
+		glfwGetFramebufferSize(window, &w, &h);
+		it->mWidth = w;
+		it->mHeight = h;
+		it->ResizeCallbackFunc(it->mWidth, it->mHeight);
+	}
+
+	void GLWindow::CursorCallback(GLFWwindow* window, double xpos, double ypos)
+	{
+		if (__window_to_instances__.find(window) == __window_to_instances__.end())
+			return;
+		auto it = __window_to_instances__[window];
+		it->CursorCallbackFunc(xpos, ypos);
+	}
+
+	void GLWindow::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
+	{
+		if (__window_to_instances__.find(window) == __window_to_instances__.end())
+			return;
+		auto it = __window_to_instances__[window];
+		it->ScrollCallbackFunc(xoffset, yoffset);
+	}
+
+	void GLWindow::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+	{
+		if (__window_to_instances__.find(window) == __window_to_instances__.end())
+			return;
+		auto it = __window_to_instances__[window];
+		it->MouseButtonCallbackFunc(button, action, mods);
+	}
 
 }
 

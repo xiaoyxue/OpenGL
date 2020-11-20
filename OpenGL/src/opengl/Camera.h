@@ -33,8 +33,8 @@ namespace OpenGL
 			int height,
 			float fovy = 45.f,
 			float disToFilm = 1.0f,
-			float nClip = 0.01f,
-			float fClip = 100000.0f
+			float nClip = 0.1f,
+			float fClip = 1000.0f
 		)
 		{
 			mPosition = position;
