@@ -1,10 +1,8 @@
 *.[oa]
-*.exe
 *.cbp
 *.depend
 bin/
 obj/
-.exe
 *.layout
 .layout
 .vs/
@@ -15,10 +13,8 @@ x64/
 Debug/
 Release/
 ipch/
-media/pictures/
 *.db
 *.user
-ReadMe.txt
 stdafx.h
 stdafx.cpp
 targetver.h
