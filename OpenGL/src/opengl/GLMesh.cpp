@@ -98,10 +98,10 @@ namespace OpenGL
 		mpVAO->UnBind();
 		mpVBO->UnBind();
 		mpIBO->UnBind();
-		//LocalToWorld = Inverse(Transform::Translate(mpObjMesh->mBBox.Center()));
-		//WorldToLocal = Inverse(LocalToWorld);
-		WorldToLocal = Transform::Translate(mpObjMesh->mBBox.Center());
-		LocalToWorld = Inverse(WorldToLocal);
+		LocalToWorld = Inverse(Transform::Translate(mpObjMesh->mBBox.Center()));
+		WorldToLocal = Inverse(LocalToWorld);
+		//WorldToLocal = Transform::Translate(mpObjMesh->mBBox.Center());
+		//LocalToWorld = Inverse(WorldToLocal);
 
 	}
 
