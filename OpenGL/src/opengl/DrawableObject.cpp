@@ -28,8 +28,10 @@ namespace OpenGL
 
 	void DrawableObject::RotateLocal(float dPhi, float dTheta)
 	{
-		LocalToWorld =  LocalToWorld * Transform::RotateX(dTheta) * Transform::RotateY(dPhi);
-		WorldToLocal = Inverse(LocalToWorld);
+		Transform moveToWorldCenter = Transform::Translate(-1 * GetBBox().Center());
+		WorldToLocal = WorldToLocal * (Inverse(moveToWorldCenter) * Transform::RotateY(dPhi)* Transform::RotateX(dTheta) * moveToWorldCenter);
+		LocalToWorld = Inverse(WorldToLocal);
+
 	}
 
 	void DrawableObject::ScaleLocal(float scale)

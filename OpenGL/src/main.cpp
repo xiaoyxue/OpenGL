@@ -44,12 +44,12 @@ int main(void)
 	previewer.SetPicker(&picker);
 	previewer.SetScene(&scene);
 
-	GLMesh mesh;
-	mesh.AddMesh("..\\models\\cube\\cube.obj");
-	mesh.AddTexture(&texture);
-	mesh.AddShader("Face", faceShader);
-	mesh.AddShader("WireFrame", lineShader);
-	previewer.AddDrawableObject(&mesh);
+	//GLMesh mesh;
+	//mesh.AddMesh("..\\models\\cube\\cube.obj");
+	//mesh.AddTexture(&texture);
+	//mesh.AddShader("Face", faceShader);
+	//mesh.AddShader("WireFrame", lineShader);
+	//previewer.AddDrawableObject(&mesh);
 	GLMesh mesh2;
 	mesh2.AddMesh("..\\models\\bunny\\bunny.obj");
 	mesh2.AddTexture(&texture);
