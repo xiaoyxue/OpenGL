@@ -108,6 +108,9 @@
     <ClCompile Include="external\tiny_obj_loader\tiny_obj_loader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\opengl\GLBackground.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />
@@ -517,6 +520,9 @@
     <None Include="external\glm\gtx\wrap.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="res\shaders\DefaultTexture.shader" />
+    <None Include="res\shaders\DefaultBackground.shader" />
+    <None Include="res\shaders\DefaultBoarder.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Def.h">
@@ -1369,6 +1375,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="external\tiny_obj_loader\tiny_obj_loader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\opengl\GLBackground.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

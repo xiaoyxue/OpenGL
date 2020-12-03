@@ -37,9 +37,13 @@ void Previewer::Init()
 void Previewer::DrawAll() const
 {
 	mpRenderer->Clear();
+	DrawBackgrounds();
 	DrawObjects();
+	if (mDisplayMode == DispayMode::CameraView)
+		DrawTraceBBox();
 	if (mShowCoordnates)
 		mpRenderer->DrawCoordinates();
+	DrawBoarder();
 	DrawGui();
 }
 
@@ -57,6 +61,12 @@ void Previewer::AddDrawableObject(DrawableObject* pObject)
 {
 	if (mpScene)
 		mpScene->AddDrawableObject(pObject);
+}
+
+void Previewer::AddBackground(DrawableObject* pBackground)
+{
+	if (mpScene)
+		mpScene->AddBackground(pBackground);
 }
 
 int Previewer::Pick(int x, int y)
@@ -100,7 +110,7 @@ void Previewer::InitState()
 	mMouseMiddleDown = false;
 	mDrawWireFrame = false;
 	mRendering = false;
-	mDisplayMode = DispayMode::Face;
+	mDisplayMode = DispayMode::CameraView;
 	mEditMode = EditMode::Select;
 	mRotateMode = RotateMode::Y;
 	mTransformMode = TransformMode::Local;
@@ -152,10 +162,11 @@ void Previewer::DrawGui() const
 
 			}
 			ImGui::Separator();
-			const char* displayModeItem[] = { "Face", "Mesh", "Edit" };
+			const char* displayModeItem[] = { "CameraView", "Mesh", "Edit" };
 			ImGui::SetNextItemWidth(150);
 			ImGui::Combo("Display Mode", (int*)(&mDisplayMode), displayModeItem, IM_ARRAYSIZE(displayModeItem));
 			ImGui::Checkbox("  LockCamera", &mLockCamera);
+			ImGui::Checkbox("  LockCameraRotation", &mEnableCameraRotation);
 			ImGui::Checkbox("  ShowCoordinates", &mShowCoordnates);
 			if (mDisplayMode == DispayMode::Edit)
 			{
@@ -169,18 +180,36 @@ void Previewer::DrawGui() const
 				ImGui::RadioButton("Rotate", (int*)&mEditMode, 2); ImGui::SameLine();
 				ImGui::RadioButton("Scale", (int*)&mEditMode, 3); ImGui::SameLine();
 				ImGui::RadioButton("Select", (int*)&mEditMode, 0);
+				if(mpScene->IsSelected())
+				{
+					ImGui::Checkbox("TraceCamera", &(mpScene->PickObject()->GetTraceFlag()));
+					{
+						const bool traceFlag = mpScene->PickObject()->GetTraceFlag();
+						if (traceFlag)
+						{
+							mTargets.insert(mpScene->PickObject());
+						}
+						else
+						{
+							mTargets.erase(mpScene->PickObject());
+						}
+					}
+				}
+
 				if (mEditMode == EditMode::Rotate)
 				{
 					ImGui::SetCursorPosX(30); ImGui::Text("Rotate model");
 					ImGui::SetCursorPosX(30); ImGui::RadioButton("Rotate around Y ", (int*)&mRotateMode, 0);
 					ImGui::SetCursorPosX(30); ImGui::RadioButton("Rotate around X", (int*)&mRotateMode, 1);
 					ImGui::SetCursorPosX(30); ImGui::RadioButton("Rotate around XY", (int*)&mRotateMode, 2);
+					ImGui::SetCursorPosX(30); ImGui::RadioButton("Rotate around Z", (int*)&mRotateMode, 3);
 				}
 			}
 			if (ImGui::IsMousePosValid())
 				ImGui::Text("Mouse Position: (%.1f,%.1f)", io.MousePos.x, io.MousePos.y);
 			else
 				ImGui::Text("Mouse Position: <invalid>");
+			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		}
 		ImGui::End();
 	}
@@ -191,7 +220,7 @@ void Previewer::DrawGui() const
 
 void Previewer::DrawObjects() const
 {
-	if (mDisplayMode == DispayMode::Face)
+	if (mDisplayMode == DispayMode::CameraView)
 	{
 		mpRenderer->DrawFaces(*mpScene);
 	}
@@ -215,6 +244,31 @@ void Previewer::DrawPickedBBox() const
 		mpRenderer->DrawBBox(*pObject);
 	}
 		
+}
+
+void Previewer::DrawTraceBBox() const
+{
+	for (auto it : mTargets)
+	{
+		mpRenderer->DrawBBox(*it, Vec4(0.0f, 1.0f, 0.0f, 0.5f));
+	}
+}
+
+void Previewer::DrawBackgrounds() const
+{
+	auto backgrounds = mpScene->GetBackground();
+	if (backgrounds.size() > 0)
+	{
+		auto pBackground = backgrounds[mBackgroundIndex];
+		pBackground->DrawFace(*mpRenderer);
+		mBackgroundIndex = (mBackgroundIndex + 1) % backgrounds.size();
+	}
+
+}
+
+void Previewer::DrawBoarder() const
+{
+	mpRenderer->DrawBoarder(mBoarderWidth);
 }
 
 void Previewer::MouseButtonCallbackFunc(int button, int action, int mods)
@@ -266,7 +320,7 @@ void Previewer::KeyCallbackFunc(int key, int scancode, int action, int mods)
 
 void Previewer::MouseLeftDragCamera(float x, float y)
 {
-	if (!mLockCamera)
+	if (!mLockCamera && mEnableCameraRotation)
 	{
 		float dx = x - mMouseX;
 		float dy = y - mMouseY;
@@ -279,13 +333,34 @@ void Previewer::MouseLeftDragCamera(float x, float y)
 void Previewer::MouseMiddleDragCamera(float x, float y)
 {
 	if (!mLockCamera)
-		mpCamera->Move(-(x - mMouseX) / float(mWidth), (y - mMouseY) / float(mHeight));
+	{
+		float dx_w = (x - mMouseX) / float(mWidth);
+		float dy_h = (y - mMouseY) / float(mHeight);
+		mpCamera->Move(-dx_w, dy_h);
+		for (auto it : mTargets)
+		{
+			it->mTraceMatrix = mpCamera->GetTraceMatrix() * it->mTraceMatrix;
+		}
+		mpCamera->UpdateTraceMatrix();
+	}
+
 }
 
 void Previewer::MouseLeftRightDragCamera(float x, float y)
 {
 	if (!mLockCamera)
-		mpCamera->Move(-(x - mMouseX) / float(mWidth), (y - mMouseY) / float(mHeight));
+	{
+		float dx_w = (x - mMouseX) / float(mWidth);
+		float dy_h = (y - mMouseY) / float(mHeight);
+		mpCamera->Move(-dx_w, dy_h);
+		for (auto it : mTargets)
+		{
+			it->mTraceMatrix = mpCamera->GetTraceMatrix() * it->mTraceMatrix;
+			//std::cout << mpCamera->GetTraceMatrix() << std::endl;
+		}
+		mpCamera->UpdateTraceMatrix();
+	}
+
 }
 
 void Previewer::MouseLeftDragOject(float x, float y)
@@ -307,20 +382,24 @@ void Previewer::MouseLeftDragOject(float x, float y)
 		if (mTransformMode == TransformMode::Global)
 		{
 			if (mRotateMode == RotateMode::Y)
-				mpScene->RotateSelection(dPhi, 0);
+				mpScene->RotateSelection("Y", dPhi, 0);
 			else if (mRotateMode == RotateMode::X)
-				mpScene->RotateSelection(0, dTheta);
+				mpScene->RotateSelection("Y", 0, dTheta);
 			else if (mRotateMode == RotateMode::XY)
-				mpScene->RotateSelection(dPhi, dTheta);
+				mpScene->RotateSelection("XY", dPhi, dTheta);
+			else if (mRotateMode == RotateMode::Z)
+				mpScene->RotateSelection("Z", -dPhi, 0);
 		}
 		else if (mTransformMode == TransformMode::Local)
 		{
 			if (mRotateMode == RotateMode::Y)
-				mpScene->RotateSelectionLocal(dPhi, 0);
+				mpScene->RotateSelectionLocal("Y", dPhi, 0);
 			else if (mRotateMode == RotateMode::X)
-				mpScene->RotateSelectionLocal(0, dTheta);
+				mpScene->RotateSelectionLocal("X", 0, dTheta);
 			else if (mRotateMode == RotateMode::XY)
-				mpScene->RotateSelectionLocal(dPhi, dTheta);
+				mpScene->RotateSelectionLocal("XY", dPhi, dTheta);
+			else if (mRotateMode == RotateMode::Z)
+				mpScene->RotateSelectionLocal("Z", -dPhi, 0);
 		}
 
 	}

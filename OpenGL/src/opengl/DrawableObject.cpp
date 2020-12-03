@@ -34,6 +34,18 @@ namespace OpenGL
 
 	}
 
+	void DrawableObject::RotateAroundZ(float dTheta)
+	{
+		LocalToWorld = Transform::RotateZ(dTheta) * LocalToWorld;
+		WorldToLocal = Inverse(LocalToWorld);
+	}
+	void DrawableObject::RotateAroundZLocal(float dTheta)
+	{
+		Transform moveToWorldCenter = Transform::Translate(-1 * GetBBox().Center());
+		WorldToLocal = WorldToLocal * (Inverse(moveToWorldCenter) * Transform::RotateZ(dTheta) * moveToWorldCenter);
+		LocalToWorld = Inverse(WorldToLocal);
+	}
+
 	void DrawableObject::ScaleLocal(float scale)
 	{
 		LocalToWorld =  LocalToWorld * Transform::Scale(scale, scale, scale);
@@ -51,7 +63,7 @@ namespace OpenGL
 	DrawableObject::DrawableObject()
 		: mObjectId(-1), mSelectorShader("res/shaders/ObjectPicker.shader")
 	{
-
+		mTraceMatrix = Matrix4(1);
 	}
 
 }

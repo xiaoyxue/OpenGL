@@ -17,10 +17,15 @@ namespace OpenGL
 			mDrawableObjects[mPickId]->Translate(dx, dy, dz);
 	}
 
-	void Scene::RotateSelection(float dPhi, float dTheta)
+	void Scene::RotateSelection(const std::string &mode, float dPhi, float dTheta)
 	{
 		if (mPickId >= 0)
-			mDrawableObjects[mPickId]->Rotate(dPhi, dTheta);
+		{
+			if ((mode == "X") || (mode == "Y") || (mode == "XY"))
+				mDrawableObjects[mPickId]->Rotate(dPhi, dTheta);
+			else if (mode == "Z")
+				mDrawableObjects[mPickId]->RotateAroundZ(dPhi);
+		}
 	}
 
 	void Scene::ScaleSelection(float scale)
@@ -35,10 +40,16 @@ namespace OpenGL
 			mDrawableObjects[mPickId]->TranslateLocal(dx, dy, dz);
 	}
 
-	void Scene::RotateSelectionLocal(float dPhi, float dTheta)
+	void Scene::RotateSelectionLocal(const std::string &mode, float dPhi, float dTheta)
 	{
 		if (mPickId >= 0)
-			mDrawableObjects[mPickId]->RotateLocal(dPhi, dTheta);
+		{
+			if((mode == "X") || (mode == "Y") || (mode == "XY"))
+				mDrawableObjects[mPickId]->RotateLocal(dPhi, dTheta);
+			else if(mode == "Z")
+				mDrawableObjects[mPickId]->RotateAroundZLocal(dPhi);
+		}
+			
 	}
 
 	void Scene::ScaleSelectionLocal(float scale)

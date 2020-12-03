@@ -4,16 +4,20 @@
 #include "imgui/imgui.h"
 #include "opengl/Picker.h"
 #include <vector>
-
+#include <set>
 
 using namespace OpenGL;
 using namespace GLFW;
+
+namespace OpenGL {
+	class DrawableObject;
+}
 
 class Previewer : public GLWindow
 {
 	enum class DispayMode
 	{
-		Face = 0,
+		CameraView = 0,
 		Mesh = 1,
 		Edit = 2
 	};
@@ -30,7 +34,8 @@ class Previewer : public GLWindow
 	{
 		Y = 0,
 		X = 1,
-		XY = 2
+		XY = 2,
+		Z = 3
 	};
 
 	enum class TransformMode
@@ -43,6 +48,8 @@ private:
 	Scene* mpScene;
 	Camera* mpCamera;
 	Picker* mpPicker;
+	int mBoarderWidth;
+	long long mFrameCount = 0;
 public:
 	Previewer() = default;
 	Previewer(const std::string& title, int w = 1024, int h = 768);
@@ -53,13 +60,16 @@ public:
 	void SetScene(Scene* pScene);
 	void SetCamera(Camera* pCamera);
 	void SetPicker(Picker* pPicker) { mpPicker = pPicker; }
+	void SetBoardWidth(int w) { mBoarderWidth = w; }
 	void AddDrawableObject(DrawableObject* pObject);
+	void AddBackground(DrawableObject* pBackground);
 
 private:
 	static const ImVec2 mButtonSize;
 	mutable bool mRendering;
 	mutable bool mShowCoordnates;
 	mutable bool mLockCamera;
+	mutable bool mEnableCameraRotation;
 	mutable bool mMouseLeftDown;
 	mutable bool mMouseRightDown;
 	mutable bool mMouseMiddleDown;
@@ -70,7 +80,9 @@ private:
 	mutable RotateMode mRotateMode;
 	mutable TransformMode mTransformMode;
 	bool mIsPicked;
+	mutable int mBackgroundIndex = 0;
 
+	mutable std::set<DrawableObject*> mTargets;
 private:
 	void InitImGui() const;
 	void InitState();
@@ -78,6 +90,9 @@ private:
 	void DrawGui() const;
 	void DrawObjects() const;
 	void DrawPickedBBox() const;
+	void DrawTraceBBox() const;
+	void DrawBackgrounds() const;
+	void DrawBoarder() const;
 	int Pick(int x, int y);
 	bool HandleGLMouseEvent() const;
 

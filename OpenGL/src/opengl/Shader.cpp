@@ -83,6 +83,11 @@ namespace OpenGL
 		GLCall(glUniform1i(GetUniformLocation(name), v0));
 	}
 
+	void Shader::SetUniform2i(const std::string& name, int v0, int v1)
+	{
+		GLCall(glUniform2i(GetUniformLocation(name), v0, v1));
+	}
+
 	void Shader::SetUniform1f(const std::string& name, float v0)
 	{
 		GLCall(glUniform1f(GetUniformLocation(name), v0));

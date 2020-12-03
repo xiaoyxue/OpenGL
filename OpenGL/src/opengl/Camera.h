@@ -8,6 +8,11 @@
 
 namespace OpenGL
 {
+	enum class CameraType
+	{
+		Perspective = 0,
+		Orthographic = 1
+	};
 	using namespace Math;
 	class Camera 
 	{
@@ -21,9 +26,12 @@ namespace OpenGL
 		Vec3 mCx, mCy, mCz;
 		Matrix4 mViewMatrix;
 		Matrix4 mProjMatrix;
+		
+		Matrix4 mViewMatrixOld;
 
 		float mMoveSpeed, mScaleFactor;
 		float mMaxR, mMinR;
+		CameraType mCameraType;
 	public:
 		void Init(
 			const Vec3& position,
@@ -31,12 +39,14 @@ namespace OpenGL
 			const Vec3& up,
 			int width,
 			int height,
+			CameraType cameraType = CameraType::Perspective,
 			float fovy = 45.f,
 			float disToFilm = 1.0f,
 			float nClip = 0.1f,
 			float fClip = 1000.0f
 		)
 		{
+			mCameraType = cameraType;
 			mPosition = position;
 			mLookAt = lookat;
 			mWidth = width;
@@ -56,6 +66,7 @@ namespace OpenGL
 			ComputePosition();
 			ComputeViewMatrix();
 			ComputeProjMatrix();
+			UpdateTraceMatrix();
 		}
 
 		void Place(const Vec3& position)
@@ -110,9 +121,19 @@ namespace OpenGL
 			ComputeViewMatrix();
 		}
 
+		void UpdateTraceMatrix() 
+		{
+			mViewMatrixOld = mViewMatrix;
+		}
+
 		inline Matrix4 GetViewMatrix() const { return mViewMatrix; }
 
 		inline Matrix4 GetProjMatrix() const { return mProjMatrix; }
+
+		Matrix4 GetTraceMatrix() const 
+		{
+			return mViewMatrixOld * Inverse(mViewMatrix);
+		}
 
 	private:
 		
@@ -150,7 +171,10 @@ namespace OpenGL
 
 		void ComputeProjMatrix()
 		{
-			mProjMatrix = Transform::Perspective(mFovy, (float)mWidth / (float)mHeight, mDistanceToFilm, mNear, mFar).GetMatrix();
+			if (mCameraType == CameraType::Perspective)
+				mProjMatrix = Transform::Perspective(mFovy, (float)mWidth / (float)mHeight, mDistanceToFilm, mNear, mFar).GetMatrix();
+			else if (mCameraType == CameraType::Orthographic)
+				mProjMatrix = Transform::Orthographic(mNear, mFar).GetMatrix();
 		}
 	};
 }

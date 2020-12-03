@@ -2,6 +2,7 @@
 #include "OpenGL.h"
 #include "GLImage.h"
 #include "stb_image/stb_image.h"
+#include <iostream>
 
 namespace OpenGL
 {
@@ -36,7 +37,7 @@ namespace OpenGL
 		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
 		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
 
-		GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, mWidth, mHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, mLocalBuffer));
+		GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, mWidth, mHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, mLocalBuffer));
 		GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 
 		if (mLocalBuffer)

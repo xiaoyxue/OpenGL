@@ -154,6 +154,7 @@
     <ClCompile Include="src\opengl\Camera.cpp" />
     <ClCompile Include="src\opengl\DrawableObject.cpp" />
     <ClCompile Include="src\opengl\FrameBuffer.cpp" />
+    <ClCompile Include="src\opengl\GLBackground.cpp" />
     <ClCompile Include="src\opengl\GLMesh.cpp" />
     <ClCompile Include="external\glm\detail\glm.cpp" />
     <ClCompile Include="src\opengl\GLOjbect.cpp" />
@@ -185,9 +186,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />
+    <None Include="res\shaders\DefaultBackground.shader" />
+    <None Include="res\shaders\DefaultBoarder.shader" />
     <None Include="res\shaders\DefaultCoord.shader" />
     <None Include="res\shaders\DefaultFace.shader" />
     <None Include="res\shaders\DefaultLine.shader" />
+    <None Include="res\shaders\DefaultTexture.shader" />
     <None Include="res\shaders\ObjectPicker.shader" />
     <None Include="external\glm\detail\func_common.inl" />
     <None Include="external\glm\detail\func_common_simd.inl" />
@@ -330,6 +334,7 @@
     <ClInclude Include="src\opengl\DrawableObject.h" />
     <ClInclude Include="src\ForwardDecl.h" />
     <ClInclude Include="src\opengl\FrameBuffer.h" />
+    <ClInclude Include="src\opengl\GLBackground.h" />
     <ClInclude Include="src\opengl\GLImage.h" />
     <ClInclude Include="src\opengl\GLMesh.h" />
     <ClInclude Include="external\glm\common.hpp" />

@@ -700,6 +700,7 @@ namespace Math
 	using Vector4f = Vector<4, float, defaultInstructionSet>;
 	using Vector4d = Vector<4, double, defaultInstructionSet>;
 
+	using Vec4 = Vector4;
 	using Vec3 = Vector3;
 	using Vec2 = Vector2;
 	using Vec2i = Vector2i;
@@ -1345,4 +1346,20 @@ namespace Math
 	using Matrix3d = Matrix<3, float64, defaultInstructionSet>;
 	using Matrix4d = Matrix<4, float64, defaultInstructionSet>;
 
+}
+
+namespace type
+{
+	using namespace Math;
+	template <typename>
+	struct is_Vector : public std::false_type {};
+
+	template <int N, typename T, IntrinsicSet ISE>
+	struct is_Vector<Vector<N, T, ISE>> : public std::true_type {};
+
+	template <typename>
+	struct is_Matrix : public std::false_type {};
+
+	template <int N, typename T, IntrinsicSet ISE>
+	struct is_Matrix<Matrix<N, T, ISE>> : public std::true_type {};
 }

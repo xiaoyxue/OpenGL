@@ -7,6 +7,7 @@
 #include "IndexBuffer.h"
 #include "VertexBufferLayout.h"
 #include "Camera.h"
+#include <sstream>
 
 namespace OpenGL
 {
@@ -22,17 +23,32 @@ namespace OpenGL
 
 	void GLMesh::DrawFace(const Renderer& renderer) const
 	{
+		std::stringstream ss;
 		auto& shader = mShaders["Face"];
 		renderer.EnableDepthTest();
 		shader->Bind();
 		Matrix4 proj = renderer.GetCamera()->GetProjMatrix();
 		Matrix4 view = renderer.GetCamera()->GetViewMatrix();
 		Matrix4 model = LocalToWorld.GetMatrix();
+		Matrix4 trace = this->mTraceMatrix;
+		shader->SetUniformMat4f("u_Trace", trace);
 		shader->SetUniformMat4f("u_Model", model);
 		shader->SetUniformMat4f("u_View", view);
 		shader->SetUniformMat4f("u_Proj", proj);
+		for (int i = 0; i < mTextures.size(); ++i)
+		{
+			ss.clear();
+			ss << i;
+			std::string textureName = "u_Texture" + ss.str();
+			shader->SetUniform1i(textureName, i);
+			mTextures[i]->Bind(i);
+		}
 		renderer.Draw(*mpVAO, *mpIBO, *shader);
 		renderer.DisableDepthTest();
+		for (int i = 0; i < mTextures.size(); ++i)
+		{
+			mTextures[i]->UnBind();
+		}
 		shader->UnBind();
 	}
 
@@ -45,6 +61,8 @@ namespace OpenGL
 		Matrix4 proj = renderer.GetCamera()->GetProjMatrix();
 		Matrix4 view = renderer.GetCamera()->GetViewMatrix();
 		Matrix4 model = LocalToWorld.GetMatrix();
+		Matrix4 trace = this->mTraceMatrix;
+		shader->SetUniformMat4f("u_Trace", trace);
 		shader->SetUniformMat4f("u_Model", model);
 		shader->SetUniformMat4f("u_View", view);
 		shader->SetUniformMat4f("u_Proj", proj);
@@ -62,6 +80,8 @@ namespace OpenGL
 		Matrix4 proj = renderer.GetCamera()->GetProjMatrix();
 		Matrix4 view = renderer.GetCamera()->GetViewMatrix();
 		Matrix4 model = LocalToWorld.GetMatrix();
+		Matrix4 trace = this->mTraceMatrix;
+		shader.SetUniformMat4f("u_Trace", trace);
 		shader.SetUniformMat4f("u_Model", model);
 		shader.SetUniformMat4f("u_View", view);
 		shader.SetUniformMat4f("u_Proj", proj);
@@ -76,7 +96,7 @@ namespace OpenGL
 
 	BBox GLMesh::GetBBox() const
 	{
-		return LocalToWorld(mpObjMesh->mBBox); 
+		return  (Transform(mTraceMatrix) * LocalToWorld)(mpObjMesh->mBBox); 
 	}
 
 	void GLMesh::AddMesh(const std::string& filename)

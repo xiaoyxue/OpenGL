@@ -15,12 +15,12 @@ namespace OpenGL
 {
 	using namespace Math;
 
-	Renderer::Renderer()
-	{
-		mWidth = DEFAULT_RESOLUTION_X;
-		mHeight = DEFAULT_RESOLUTION_Y;
+	//Renderer::Renderer()
+	//{
+	//	mWidth = DEFAULT_RESOLUTION_X;
+	//	mHeight = DEFAULT_RESOLUTION_Y;
 
-	}
+	//}
 
 	void Renderer::Init()
 	{
@@ -42,6 +42,7 @@ namespace OpenGL
 	{
 		mWidth = width;
 		mHeight = height;
+		GLCall(glViewport(0, 0, mWidth, mHeight));
 	}
 
 	void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const
@@ -55,7 +56,8 @@ namespace OpenGL
 
 	void Renderer::DrawFaces(const DrawableObject& object) const
 	{
-		GLCall(glDisable(GL_BLEND));
+		//GLCall(glDisable(GL_BLEND));
+		EnableBlend();
 		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
 		GLCall(glEnable(GL_POLYGON_OFFSET_FILL));
 		GLCall(glPolygonOffset(1.0, 1.0));
@@ -64,7 +66,8 @@ namespace OpenGL
 
 	void Renderer::DrawFaces(const Scene& scene) const
 	{
-		GLCall(glDisable(GL_BLEND));
+		//GLCall(glDisable(GL_BLEND));
+		EnableBlend();
 		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
 		GLCall(glEnable(GL_POLYGON_OFFSET_FILL));
 		GLCall(glPolygonOffset(1.0, 1.0));
@@ -116,7 +119,7 @@ namespace OpenGL
 		}
 	}
 
-	void Renderer::DrawBBox(const DrawableObject& object) const
+	void Renderer::DrawBBox(const DrawableObject& object, const Vec4& lineColor) const
 	{
 		BBoxDrawer bboxDrawer(object.GetBBox());
 		GLCall(glDisable(GL_DEPTH_TEST));
@@ -130,7 +133,7 @@ namespace OpenGL
 		bboxDrawer.mBBoxShader.SetUniformMat4f("u_Model", model);
 		bboxDrawer.mBBoxShader.SetUniformMat4f("u_View", view);
 		bboxDrawer.mBBoxShader.SetUniformMat4f("u_Proj", proj);
-		bboxDrawer.mBBoxShader.SetUniform4f("u_LineColor", 1.0f, 0.0f, 0.0f, 0.5f);
+		bboxDrawer.mBBoxShader.SetUniform4f("u_LineColor", lineColor[0], lineColor[1], lineColor[2], lineColor[3]);
 		bboxDrawer.mVa.Bind();
 		bboxDrawer.mIb.Bind();
 		GLCall(glDrawElements(GL_LINES, bboxDrawer.mIb.GetCount(), GL_UNSIGNED_INT, nullptr));
@@ -139,7 +142,7 @@ namespace OpenGL
 		bboxDrawer.mBBoxShader.UnBind();
 	}
 
-	void Renderer::DrawBBox(const Scene& scene) const
+	void Renderer::DrawBBox(const Scene& scene, const Vec4& lineColor) const
 	{
 		BBoxDrawer bboxDrawer(scene.GetBBox());
 		GLCall(glDisable(GL_DEPTH_TEST));
@@ -153,7 +156,7 @@ namespace OpenGL
 		bboxDrawer.mBBoxShader.SetUniformMat4f("u_Model", model);
 		bboxDrawer.mBBoxShader.SetUniformMat4f("u_View", view);
 		bboxDrawer.mBBoxShader.SetUniformMat4f("u_Proj", proj);
-		bboxDrawer.mBBoxShader.SetUniform4f("u_LineColor", 1.0f, 0.0f, 0.0f, 0.5f);
+		bboxDrawer.mBBoxShader.SetUniform4f("u_LineColor", lineColor[0], lineColor[1], lineColor[2], lineColor[3]);
 		bboxDrawer.mVa.Bind();
 		bboxDrawer.mIb.Bind();
 		GLCall(glDrawElements(GL_LINES, bboxDrawer.mIb.GetCount(), GL_UNSIGNED_INT, nullptr));
@@ -175,6 +178,17 @@ namespace OpenGL
 	void Renderer::DisableDepthTest() const
 	{
 		GLCall(glDisable(GL_DEPTH_TEST));
+	}
+
+	void Renderer::EnableBlend() const
+	{
+		GLCall(glEnable(GL_BLEND));
+		GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+	}
+
+	void Renderer::DisableBlend() const
+	{
+		GLCall(glDisable(GL_BLEND));
 	}
 
 	void Renderer::DrawCoordinates() const
@@ -221,6 +235,14 @@ namespace OpenGL
 		mCoords.mCoordShader.UnBind();
 		GLCall(glEnable(GL_DEPTH_TEST));
 		GLCall(glDisable(GL_BLEND));
+	}
+
+	void Renderer::DrawBoarder(int w) const
+	{
+		BoarderDrawer boarderDrawer;
+		EnableBlend();
+		DisableDepthTest();
+		boarderDrawer.Draw(w, Vec2i(mWidth, mHeight), this);
 	}
 
 	void Renderer::SetCamera(Camera* pCamera)
