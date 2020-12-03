@@ -6,7 +6,7 @@
 #include "opengl/VertexBufferLayout.h"
 #include "opengl/Shader.h"
 #include "opengl/Texture.h"
-#include "opengl/Camera.h"
+#include "visual/Camera.h"
 #include "opengl/GLMesh.h"
 #include "opengl/Scene.h"
 #include "Previewer.h"

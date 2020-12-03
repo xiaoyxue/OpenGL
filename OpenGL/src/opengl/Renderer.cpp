@@ -3,7 +3,7 @@
 #include "IndexBuffer.h"
 #include "Shader.h"
 #include "Misc.h"
-#include "Camera.h"
+#include "visual/Camera.h"
 #include "GLOjbect.h"
 #include "Scene.h"
 #include "math/Lingal.h"

@@ -5,7 +5,7 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_utils.h"
-#include "opengl/Camera.h"
+#include "visual/Camera.h"
 #include "opengl/Misc.h"
 #include "opengl/Picker.h"
 #include "opengl/Scene.h"

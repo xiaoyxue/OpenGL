@@ -151,7 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\opengl\Camera.cpp" />
+    <ClCompile Include="src\visual\Camera.cpp" />
     <ClCompile Include="src\opengl\DrawableObject.cpp" />
     <ClCompile Include="src\opengl\FrameBuffer.cpp" />
     <ClCompile Include="src\opengl\GLBackground.cpp" />
@@ -329,7 +329,7 @@
     <None Include="external\glm\gtx\wrap.inl" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\opengl\Camera.h" />
+    <ClInclude Include="src\visual\Camera.h" />
     <ClInclude Include="src\Def.h" />
     <ClInclude Include="src\opengl\DrawableObject.h" />
     <ClInclude Include="src\ForwardDecl.h" />
