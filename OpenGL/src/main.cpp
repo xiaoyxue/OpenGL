@@ -18,7 +18,7 @@ using namespace GLFW;
 
 int main(void)
 {
-	int resolutionX = 1280, resolutionY = 800;
+	int resolutionX = 1280, resolutionY = 900;
 	Previewer previewer("Hello World!", resolutionX, resolutionY);
 	previewer.Init();
 	Picker picker(resolutionX, resolutionY);
