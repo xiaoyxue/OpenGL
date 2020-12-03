@@ -166,7 +166,7 @@ void Previewer::DrawGui() const
 			ImGui::SetNextItemWidth(150);
 			ImGui::Combo("Display Mode", (int*)(&mDisplayMode), displayModeItem, IM_ARRAYSIZE(displayModeItem));
 			ImGui::Checkbox("  LockCamera", &mLockCamera);
-			ImGui::Checkbox("  LockCameraRotation", &mEnableCameraRotation);
+			ImGui::Checkbox("  EnableCameraRotation", &mEnableCameraRotation);
 			ImGui::Checkbox("  ShowCoordinates", &mShowCoordnates);
 			if (mDisplayMode == DispayMode::Edit)
 			{

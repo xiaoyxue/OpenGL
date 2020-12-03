@@ -6,7 +6,7 @@
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "VertexBufferLayout.h"
-#include "Camera.h"
+#include "visual/Camera.h"
 
 
 namespace OpenGL
