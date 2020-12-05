@@ -175,6 +175,7 @@ namespace OpenGL
 				mProjMatrix = Transform::Perspective(mFovy, (float)mWidth / (float)mHeight, mDistanceToFilm, mNear, mFar).GetMatrix();
 			else if (mCameraType == CameraType::Orthographic)
 				mProjMatrix = Transform::Orthographic(mNear, mFar).GetMatrix();
+				//mProjMatrix = Transform::Orthographic(mFovy, (float)mWidth / (float)mHeight, mDistanceToFilm, mNear, mFar).GetMatrix();
 		}
 	};
 }

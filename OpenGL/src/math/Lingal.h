@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <vector>
 #include <functional>
+#include <type_traits>
 #include "Utils.h"
 #include "simd/SSE.h"
 #include "simd/AVX.h"
