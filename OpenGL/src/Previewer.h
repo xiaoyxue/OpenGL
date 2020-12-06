@@ -49,7 +49,6 @@ private:
 	Camera* mpCamera;
 	Picker* mpPicker;
 	int mBoarderWidth;
-	long long mFrameCount = 0;
 public:
 	Previewer() = default;
 	Previewer(const std::string& title, int w = 1024, int h = 768);

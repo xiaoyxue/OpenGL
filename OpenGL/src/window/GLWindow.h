@@ -13,7 +13,10 @@ namespace GLFW
 	protected:
 		GLFWwindow* mpWindow;
 		Renderer* mpRenderer;
-		float mDeltaTime, mLastFrame;
+		double mDeltaTime, mLastRefreshTime, mLastFrameTime;
+		double mMaxFps, mInvFpsLimit;
+		double mFps;
+		long long mFrameCount = 0;
 	public:
 		GLWindow() = default;
 		GLWindow(const std::string& title, int w = 1024, int h = 760);
@@ -22,6 +25,7 @@ namespace GLFW
 		void Init();
 		void MainLoop();
 		void SetRenderer(Renderer* pRenderer);
+		void SetMaxFps(double fps = 60);
 		virtual void DrawAll() const;
 
 	private:

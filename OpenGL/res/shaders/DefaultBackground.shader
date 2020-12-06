@@ -14,9 +14,10 @@ out vec2 v_TexCoord;
 out vec4 v_Color;
 void main()
 {
-	gl_Position = u_Proj * u_View * u_Model * position;
+	//gl_Position = u_Proj * u_View * u_Model * position;
 	v_TexCoord = texCoord;
-	v_Color = v_color;
+	//v_Color = v_color;
+	gl_Position = vec4(position.x, position.y, 0.999, 1);
 }
 
 

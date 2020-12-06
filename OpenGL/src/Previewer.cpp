@@ -43,7 +43,7 @@ void Previewer::DrawAll() const
 		DrawTraceBBox();
 	if (mShowCoordnates)
 		mpRenderer->DrawCoordinates();
-	DrawBoarder();
+	//DrawBoarder();
 	DrawGui();
 }
 

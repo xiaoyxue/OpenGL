@@ -81,6 +81,7 @@ int main(void)
 	previewer.SetBoardWidth(150);
 	previewer.SetCamera(&camera);
 	previewer.SetRenderer(&renderer);
+	previewer.SetMaxFps(30);
 	previewer.MainLoop();
 
     return 0;
