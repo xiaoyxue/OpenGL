@@ -25,5 +25,9 @@ namespace GLFW
 	class GLWindow;
 }
 
+namespace Preview
+{
+	class Previewer;
+}
+
 class Window;
-class Previewer;

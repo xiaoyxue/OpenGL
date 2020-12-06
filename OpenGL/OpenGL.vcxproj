@@ -151,6 +151,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\gui\ImmediateGui.cpp" />
+    <ClCompile Include="src\previewer\Preview.cpp" />
+    <ClCompile Include="src\previewer\Previewer.cpp" />
+    <ClCompile Include="src\previewer\PreviewerGui.cpp" />
     <ClCompile Include="src\visual\Camera.cpp" />
     <ClCompile Include="src\opengl\DrawableObject.cpp" />
     <ClCompile Include="src\opengl\FrameBuffer.cpp" />
@@ -172,7 +176,6 @@
     <ClCompile Include="src\opengl\OpenGL.cpp" />
     <ClCompile Include="src\opengl\Picker.cpp" />
     <ClCompile Include="src\ObjMesh.cpp" />
-    <ClCompile Include="src\Previewer.cpp" />
     <ClCompile Include="src\opengl\Renderer.cpp" />
     <ClCompile Include="src\opengl\Scene.cpp" />
     <ClCompile Include="src\opengl\Shader.cpp" />
@@ -329,6 +332,10 @@
     <None Include="external\glm\gtx\wrap.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\gui\ImmediateGui.h" />
+    <ClInclude Include="src\previewer\Preview.h" />
+    <ClInclude Include="src\previewer\Previewer.h" />
+    <ClInclude Include="src\previewer\PreviewerGui.h" />
     <ClInclude Include="src\visual\Camera.h" />
     <ClInclude Include="src\Def.h" />
     <ClInclude Include="src\opengl\DrawableObject.h" />
@@ -600,7 +607,6 @@
     <ClInclude Include="src\math\Transform.h" />
     <ClInclude Include="src\opengl\Misc.h" />
     <ClInclude Include="src\ObjMesh.h" />
-    <ClInclude Include="src\Previewer.h" />
     <ClInclude Include="src\opengl\Renderer.h" />
     <ClInclude Include="src\opengl\Scene.h" />
     <ClInclude Include="src\opengl\Shader.h" />

@@ -72,9 +72,6 @@
     <ClCompile Include="src\opengl\Picker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Previewer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="external\glm\detail\glm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -109,6 +106,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\visual\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gui\ImmediateGui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\previewer\Preview.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\previewer\Previewer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\previewer\PreviewerGui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -601,9 +610,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\opengl\Picker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Previewer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\opengl\Misc.h">
@@ -1378,6 +1384,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\visual\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\ImmediateGui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\previewer\Preview.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\previewer\Previewer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\previewer\PreviewerGui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

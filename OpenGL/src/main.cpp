@@ -9,12 +9,10 @@
 #include "visual/Camera.h"
 #include "opengl/GLMesh.h"
 #include "opengl/Scene.h"
-#include "Previewer.h"
+#include "previewer/Previewer.h"
 #include "opengl/GLBackground.h"
 
-//using namespace OpenGL;
-using namespace Math;
-using namespace GLFW;
+using namespace Preview;
 
 int main(void)
 {
@@ -81,6 +79,7 @@ int main(void)
 	previewer.SetBoardWidth(150);
 	previewer.SetCamera(&camera);
 	previewer.SetRenderer(&renderer);
+	// Set max fps
 	previewer.SetMaxFps(30);
 	previewer.MainLoop();
 

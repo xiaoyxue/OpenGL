@@ -26,6 +26,7 @@ namespace GLFW
 		void MainLoop();
 		void SetRenderer(Renderer* pRenderer);
 		void SetMaxFps(double fps = 60);
+		inline GLFWwindow* GetGlfwWindow() const { return mpWindow; }
 		virtual void DrawAll() const;
 
 	private:
@@ -35,6 +36,7 @@ namespace GLFW
 		void SetCursorCallback();
 		void SetScrollCallback();
 		void SetMouseButtonCallback();
+
 
 		static void ErrorCallback(int error, const char* description);
 		static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
