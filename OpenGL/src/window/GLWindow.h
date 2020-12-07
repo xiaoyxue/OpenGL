@@ -1,8 +1,9 @@
 #pragma once
 #include "Window.h"
+#include "ForwardDecl.h"
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #include <functional>
-#include "../ForwardDecl.h"
-
 
 namespace GLFW
 {

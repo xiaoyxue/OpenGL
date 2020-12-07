@@ -7,11 +7,6 @@
 #include <vector>
 #include <set>
 
-
-namespace OpenGL {
-	class DrawableObject;
-}
-
 namespace Preview
 {
 

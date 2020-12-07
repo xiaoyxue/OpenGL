@@ -1,16 +1,12 @@
-#include <iostream>
 #include "opengl/Renderer.h"
-#include "opengl/VertexBuffer.h"
-#include "opengl/IndexBuffer.h"
-#include "opengl/VertexArray.h"
-#include "opengl/VertexBufferLayout.h"
 #include "opengl/Shader.h"
 #include "opengl/Texture.h"
-#include "visual/Camera.h"
 #include "opengl/GLMesh.h"
 #include "opengl/Scene.h"
-#include "previewer/Previewer.h"
 #include "opengl/GLBackground.h"
+#include "visual/Camera.h"
+#include "previewer/Previewer.h"
+#include <iostream>
 
 using namespace Preview;
 
