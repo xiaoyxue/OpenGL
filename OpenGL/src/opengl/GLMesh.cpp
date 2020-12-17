@@ -6,7 +6,8 @@
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "VertexBufferLayout.h"
-#include "Camera.h"
+#include "visual/Camera.h"
+#include <sstream>
 
 namespace OpenGL
 {
@@ -22,6 +23,7 @@ namespace OpenGL
 
 	void GLMesh::DrawFace(const Renderer& renderer) const
 	{
+		std::stringstream ss;
 		auto& shader = mShaders["Face"];
 		renderer.EnableDepthTest();
 		shader->Bind();
@@ -31,8 +33,20 @@ namespace OpenGL
 		shader->SetUniformMat4f("u_Model", model);
 		shader->SetUniformMat4f("u_View", view);
 		shader->SetUniformMat4f("u_Proj", proj);
+		for (int i = 0; i < mTextures.size(); ++i)
+		{
+			ss.clear();
+			ss << i;
+			std::string textureName = "u_Texture" + ss.str();
+			shader->SetUniform1i(textureName, i);
+			mTextures[i]->Bind(i);
+		}
 		renderer.Draw(*mpVAO, *mpIBO, *shader);
 		renderer.DisableDepthTest();
+		for (int i = 0; i < mTextures.size(); ++i)
+		{
+			mTextures[i]->UnBind();
+		}
 		shader->UnBind();
 	}
 
@@ -76,7 +90,7 @@ namespace OpenGL
 
 	BBox GLMesh::GetBBox() const
 	{
-		return LocalToWorld(mpObjMesh->mBBox); 
+		return  (Transform(mTraceMatrix) * LocalToWorld)(mpObjMesh->mBBox); 
 	}
 
 	void GLMesh::AddMesh(const std::string& filename)
@@ -100,8 +114,6 @@ namespace OpenGL
 		mpIBO->UnBind();
 		LocalToWorld = Inverse(Transform::Translate(mpObjMesh->mBBox.Center()));
 		WorldToLocal = Inverse(LocalToWorld);
-		//WorldToLocal = Transform::Translate(mpObjMesh->mBBox.Center());
-		//LocalToWorld = Inverse(WorldToLocal);
 
 	}
 

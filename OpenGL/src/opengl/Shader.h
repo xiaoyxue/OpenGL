@@ -29,6 +29,7 @@ namespace OpenGL
 		void UnBind() const;
 		void SetUniform1ui(const std::string& name, unsigned int v0);
 		void SetUniform1i(const std::string& name, int v0);
+		void SetUniform2i(const std::string& name, int v0, int v1);
 		void SetUniform1f(const std::string& name, float v0);
 		void SetUniform2f(const std::string& name, float v0, float v1);
 		void SetUniform3f(const std::string& name, float v0, float v1, float v2);

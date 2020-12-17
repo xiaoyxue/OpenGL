@@ -11,7 +11,7 @@ namespace GLFW
 	std::unordered_map<GLFWwindow*, GLWindow*> __window_to_instances__;
 
 	GLWindow::GLWindow(const std::string& title, int w /*= 1024*/, int h /*= 760*/)
-		:Window(title, w, h), mpWindow(nullptr), mpRenderer(nullptr), mLastFrame(0), mDeltaTime(0)
+		:Window(title, w, h), mpWindow(nullptr), mpRenderer(nullptr), mLastRefreshTime(0), mDeltaTime(0)
 	{
 
 	}
@@ -56,6 +56,8 @@ namespace GLFW
 		// wheel event callbacks
 		SetScrollCallback();
 
+		SetMaxFps();
+
 		// mouse button callbacks
 		glfwSetInputMode(mpWindow, GLFW_STICKY_MOUSE_BUTTONS, 1);
 		SetMouseButtonCallback();
@@ -77,14 +79,16 @@ namespace GLFW
 		mpRenderer->EnableDepthTest();
 		while (!glfwWindowShouldClose(mpWindow))
 		{
-			float currentFrame = float(glfwGetTime());
-			mDeltaTime = currentFrame - mLastFrame;
-			mLastFrame = currentFrame;
-			DrawAll();
-
-
-			glfwSwapBuffers(mpWindow);
-
+			double currentTime = glfwGetTime();
+			mDeltaTime = currentTime - mLastRefreshTime;
+			// Limit the max fps
+			if ((currentTime - mLastFrameTime) >= mInvFpsLimit)
+			{
+				DrawAll();
+				glfwSwapBuffers(mpWindow);
+				mLastFrameTime = currentTime;
+			}
+			mLastRefreshTime = currentTime;
 			/* Poll for and process events */
 			glfwPollEvents();
 		}
@@ -93,6 +97,12 @@ namespace GLFW
 	void GLWindow::SetRenderer(Renderer* pRenderer)
 	{
 		mpRenderer = pRenderer;
+	}
+
+	void GLWindow::SetMaxFps(double fps /*= 60*/)
+	{
+		mMaxFps = fps;
+		mInvFpsLimit = 1.0 / mMaxFps;
 	}
 
 	void GLWindow::DrawAll() const

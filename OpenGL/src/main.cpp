@@ -6,59 +6,50 @@
 #include "opengl/VertexBufferLayout.h"
 #include "opengl/Shader.h"
 #include "opengl/Texture.h"
-#include "opengl/Camera.h"
+#include "visual/Camera.h"
 #include "opengl/GLMesh.h"
 #include "opengl/Scene.h"
-#include "Previewer.h"
+#include "previewer/Previewer.h"
+#include "opengl/GLBackground.h"
 
-//using namespace OpenGL;
-using namespace Math;
-using namespace GLFW;
+using namespace Preview;
 
 int main(void)
 {
-	int resolutionX = 1280, resolutionY = 800;
+	int resolutionX = 1280, resolutionY = 900;
 	Previewer previewer("Hello World!", resolutionX, resolutionY);
 	previewer.Init();
 	Picker picker(resolutionX, resolutionY);
-	Renderer renderer;
+	Renderer renderer(resolutionX, resolutionY);
 	Camera camera;
 	camera.Init(
 		Vec3(0, 0, 3),
 		Vec3(0, 0, 0),
 		Vec3(0, 1, 0),
 		resolutionX,
-		resolutionY
+		resolutionY,
+		CameraType::Perspective
 	);
 	renderer.SetCamera(&camera);
 	//model and shader
-	std::shared_ptr<Shader> faceShader = std::make_shared<Shader>("res/shaders/DefaultFace.shader");
-	faceShader->Bind();
-	Texture texture("res/textures/texture1.png");
-	texture.Bind(0);
-	faceShader->SetUniform1i("u_Texture", 0);
-	faceShader->UnBind();
-	std::shared_ptr<Shader> lineShader = std::make_shared<Shader>("res/shaders/DefaultLine.shader");
 
 	Scene scene;
 	previewer.SetPicker(&picker);
 	previewer.SetScene(&scene);
 
-	//GLMesh mesh;
-	//mesh.AddMesh("..\\models\\cube\\cube.obj");
-	//mesh.AddTexture(&texture);
-	//mesh.AddShader("Face", faceShader);
-	//mesh.AddShader("WireFrame", lineShader);
-	//previewer.AddDrawableObject(&mesh);
-	GLMesh mesh2;
-	mesh2.AddMesh("..\\models\\bunny\\bunny.obj");
-	mesh2.AddTexture(&texture);
-	mesh2.AddShader("Face", faceShader);
-	mesh2.AddShader("WireFrame", lineShader);
-	previewer.AddDrawableObject(&mesh2);
-	
+
+	GLMesh mesh;
+	mesh.AddMesh("..\\models\\bunny\\bunny.obj");
+	auto faceShader = std::make_shared<Shader>("res/shaders/DefaultFace.shader");
+	auto lineShader = std::make_shared<Shader>("res/shaders/DefaultLine.shader");
+	//mesh2.AddTexture(&texture);
+	mesh.AddShader("Face", faceShader);
+	mesh.AddShader("WireFrame", lineShader);
+	previewer.AddDrawableObject(&mesh);
 	previewer.SetCamera(&camera);
 	previewer.SetRenderer(&renderer);
+	// Set max fps
+	previewer.SetMaxFps(60);
 	previewer.MainLoop();
 
     return 0;

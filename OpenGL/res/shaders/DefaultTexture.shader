@@ -9,6 +9,7 @@ layout(location = 3) in vec4 v_color;
 uniform mat4 u_Model;
 uniform mat4 u_View;
 uniform mat4 u_Proj;
+
 out vec2 v_TexCoord;
 out vec4 v_Color;
 void main()
@@ -32,5 +33,5 @@ uniform sampler2D u_Texture0;
 void main()
 {
 	vec4 texColor = texture(u_Texture0, v_TexCoord);
-	color = v_Color;
+	color = texColor;
 }

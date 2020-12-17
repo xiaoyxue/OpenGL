@@ -119,13 +119,46 @@ namespace OpenGL
             }
 
         };
+
+		struct BoarderDrawer
+        {
+			mutable Shader mBoarderShader;
+			VertexBuffer mVb;
+            VertexArray mVa;
+            IndexBuffer mIb;
+            unsigned int mIndex[6] = { 0, 1, 2, 0, 2, 3 };
+			float data[12] = { -1, -1, 0, 1, -1, 0, 1, 1, 0, -1, 1, 0 };
+            BoarderDrawer()
+			{
+                mVa.Bind();
+                mBoarderShader.AttachProgram("res/shaders/DefaultBoarder.shader");
+				mVb.Bind();
+				mVb.SetData(&data[0], 12 * sizeof(float));
+                mIb.Bind();
+                mIb.SetData(&mIndex[0], 6);
+                VertexBufferLayout layout;
+                layout.Push<float>(3);
+                mVa.AddBuffer(mVb, layout);
+				mVb.UnBind();
+                mIb.UnBind();
+			}
+            void Draw(int width, Vec2i res, const Renderer *pRenderer) const
+            {
+                mBoarderShader.Bind();
+                mBoarderShader.SetUniform1i("width", width);
+                mBoarderShader.SetUniform2f("res", res.x, res.y);
+                pRenderer->Draw(mVa, mIb, mBoarderShader);
+                mBoarderShader.UnBind();
+            }
+		};
     private:
         Camera* mpCamera;
         Coordinates mCoords;
         int mWidth, mHeight;
 
     public:
-        Renderer();
+        Renderer() = delete;
+        Renderer(int w, int h) : mWidth(w), mHeight(h){}
         void Init();
         void Resize(int width, int height);
         void SetSize(int width, int height);
@@ -137,12 +170,16 @@ namespace OpenGL
         void DrawWireFrame(const Scene& scene) const;
         void DrawObjectId(const DrawableObject& obejct) const;
         void DrawObjectId(const Scene& scene) const;
-        void DrawBBox(const DrawableObject& object) const;
-        void DrawBBox(const Scene& scene) const;
+        void DrawBBox(const DrawableObject& object, const Vec4& lineColor = Vec4(1.0f, 0.0f, 0.0f, 0.5f)) const;
+        void DrawBBox(const Scene& scene, const Vec4 &lineColor = Vec4(1.0f, 0.0f, 0.0f, 0.5f)) const;
         void Clear() const;
         void EnableDepthTest() const;
         void DisableDepthTest() const;
+        void EnableBlend() const;
+        void DisableBlend() const;
         void DrawCoordinates() const;
+        void DrawBoarder(int w) const;
+        void Flush() const { glFlush(); }
 
         inline Camera* GetCamera() const { return mpCamera; }
 

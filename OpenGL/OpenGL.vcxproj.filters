@@ -72,12 +72,6 @@
     <ClCompile Include="src\opengl\Picker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\opengl\Camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Previewer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="external\glm\detail\glm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -106,6 +100,24 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="external\tiny_obj_loader\tiny_obj_loader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\opengl\GLBackground.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\visual\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gui\ImmediateGui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\previewer\Preview.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\previewer\Previewer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\previewer\PreviewerGui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -517,6 +529,9 @@
     <None Include="external\glm\gtx\wrap.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="res\shaders\DefaultTexture.shader" />
+    <None Include="res\shaders\DefaultBackground.shader" />
+    <None Include="res\shaders\DefaultBoarder.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Def.h">
@@ -595,12 +610,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\opengl\Picker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\opengl\Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Previewer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\opengl\Misc.h">
@@ -1369,6 +1378,24 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="external\tiny_obj_loader\tiny_obj_loader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\opengl\GLBackground.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\visual\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\ImmediateGui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\previewer\Preview.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\previewer\Previewer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\previewer\PreviewerGui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -110,6 +110,19 @@ namespace Math
 		return Scale(1, 1, 1 / (zFar - zNear)) * Translate(Vector3(0, 0, -zNear));
 	}
 
+	Transform Transform::Orthographic(real fovy, real aspect, real dis, real n, real f)
+	{
+		real h = 2 * dis * std::tan(Radians(fovy) * 0.5f);
+		real w = h * aspect;
+		Matrix4 orthoGraphic(
+			1 / w, 0, 0, 0,
+			0, 1 / h, 0, 0,
+			0, 0, 2.f / (f - n), -(f + n) / (f - n),
+			0, 0, 0, 1
+		);
+		return Transform(orthoGraphic, Inverse(orthoGraphic));
+	}
+
 	Transform Transform::Perspective(real fovy, real aspect, real dis, real n, real f) {
 
 		real t = dis * std::tan(Radians(fovy) * 0.5f);
