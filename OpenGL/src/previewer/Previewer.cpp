@@ -40,13 +40,9 @@ namespace Preview
 	void Previewer::DrawAll() const
 	{
 		mpRenderer->Clear();
-		DrawBackgrounds();
 		DrawObjects();
-		if (gDisplayMode == DispayMode::CameraView)
-			DrawTraceBBox();
 		if (gShowCoordnates)
 			mpRenderer->DrawCoordinates();
-		//DrawBoarder();
 		mpGui->Draw();
 	}
 
@@ -93,24 +89,6 @@ namespace Preview
 	bool Previewer::IsSelected() const
 	{
 		return mpScene->IsSelected();
-	}
-
-	bool& Previewer::GetSelectedTraceFlag()
-	{
-		return mpScene->PickObject()->GetTraceFlag();
-	}
-
-	void Previewer::ProcessTrace()
-	{
-		const bool traceFlag = mpScene->PickObject()->GetTraceFlag();
-		if (traceFlag)
-		{
-			mTargets.insert(mpScene->PickObject());
-		}
-		else
-		{
-			mTargets.erase(mpScene->PickObject());
-		}
 	}
 
 	void Previewer::InitState()
@@ -254,11 +232,6 @@ namespace Preview
 			float dx_w = (x - gMouseX) / float(mWidth);
 			float dy_h = (y - gMouseY) / float(mHeight);
 			mpCamera->Move(-dx_w, dy_h);
-			for (auto it : mTargets)
-			{
-				it->mTraceMatrix = mpCamera->GetTraceMatrix() * it->mTraceMatrix;
-			}
-			mpCamera->UpdateTraceMatrix();
 		}
 
 	}
@@ -270,12 +243,6 @@ namespace Preview
 			float dx_w = (x - gMouseX) / float(mWidth);
 			float dy_h = (y - gMouseY) / float(mHeight);
 			mpCamera->Move(-dx_w, dy_h);
-			for (auto it : mTargets)
-			{
-				it->mTraceMatrix = mpCamera->GetTraceMatrix() * it->mTraceMatrix;
-				//std::cout << mpCamera->GetTraceMatrix() << std::endl;
-			}
-			mpCamera->UpdateTraceMatrix();
 		}
 
 	}

@@ -41,8 +41,6 @@ namespace Preview
 
 		bool HandleGLMouseEvent() const;
 		bool IsSelected() const;
-		bool& GetSelectedTraceFlag();
-		void ProcessTrace();
 
 	private:
 		bool mIsPicked;

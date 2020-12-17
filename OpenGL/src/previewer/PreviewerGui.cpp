@@ -72,11 +72,6 @@ namespace Preview
 					ImGui::RadioButton("Rotate", (int*)&gEditMode, 2); ImGui::SameLine();
 					ImGui::RadioButton("Scale", (int*)&gEditMode, 3); ImGui::SameLine();
 					ImGui::RadioButton("Select", (int*)&gEditMode, 0);
-					if (mpPreviewer->IsSelected())
-					{
-						ImGui::Checkbox("TraceCamera", &(mpPreviewer->GetSelectedTraceFlag()));
-						mpPreviewer->ProcessTrace();
-					}
 
 					if (gEditMode == EditMode::Rotate)
 					{

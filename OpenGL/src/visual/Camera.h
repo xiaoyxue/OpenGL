@@ -66,7 +66,6 @@ namespace OpenGL
 			ComputePosition();
 			ComputeViewMatrix();
 			ComputeProjMatrix();
-			UpdateTraceMatrix();
 		}
 
 		void Place(const Vec3& position)
@@ -121,11 +120,6 @@ namespace OpenGL
 			ComputeViewMatrix();
 		}
 
-		void UpdateTraceMatrix() 
-		{
-			mViewMatrixOld = mViewMatrix;
-		}
-
 		inline Matrix4 GetViewMatrix() const { return mViewMatrix; }
 
 		inline Matrix4 GetProjMatrix() const { return mProjMatrix; }
@@ -174,8 +168,7 @@ namespace OpenGL
 			if (mCameraType == CameraType::Perspective)
 				mProjMatrix = Transform::Perspective(mFovy, (float)mWidth / (float)mHeight, mDistanceToFilm, mNear, mFar).GetMatrix();
 			else if (mCameraType == CameraType::Orthographic)
-				mProjMatrix = Transform::Orthographic(mNear, mFar).GetMatrix();
-				//mProjMatrix = Transform::Orthographic(mFovy, (float)mWidth / (float)mHeight, mDistanceToFilm, mNear, mFar).GetMatrix();
+				mProjMatrix = Transform::Orthographic(mFovy, (float)mWidth / (float)mHeight, mDistanceToFilm, mNear, mFar).GetMatrix();
 		}
 	};
 }

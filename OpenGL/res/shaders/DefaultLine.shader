@@ -7,11 +7,10 @@ layout(location = 2) in vec2 texCoord;
 uniform mat4 u_Model;
 uniform mat4 u_View;
 uniform mat4 u_Proj;
-uniform mat4 u_Trace;
 
 void main()
 {
-	gl_Position = u_Proj * u_Trace * u_View * u_Model * position;
+	gl_Position = u_Proj * u_View * u_Model * position;
 }
 
 

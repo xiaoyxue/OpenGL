@@ -30,8 +30,6 @@ namespace OpenGL
 		Matrix4 proj = renderer.GetCamera()->GetProjMatrix();
 		Matrix4 view = renderer.GetCamera()->GetViewMatrix();
 		Matrix4 model = LocalToWorld.GetMatrix();
-		Matrix4 trace = this->mTraceMatrix;
-		shader->SetUniformMat4f("u_Trace", trace);
 		shader->SetUniformMat4f("u_Model", model);
 		shader->SetUniformMat4f("u_View", view);
 		shader->SetUniformMat4f("u_Proj", proj);
@@ -61,8 +59,6 @@ namespace OpenGL
 		Matrix4 proj = renderer.GetCamera()->GetProjMatrix();
 		Matrix4 view = renderer.GetCamera()->GetViewMatrix();
 		Matrix4 model = LocalToWorld.GetMatrix();
-		Matrix4 trace = this->mTraceMatrix;
-		shader->SetUniformMat4f("u_Trace", trace);
 		shader->SetUniformMat4f("u_Model", model);
 		shader->SetUniformMat4f("u_View", view);
 		shader->SetUniformMat4f("u_Proj", proj);
@@ -80,8 +76,6 @@ namespace OpenGL
 		Matrix4 proj = renderer.GetCamera()->GetProjMatrix();
 		Matrix4 view = renderer.GetCamera()->GetViewMatrix();
 		Matrix4 model = LocalToWorld.GetMatrix();
-		Matrix4 trace = this->mTraceMatrix;
-		shader.SetUniformMat4f("u_Trace", trace);
 		shader.SetUniformMat4f("u_Model", model);
 		shader.SetUniformMat4f("u_View", view);
 		shader.SetUniformMat4f("u_Proj", proj);
@@ -120,8 +114,6 @@ namespace OpenGL
 		mpIBO->UnBind();
 		LocalToWorld = Inverse(Transform::Translate(mpObjMesh->mBBox.Center()));
 		WorldToLocal = Inverse(LocalToWorld);
-		//WorldToLocal = Transform::Translate(mpObjMesh->mBBox.Center());
-		//LocalToWorld = Inverse(WorldToLocal);
 
 	}
 
