@@ -27,7 +27,6 @@ namespace Preview
 		std::unique_ptr<ImmediateGui> mpGui;
 		std::vector<std::unique_ptr<DrawableObject>> mDrawableObjects;
 		std::unique_ptr<Renderer> mpRendererOwner;
-		int mBoarderWidth;
 	public:
 		Previewer() = delete;
 		Previewer(const std::string& title, int w = 1024, int h = 768);
@@ -38,7 +37,6 @@ namespace Preview
 		//void SetScene(Scene* pScene);
 		//void SetCamera(Camera* pCamera);
 		//void SetPicker(Picker* pPicker) { mpPicker = pPicker; }
-		//void SetBoardWidth(int w) { mBoarderWidth = w; }
 		void AddDrawableObject(DrawableObject* pObject);
 		void AddBackground(DrawableObject* pBackground);
 		void LoadModel(const std::string& filename);
@@ -57,9 +55,7 @@ namespace Preview
 		void DrawGui() const;
 		void DrawObjects() const;
 		void DrawPickedBBox() const;
-		void DrawTraceBBox() const;
 		void DrawBackgrounds() const;
-		void DrawBoarder() const;
 		int Pick(int x, int y);
 
 		void ParseInput(const std::string& filename);

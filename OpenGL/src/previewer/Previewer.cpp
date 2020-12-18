@@ -189,13 +189,6 @@ namespace Preview
 		
 	}
 
-	void Previewer::DrawTraceBBox() const
-	{
-		for (auto it : mTargets)
-		{
-			mpRenderer->DrawBBox(*it, Vec4(0.0f, 1.0f, 0.0f, 0.5f));
-		}
-	}
 
 	void Previewer::DrawBackgrounds() const
 	{
@@ -207,11 +200,6 @@ namespace Preview
 			mBackgroundIndex = (mBackgroundIndex + 1) % backgrounds.size();
 		}
 
-	}
-
-	void Previewer::DrawBoarder() const
-	{
-		mpRenderer->DrawBoarder(mBoarderWidth);
 	}
 
 	void Previewer::MouseButtonCallbackFunc(int button, int action, int mods)
