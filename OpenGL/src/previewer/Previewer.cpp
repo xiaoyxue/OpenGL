@@ -6,6 +6,8 @@
 #include "opengl/Picker.h"
 #include "opengl/Scene.h"
 #include "opengl/DrawableObject.h"
+#include "opengl/GLPointCloud.h"
+#include "opengl/GLMesh.h"
 #include <iostream>
 
 
@@ -14,15 +16,26 @@ namespace Preview
 {
 	using namespace Math;
 
-	Previewer::Previewer()
-	{
-		mpGui = std::make_unique<PreviewerGui>(this);
-	}
 
 	Previewer::Previewer(const std::string& title, int w /*= 1024*/, int h /*= 760*/)
 		:GLWindow(title, w, h)
 	{
+		GLWindow::Init();
+		mpScene = std::make_unique<Scene>();
+		mpCamera = std::make_unique<Camera>();
+		mpPicker = std::make_unique<Picker>(w, h);
 		mpGui = std::make_unique<PreviewerGui>(this);
+		mpCamera->Init(
+			Vec3(0, 0, 3),
+			Vec3(0, 0, 0),
+			Vec3(0, 1, 0),
+			w,
+			h,
+			CameraType::Perspective
+		);
+		mpRendererOwner = std::make_unique<Renderer>(w, h);
+		mpRendererOwner->SetCamera(mpCamera.get());
+		SetRenderer(mpRendererOwner.get());
 	}
 
 	Previewer::~Previewer()
@@ -32,7 +45,7 @@ namespace Preview
 
 	void Previewer::Init()
 	{
-		GLWindow::Init();
+		//GLWindow::Init();
 		InitState();
 		mpGui->InitImGui(this);
 	}
@@ -46,15 +59,17 @@ namespace Preview
 		mpGui->Draw();
 	}
 
-	void Previewer::SetScene(Scene* pScene)
-	{
-		mpScene = pScene;
-	}
+	//void Previewer::SetScene(Scene* pScene)
+	//{
+	//	mpScene = pScene;
+	//}
 
-	void Previewer::SetCamera(Camera* pCamera)
-	{
-		mpCamera = pCamera;
-	}
+	//void Previewer::SetCamera(Camera* pCamera)
+	//{
+	//	mpCamera = pCamera;
+	//	if(mpScene)
+	//		mpScene->Setca
+	//}
 
 	void Previewer::AddDrawableObject(DrawableObject* pObject)
 	{
@@ -78,6 +93,39 @@ namespace Preview
 		mpPicker->UnBind();
 		mpScene->SetPickId(id);
 		return id;
+	}
+
+	void Previewer::LoadModel(const std::string& filename)
+	{
+		ParseInput(filename);
+	}
+
+	void Previewer::ParseInput(const std::string& filename)
+	{
+		int len = filename.length();
+		if (filename.substr(len - 4) == ".obj")
+		{
+			auto pMesh = std::make_unique<GLMesh>();
+			auto faceShader = std::make_shared<Shader>("res/shaders/DefaultFace.shader");
+			auto lineShader = std::make_shared<Shader>("res/shaders/DefaultLine.shader");
+			pMesh->AddMesh(filename);
+			pMesh->AddShader("Face", faceShader);
+			pMesh->AddShader("WireFrame", lineShader);
+			std::unique_ptr<DrawableObject> pDrawableObject = std::move(pMesh);
+			mDrawableObjects.push_back(std::move(pDrawableObject));
+			AddDrawableObject(mDrawableObjects.back().get());
+		}
+		else if (filename.substr(len - 4) == ".txt")
+		{
+			auto pPointCloud = std::make_unique<GLPointCloud>();
+			auto poinitShader = std::make_shared<Shader>("res/shaders/DefaultPoint.shader");
+			pPointCloud->AddPoints(filename);
+			pPointCloud->AddShader("Point", poinitShader);
+			std::unique_ptr<DrawableObject> pDrawableObject = std::move(pPointCloud);
+			mDrawableObjects.push_back(std::move(pDrawableObject));
+			AddDrawableObject(mDrawableObjects.back().get());
+			
+		}
 	}
 
 	bool Previewer::HandleGLMouseEvent() const

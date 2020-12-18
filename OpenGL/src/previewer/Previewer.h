@@ -4,6 +4,7 @@
 #include "opengl/Picker.h"
 #include "PreviewerGui.h"
 #include "ForwardDecl.h"
+#include "opengl/Renderer.h"
 #include <vector>
 #include <set>
 
@@ -20,24 +21,27 @@ namespace Preview
 	class Previewer final : public GLWindow
 	{
 	private:
-		Scene* mpScene;
-		Camera* mpCamera;
-		Picker* mpPicker;
+		std::unique_ptr<Scene> mpScene;
+		std::unique_ptr<Camera> mpCamera;
+		std::unique_ptr<Picker> mpPicker;
 		std::unique_ptr<ImmediateGui> mpGui;
+		std::vector<std::unique_ptr<DrawableObject>> mDrawableObjects;
+		std::unique_ptr<Renderer> mpRendererOwner;
 		int mBoarderWidth;
 	public:
-		Previewer();
+		Previewer() = delete;
 		Previewer(const std::string& title, int w = 1024, int h = 768);
 		virtual ~Previewer();
 
 		void Init();
 		void DrawAll() const override;
-		void SetScene(Scene* pScene);
-		void SetCamera(Camera* pCamera);
-		void SetPicker(Picker* pPicker) { mpPicker = pPicker; }
-		void SetBoardWidth(int w) { mBoarderWidth = w; }
+		//void SetScene(Scene* pScene);
+		//void SetCamera(Camera* pCamera);
+		//void SetPicker(Picker* pPicker) { mpPicker = pPicker; }
+		//void SetBoardWidth(int w) { mBoarderWidth = w; }
 		void AddDrawableObject(DrawableObject* pObject);
 		void AddBackground(DrawableObject* pBackground);
+		void LoadModel(const std::string& filename);
 
 		bool HandleGLMouseEvent() const;
 		bool IsSelected() const;
@@ -58,7 +62,7 @@ namespace Preview
 		void DrawBoarder() const;
 		int Pick(int x, int y);
 
-
+		void ParseInput(const std::string& filename);
 
 	protected:
 		// Callback

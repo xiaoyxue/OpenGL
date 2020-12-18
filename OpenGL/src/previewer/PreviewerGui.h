@@ -4,6 +4,8 @@
 #include "math/Lingal.h"
 #include "imgui/imgui.h"
 
+bool OpenDialog(std::string& filename);
+
 namespace Preview
 {	
 	using namespace Gui;

@@ -5,6 +5,7 @@
 
 #include <cstdint>
 #include <algorithm>
+#include <codecvt>
 #include "Def.h"
 /***************** Type ******************/
 using uchar = unsigned char;
@@ -53,4 +54,20 @@ T1 Clamp(const T1& tVal, const T2& tMin, const T3& max)
 	if (tVal < tMin) return tMin;
 	if (tVal > max) return max;
 	return tVal;
+}
+
+FORCE_INLINE std::wstring s2ws(const std::string& str)
+{
+	using convert_typeX = std::codecvt_utf8<wchar_t>;
+	std::wstring_convert<convert_typeX, wchar_t> converterX;
+
+	return converterX.from_bytes(str);
+}
+
+FORCE_INLINE std::string ws2s(const std::wstring& wstr)
+{
+	using convert_typeX = std::codecvt_utf8<wchar_t>;
+	std::wstring_convert<convert_typeX, wchar_t> converterX;
+
+	return converterX.to_bytes(wstr);
 }

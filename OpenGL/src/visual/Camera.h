@@ -24,10 +24,8 @@ namespace OpenGL
 		float mR, mTheta, mPhi;
 		Vec3 mPosition, mLookAt, mUp;
 		Vec3 mCx, mCy, mCz;
-		Matrix4 mViewMatrix;
-		Matrix4 mProjMatrix;
-		
-		Matrix4 mViewMatrixOld;
+		Transform mViewMatrix;
+		Transform mProjMatrix;
 
 		float mMoveSpeed, mScaleFactor;
 		float mMaxR, mMinR;
@@ -120,14 +118,10 @@ namespace OpenGL
 			ComputeViewMatrix();
 		}
 
-		inline Matrix4 GetViewMatrix() const { return mViewMatrix; }
+		inline Matrix4 GetViewMatrix() const { return mViewMatrix.GetMatrix(); }
 
-		inline Matrix4 GetProjMatrix() const { return mProjMatrix; }
+		inline Matrix4 GetProjMatrix() const { return mProjMatrix.GetMatrix(); }
 
-		Matrix4 GetTraceMatrix() const 
-		{
-			return mViewMatrixOld * Inverse(mViewMatrix);
-		}
 
 	private:
 		
@@ -160,15 +154,15 @@ namespace OpenGL
 
 		void ComputeViewMatrix()
 		{
-			mViewMatrix = Transform::LookAt(mPosition, mLookAt, mUp).GetMatrix();
+			mViewMatrix = Transform::LookAt(mPosition, mLookAt, mUp);
 		}
 
 		void ComputeProjMatrix()
 		{
 			if (mCameraType == CameraType::Perspective)
-				mProjMatrix = Transform::Perspective(mFovy, (float)mWidth / (float)mHeight, mDistanceToFilm, mNear, mFar).GetMatrix();
+				mProjMatrix = Transform::Perspective(mFovy, (float)mWidth / (float)mHeight, mDistanceToFilm, mNear, mFar);
 			else if (mCameraType == CameraType::Orthographic)
-				mProjMatrix = Transform::Orthographic(mFovy, (float)mWidth / (float)mHeight, mDistanceToFilm, mNear, mFar).GetMatrix();
+				mProjMatrix = Transform::Orthographic(mFovy, (float)mWidth / (float)mHeight, mDistanceToFilm, mNear, mFar);
 		}
 	};
 }

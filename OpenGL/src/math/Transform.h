@@ -72,6 +72,12 @@ namespace Math
 			return Transform(mat * t.mat, t.invMat * invMat);
 		}
 
+		FORCE_INLINE Transform& operator=(const Transform& t) {
+			mat = t.mat;
+			invMat = t.invMat;
+			return *this;
+		}
+
 		FORCE_INLINE Vector3 operator()(const Vector3& p) const {
 			Vector4 pp(p.x, p.y, p.z, 1.0);
 			pp = mat * pp;

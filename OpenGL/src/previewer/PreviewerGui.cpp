@@ -4,7 +4,11 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_utils.h"
-
+#include <windows.h>
+#include <shobjidl.h> 
+#include <string>
+#include <iostream>
+#include <codecvt>
 
 
 namespace Preview
@@ -46,7 +50,9 @@ namespace Preview
 				ImGui::CenterCursor(mButtonSize.x);
 				if (ImGui::Button("Load Model", mButtonSize))
 				{
-
+					std::string filename;
+					if(OpenDialog(filename))
+						mpPreviewer->LoadModel(filename);
 				}
 				ImGui::CenterCursor(mButtonSize.x);
 				if (ImGui::Button("Save Image", mButtonSize))
@@ -94,4 +100,49 @@ namespace Preview
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
+}
+
+bool OpenDialog(std::string& filename)
+{
+	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED |
+		COINIT_DISABLE_OLE1DDE);
+	bool success = false;
+	if (SUCCEEDED(hr))
+	{
+		IFileOpenDialog* pFileOpen;
+
+		// Create the FileOpenDialog object.
+		hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_ALL,
+			IID_IFileOpenDialog, reinterpret_cast<void**>(&pFileOpen));
+
+		if (SUCCEEDED(hr))
+		{
+			// Show the Open dialog box.
+			hr = pFileOpen->Show(NULL);
+
+			// Get the file name from the dialog box.
+			if (SUCCEEDED(hr))
+			{
+				IShellItem* pItem;
+				hr = pFileOpen->GetResult(&pItem);
+				if (SUCCEEDED(hr))
+				{
+					PWSTR pszFilePath;
+					hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
+
+					// Get the file name to the user.
+					if (SUCCEEDED(hr))
+					{
+						filename = ws2s(std::wstring(pszFilePath));
+						success = true;
+						CoTaskMemFree(pszFilePath);
+					}
+					pItem->Release();
+				}
+			}
+			pFileOpen->Release();
+		}
+		CoUninitialize();
+	}
+	return success;
 }
