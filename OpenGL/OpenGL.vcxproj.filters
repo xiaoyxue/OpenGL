@@ -120,6 +120,12 @@
     <ClCompile Include="src\previewer\PreviewerGui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\opengl\GLPointCloud.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PointCloud.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />
@@ -532,6 +538,7 @@
     <None Include="res\shaders\DefaultTexture.shader" />
     <None Include="res\shaders\DefaultBackground.shader" />
     <None Include="res\shaders\DefaultBoarder.shader" />
+    <None Include="res\shaders\DefaultPoint.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Def.h">
@@ -1396,6 +1403,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\previewer\PreviewerGui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\opengl\GLPointCloud.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PointCloud.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

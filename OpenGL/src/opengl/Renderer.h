@@ -11,6 +11,13 @@
 
 namespace OpenGL
 {
+	enum class DrawModel
+	{
+		TRIANGLE = 0,
+		POINT = 1
+	};
+
+
     class Renderer
     {
         struct Coordinates
@@ -163,9 +170,37 @@ namespace OpenGL
         void Resize(int width, int height);
         void SetSize(int width, int height);
         void SetCamera(Camera* pCamera);
-        void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
+
+		template<DrawModel Mode = DrawModel::TRIANGLE>
+		void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const
+		{
+			static_assert(false);
+		}
+
+		template<>
+		void Draw<DrawModel::TRIANGLE>(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const
+		{
+			shader.Bind();
+			va.Bind();
+			ib.Bind();
+			GLCall(glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr));
+		}
+
+		template<>
+		void Draw<DrawModel::POINT>(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const
+		{
+			shader.Bind();
+			va.Bind();
+			ib.Bind();
+            GLCall(glEnable(GL_PROGRAM_POINT_SIZE_EXT));
+            GLCall(glPointSize(10));
+            GLCall(glEnable(GL_POINT_SMOOTH));
+			GLCall(glDrawElements(GL_POINTS, ib.GetCount(), GL_UNSIGNED_INT, nullptr));
+            GLCall(glDisable(GL_POINT_SMOOTH));
+		}
         void DrawFaces(const DrawableObject &object) const;
         void DrawFaces(const Scene& scene) const;
+        void DrawPoints(const DrawableObject& object) const;
         void DrawWireFrame(const DrawableObject& object) const;
         void DrawWireFrame(const Scene& scene) const;
         void DrawObjectId(const DrawableObject& obejct) const;

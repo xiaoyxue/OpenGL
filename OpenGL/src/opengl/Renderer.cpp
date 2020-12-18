@@ -13,6 +13,7 @@
 
 namespace OpenGL
 {
+
 	using namespace Math;
 
 	//Renderer::Renderer()
@@ -45,15 +46,6 @@ namespace OpenGL
 		GLCall(glViewport(0, 0, mWidth, mHeight));
 	}
 
-	void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const
-	{
-		shader.Bind();
-		va.Bind();
-		ib.Bind();
-
-		GLCall(glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr));
-	}
-
 	void Renderer::DrawFaces(const DrawableObject& object) const
 	{
 		//GLCall(glDisable(GL_BLEND));
@@ -75,6 +67,15 @@ namespace OpenGL
 		{
 			it->DrawFace(*this);
 		}
+	}
+
+	void Renderer::DrawPoints(const DrawableObject& object) const
+	{
+		EnableBlend();
+		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
+		GLCall(glEnable(GL_POLYGON_OFFSET_FILL));
+		GLCall(glPolygonOffset(1.0, 1.0));
+		object.DrawFace(*this);
 	}
 
 	void Renderer::DrawWireFrame(const DrawableObject& object) const
