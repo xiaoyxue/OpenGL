@@ -56,22 +56,24 @@ int main(void)
 	previewer.AddBackground(&background1);
 	previewer.AddBackground(&background2);
 
-	std::shared_ptr<Shader> pAdsShader = std::make_shared<Shader>("res/shaders/DefaultTexture.shader");
-	GLMesh mesh;
-	pAdsShader->Bind();
-	Texture adsTexture("res/textures/texture2.png");
-	mesh.AddMesh("..\\models\\plane\\plane.obj");
-	mesh.AddTexture(&adsTexture);
-	mesh.AddShader("Face", pAdsShader);
-	previewer.AddDrawableObject(&mesh);
+	//std::shared_ptr<Shader> pAdsShader = std::make_shared<Shader>("res/shaders/DefaultTexture.shader");
+	//GLMesh mesh;
+	//pAdsShader->Bind();
+	//Texture adsTexture("res/textures/texture2.png");
+	//mesh.AddMesh("..\\models\\plane\\plane.obj");
+	//mesh.AddTexture(&adsTexture);
+	//mesh.AddShader("Face", pAdsShader);
+	//previewer.AddDrawableObject(&mesh);
 
-
-	//GLMesh mesh2;
-	//mesh2.AddMesh("..\\models\\bunny\\bunny.obj");
+	GLMesh mesh2;
+	auto faceShader = std::make_shared<Shader>("res/shaders/DefaultFace.shader");
+	auto lineShader = std::make_shared<Shader>("res/shaders/DefaultLine.shader");
+	mesh2.AddMesh("..\\models\\bunny\\bunny.obj");
 	//mesh2.AddTexture(&texture);
-	//mesh2.AddShader("Face", faceShader);
-	//mesh2.AddShader("WireFrame", lineShader);
-	//previewer.AddDrawableObject(&mesh2);
+	mesh2.AddShader("Face", faceShader);
+	mesh2.AddShader("WireFrame", lineShader);
+	previewer.AddDrawableObject(&mesh2);
+
 	previewer.SetBoardWidth(150);
 	previewer.SetCamera(&camera);
 	previewer.SetRenderer(&renderer);

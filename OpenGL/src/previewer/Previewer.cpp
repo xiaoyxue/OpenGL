@@ -139,6 +139,7 @@ namespace Preview
 	{
 		if (gDisplayMode == DispayMode::CameraView)
 		{
+			mpRenderer->GetCamera()->Rotate(0.05, 0);
 			mpRenderer->DrawFaces(*mpScene);
 		}
 		else if (gDisplayMode == DispayMode::Mesh)
