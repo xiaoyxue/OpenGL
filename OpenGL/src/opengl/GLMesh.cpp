@@ -30,9 +30,11 @@ namespace OpenGL
 		Matrix4 proj = renderer.GetCamera()->GetProjMatrix();
 		Matrix4 view = renderer.GetCamera()->GetViewMatrix();
 		Matrix4 model = LocalToWorld.GetMatrix();
+		Vec3 camPosition = renderer.GetCamera()->GetPosition();
 		shader->SetUniformMat4f("u_Model", model);
 		shader->SetUniformMat4f("u_View", view);
 		shader->SetUniformMat4f("u_Proj", proj);
+		shader->SetUniform3f("cameraPosition", camPosition[0], camPosition[1], camPosition[2]);
 		for (int i = 0; i < mTextures.size(); ++i)
 		{
 			ss.clear();

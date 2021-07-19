@@ -45,6 +45,9 @@ namespace OpenGL
 		shader->SetUniformMat4f("u_Model", model);
 		shader->SetUniformMat4f("u_View", view);
 		shader->SetUniformMat4f("u_Proj", proj);
+
+		shader->SetUniform2f("u_Resolution", 1280, 1280);
+
 		shader->SetUniform1i("u_Texture", 0); mpTexture->Bind(0);
 		renderer.Draw(*mpVAO, *mpIBO, *shader);
 		renderer.DisableDepthTest();

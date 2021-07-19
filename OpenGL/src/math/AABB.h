@@ -1,7 +1,7 @@
 #pragma once
 
 #include <algorithm>
-#include "Lingal.h"
+#include "math/Lingal.h"
 
 
 namespace Math

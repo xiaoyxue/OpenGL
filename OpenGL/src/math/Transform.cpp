@@ -1,5 +1,5 @@
 #include "Transform.h"
-
+#include "math/MathUtils.h"
 namespace Math 
 {
 	Transform Transform::Translate(const Vector3& v) {

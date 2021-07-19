@@ -5,7 +5,7 @@
 #include <vector>
 #include <functional>
 #include <type_traits>
-#include "Utils.h"
+#include "common/Core.h"
 #include "simd/SSE.h"
 #include "simd/AVX.h"
 

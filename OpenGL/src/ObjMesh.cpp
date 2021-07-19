@@ -28,6 +28,9 @@ namespace OpenGL
 		float lineColor[3] = { 0.f, 0.f, 0.3f };
 
 		bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, inputfile.c_str());
+		
+		// Add material
+
 
 		//Add default material
 		materials.push_back(tinyobj::material_t());

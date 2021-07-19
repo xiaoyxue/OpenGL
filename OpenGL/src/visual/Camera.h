@@ -2,11 +2,12 @@
 #include "Def.h"
 #include "math/Lingal.h"
 #include "math/Transform.h"
-#include "Utils.h"
+#include "math/MathUtils.h"
+#include "common/Core.h"
 #include <iostream>
 #include <algorithm>
 
-namespace OpenGL
+namespace Visual
 {
 	enum class CameraType
 	{
@@ -58,7 +59,7 @@ namespace OpenGL
 			mUp = up;
 
 			mMoveSpeed = 2.5f;
-			mScaleFactor = 2.0f;
+			mScaleFactor = 20.0f;
 			mMinR = 0.001f;
 			mMaxR = 10000000.f;
 
@@ -119,6 +120,8 @@ namespace OpenGL
 			ComputePosition();
 			ComputeViewMatrix();
 		}
+
+		inline Vec3 GetPosition() const { return mPosition; }
 
 		inline Matrix4 GetViewMatrix() const { return mViewMatrix; }
 

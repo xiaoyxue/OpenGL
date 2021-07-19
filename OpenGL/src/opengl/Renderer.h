@@ -11,6 +11,7 @@
 
 namespace OpenGL
 {
+    using namespace Visual;
     class Renderer
     {
         struct Coordinates

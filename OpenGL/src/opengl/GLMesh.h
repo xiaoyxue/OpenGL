@@ -11,7 +11,7 @@ namespace OpenGL
 	using namespace Math;
 	class GLMesh: public DrawableObject
 	{
-	private:
+	protected:
 		std::unique_ptr<VertexBuffer> mpVBO;
 		std::unique_ptr<IndexBuffer> mpIBO;
 		std::unique_ptr<VertexArray> mpVAO;
@@ -22,7 +22,7 @@ namespace OpenGL
 		GLMesh();
 		virtual ~GLMesh();
 		
-		void DrawFace(const Renderer& renderer) const override;
+		virtual void DrawFace(const Renderer& renderer) const override;
 		void DrawWireFrame(const Renderer& renderer) const override;
 		void DrawObjectId(const Renderer& renderer) const override;
 		BBox GetBBox() const override;

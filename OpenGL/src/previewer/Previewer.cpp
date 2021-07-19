@@ -13,6 +13,7 @@
 namespace Preview
 {
 	using namespace Math;
+	using namespace Visual;
 
 	Previewer::Previewer()
 	{

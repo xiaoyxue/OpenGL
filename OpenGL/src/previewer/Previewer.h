@@ -16,6 +16,7 @@ namespace Preview
 {
 
 	using namespace GLFW;
+	using namespace Visual;
 
 	class Previewer final : public GLWindow
 	{
