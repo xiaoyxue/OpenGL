@@ -2,7 +2,6 @@
 
 namespace OpenGL
 {
-	class Camera;
 	class GLMesh;
 	class GLObject;
 	class IndexBuffer;
@@ -18,6 +17,10 @@ namespace OpenGL
 	class FrameBuffer;
 	enum class ImageDataType;
 	enum class ImageFormat;
+}
+
+namespace Visual {
+	class Camera;
 }
 
 namespace GLFW

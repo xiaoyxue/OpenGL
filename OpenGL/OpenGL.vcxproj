@@ -152,6 +152,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\gui\ImmediateGui.cpp" />
+    <ClCompile Include="src\image\ImageIO.cpp" />
+    <ClCompile Include="src\opengl\GLMeshShading.cpp" />
+    <ClCompile Include="src\pbr\BRDFTexture.cpp" />
+    <ClCompile Include="src\pbr\DrawBRDFIntegral.cpp" />
     <ClCompile Include="src\previewer\Preview.cpp" />
     <ClCompile Include="src\previewer\Previewer.cpp" />
     <ClCompile Include="src\previewer\PreviewerGui.cpp" />
@@ -179,7 +183,6 @@
     <ClCompile Include="src\opengl\Renderer.cpp" />
     <ClCompile Include="src\opengl\Scene.cpp" />
     <ClCompile Include="src\opengl\Shader.cpp" />
-    <ClCompile Include="external\stb_image\stb_image.cpp" />
     <ClCompile Include="src\opengl\Texture.cpp" />
     <ClCompile Include="external\tiny_obj_loader\tiny_obj_loader.cpp" />
     <ClCompile Include="src\opengl\VertexArray.cpp" />
@@ -189,12 +192,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />
+    <None Include="res\shaders\BRDF_Integral.shader" />
+    <None Include="res\shaders\Debug.shader" />
     <None Include="res\shaders\DefaultBackground.shader" />
     <None Include="res\shaders\DefaultBoarder.shader" />
     <None Include="res\shaders\DefaultCoord.shader" />
     <None Include="res\shaders\DefaultFace.shader" />
     <None Include="res\shaders\DefaultLine.shader" />
     <None Include="res\shaders\DefaultTexture.shader" />
+    <None Include="res\shaders\ImageBasedLighting.shader" />
+    <None Include="res\shaders\ImageBasedLightingV2.shader" />
     <None Include="res\shaders\ObjectPicker.shader" />
     <None Include="external\glm\detail\func_common.inl" />
     <None Include="external\glm\detail\func_common_simd.inl" />
@@ -332,7 +339,17 @@
     <None Include="external\glm\gtx\wrap.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\common\Core.h" />
+    <ClInclude Include="src\common\Platform.h" />
+    <ClInclude Include="src\container\Array.h" />
     <ClInclude Include="src\gui\ImmediateGui.h" />
+    <ClInclude Include="src\image\ImageIO.h" />
+    <ClInclude Include="src\light\EnvLight.h" />
+    <ClInclude Include="src\light\Light.h" />
+    <ClInclude Include="src\math\MathUtils.h" />
+    <ClInclude Include="src\opengl\GLMeshShading.h" />
+    <ClInclude Include="src\pbr\BRDFTexture.h" />
+    <ClInclude Include="src\pbr\DrawBRDFIntegral.h" />
     <ClInclude Include="src\previewer\Preview.h" />
     <ClInclude Include="src\previewer\Previewer.h" />
     <ClInclude Include="src\previewer\PreviewerGui.h" />
@@ -593,6 +610,9 @@
     <ClInclude Include="src\math\AABB.h" />
     <ClInclude Include="src\opengl\OpenGL.h" />
     <ClInclude Include="src\opengl\Picker.h" />
+    <ClInclude Include="src\visual\EvnMap.h" />
+    <ClInclude Include="src\visual\Sampling.h" />
+    <ClInclude Include="src\visual\Texture.h" />
     <ClInclude Include="src\window\GLWindow.h" />
     <ClInclude Include="external\imgui\imconfig.h" />
     <ClInclude Include="external\imgui\imgui.h" />
@@ -612,10 +632,8 @@
     <ClInclude Include="src\opengl\Shader.h" />
     <ClInclude Include="src\simd\AVX.h" />
     <ClInclude Include="src\simd\SSE.h" />
-    <ClInclude Include="external\stb_image\stb_image.h" />
     <ClInclude Include="src\opengl\Texture.h" />
     <ClInclude Include="external\tiny_obj_loader\tiny_obj_loader.h" />
-    <ClInclude Include="src\Utils.h" />
     <ClInclude Include="src\opengl\VertexArray.h" />
     <ClInclude Include="src\opengl\VertexBuffer.h" />
     <ClInclude Include="src\opengl\VertexBufferLayout.h" />
