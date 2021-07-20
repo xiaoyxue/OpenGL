@@ -143,15 +143,32 @@ int main(void)
 	//previewer.AddDrawableObject(&background);
 
 
-	GLMeshShading mesh;
-	mesh.AddMesh("..\\models\\mailbox\\10556_Mailbox-L2.obj");
-	mesh.AddTexture(&evnMap);
-	mesh.AddTexture(&brdfLUT);
-	auto faceShader = std::make_shared<Shader>("res/shaders/ImageBasedLightingV2.shader");
 	auto lineShader = std::make_shared<Shader>("res/shaders/DefaultLine.shader");
-	mesh.AddShader("Face", faceShader);
-	mesh.AddShader("WireFrame", lineShader);
-	previewer.AddDrawableObject(&mesh);
+	auto textureShader = std::make_shared<Shader>("res/shaders/DefaultTexture.shader");
+
+	GLMeshShading mailbox;
+	mailbox.AddMesh("..\\models\\mailbox\\10556_Mailbox-L2.obj");
+	mailbox.RotateLocal(0, 90);
+	mailbox.ScaleLocal(0.07);
+	mailbox.AddTexture(&evnMap);
+	mailbox.AddTexture(&brdfLUT);
+	auto mainboxShader = std::make_shared<Shader>("res/shaders/ImageBasedLightingV2.shader");
+	mailbox.AddShader("Face", mainboxShader);
+	mailbox.AddShader("WireFrame", lineShader);
+	previewer.AddDrawableObject(&mailbox);
+
+	GLMesh plane;
+	std::string planeTexturePath = "..\\models\\plane\\default.png";
+	GLTexture planeTexture(planeTexturePath);
+	plane.AddMesh("..\\models\\plane\\plane.obj");
+	plane.RotateLocal(0, -90);
+	plane.ScaleLocal(20.0);
+	plane.Translate(0, 5, 0);
+	plane.Translate(0, 0, 0);
+	plane.AddTexture(&planeTexture);
+	plane.AddShader("Face", textureShader);
+	plane.AddShader("WireFrame", lineShader);
+	previewer.AddDrawableObject(&plane);
 	
 	previewer.SetCamera(&camera);
 	previewer.SetRenderer(&renderer);
