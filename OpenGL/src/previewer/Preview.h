@@ -6,7 +6,8 @@ namespace Preview
 	{
 		CameraView = 0,
 		Mesh = 1,
-		Edit = 2
+		Edit = 2,
+		Debug = 3
 	};
 
 	enum class EditMode
@@ -44,4 +45,5 @@ namespace Preview
 	extern EditMode gEditMode;
 	extern RotateMode gRotateMode;
 	extern TransformMode gTransformMode;
+	extern bool gUseGbuffer;
 }

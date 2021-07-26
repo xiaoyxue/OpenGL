@@ -8,7 +8,7 @@
 namespace PBR 
 {
 
-	BRDFTexture::BRDFTexture(int width, int height): Texture(width, height)
+	BRDFTexture::BRDFTexture(int width, int height): Texture2D(width, height)
 	{
 		//unsigned int brdfLUTTexture;
 		GLCall(glGenTextures(1, &mHandle));

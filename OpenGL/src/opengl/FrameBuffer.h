@@ -10,7 +10,7 @@ namespace OpenGL
 	{
 		Draw = GL_DRAW_FRAMEBUFFER,
 		Read = GL_READ_FRAMEBUFFER,
-		FRAME = GL_FRAMEBUFFER
+		Frame = GL_FRAMEBUFFER
 	};
 
 	enum class FrameBufferAttachment
@@ -32,7 +32,8 @@ namespace OpenGL
 		Color14 = GL_COLOR_ATTACHMENT14,
 		Color15 = GL_COLOR_ATTACHMENT15,
 		Depth = GL_DEPTH_ATTACHMENT,
-		Stencil = GL_STENCIL_ATTACHMENT
+		Stencil = GL_STENCIL_ATTACHMENT,
+		Depth24 = GL_DEPTH_COMPONENT24
 	};
 
 	class RenderBuffer : public GLObject
@@ -42,9 +43,11 @@ namespace OpenGL
 		virtual ~RenderBuffer();
 	public:
 		void SetStorage(int w, int h, ImageFormat format, int multiSampleCount = 0);
+		void Bind() const;
+		void UnBind() const;
 	};
 
-	class FrameBuffer : GLObject
+	class FrameBuffer : public GLObject
 	{
 	private:
 		int mTarget;
@@ -54,8 +57,9 @@ namespace OpenGL
 	public:
 		void SetTarget(FrameBufferTarget target);
 		void Attach(FrameBufferAttachment attachment, RenderBuffer* renderBuffer);
-		void Attach(FrameBufferAttachment attachment, Texture* texture, int level = 0);
-		void Bind();
-		void UnBind();
+		void Attach(FrameBufferAttachment attachment, Texture2D* texture, int level = 0);
+		void Bind() const;
+		void UnBind() const;
+		void Check();
 	};
 }

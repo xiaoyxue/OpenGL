@@ -10,7 +10,8 @@ namespace OpenGL
 
 	enum class ImageFormat
 	{
-		Luminance = GL_LUMINANCE, RGB = GL_RGB, RGBA = GL_RGBA,
+		Luminance = GL_LUMINANCE, R = GL_R, RG = GL_RG, RGB = GL_RGB, RGBA = GL_RGBA,
+		Red = GL_RED,
 		RGBA_32F = GL_RGBA32F, RGBA_16F = GL_RGBA16F,
 		R11_G11_B10 = GL_R11F_G11F_B10F,
 		RGB10_A2 = GL_RGB10_A2,

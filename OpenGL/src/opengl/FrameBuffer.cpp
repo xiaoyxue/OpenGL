@@ -1,6 +1,7 @@
 #include "FrameBuffer.h"
 #include "Texture.h"
 #include "GLImage.h"
+#include <iostream>
 
 namespace OpenGL
 {
@@ -21,9 +22,19 @@ namespace OpenGL
 		GLCall(glBindRenderbuffer(GL_RENDERBUFFER, 0));
 	}
 
+	void RenderBuffer::Bind() const
+	{
+		GLCall(glBindRenderbuffer(GL_RENDERBUFFER, mHandle));
+	}
+
+	void RenderBuffer::UnBind() const
+	{
+		GLCall(glBindRenderbuffer(GL_RENDERBUFFER, 0));
+	}
+
 	FrameBuffer::FrameBuffer()
 	{
-		mTarget = (int)FrameBufferTarget::FRAME;
+		mTarget = (int)FrameBufferTarget::Frame;
 		GLCall(glGenFramebuffers(1, &mHandle));
 	}
 
@@ -39,7 +50,7 @@ namespace OpenGL
 		UnBind();
 	}
 
-	void FrameBuffer::Attach(FrameBufferAttachment attachment, Texture* texture, int level)
+	void FrameBuffer::Attach(FrameBufferAttachment attachment, Texture2D* texture, int level)
 	{
 		Bind();
 		GLCall(glFramebufferTexture2D(mTarget, (int)attachment, GL_TEXTURE_2D, texture->GetHandle(), level));
@@ -51,14 +62,21 @@ namespace OpenGL
 		this->mTarget = (int)target;
 	}
 
-	void FrameBuffer::Bind()
+	void FrameBuffer::Bind() const
 	{
 		GLCall(glBindFramebuffer(mTarget, mHandle));
 	}
 
-	void FrameBuffer::UnBind()
+	void FrameBuffer::UnBind() const
 	{
 		GLCall(glBindFramebuffer(mTarget, 0));
 	}
+
+	void FrameBuffer::Check()
+	{
+		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+			std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
+	}
+
 }
 

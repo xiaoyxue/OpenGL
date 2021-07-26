@@ -15,6 +15,10 @@ namespace OpenGL
 		virtual void DrawFace(const Renderer& renderer) const {}
 		virtual void DrawWireFrame(const Renderer& renderer) const {}
 		virtual void DrawObjectId(const Renderer& renderer) const {}
+		virtual void DrawToGbuffer(const Renderer& renderer, const FrameBuffer &frameBuffer) const {}
+		virtual void DebugDraw(const Renderer& renderer) const {}
+		virtual void DrawSSAO(const Renderer& renderer, const SSAO& ssaoBuffer) const {}
+		virtual void DrawToFrameBuffer(const Renderer& renderer, const FrameBuffer& frameBuffer) const {}
 
 		virtual void Rotate(float dPhi, float dTheta);
 		virtual void Translate(float dx, float dy, float dz);
@@ -35,6 +39,7 @@ namespace OpenGL
 	protected:
 		unsigned int mObjectId;
 		mutable Shader mSelectorShader;
+		mutable Shader mDebugShader;
 	private:
 		bool mTraceFlag = false;
 	};

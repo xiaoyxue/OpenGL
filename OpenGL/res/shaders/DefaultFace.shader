@@ -28,9 +28,13 @@ in vec2 v_TexCoord;
 in vec4 v_Color;
 
 uniform sampler2D u_Texture0;
+uniform sampler2D ssao;
 
 void main()
 {
+	//float ssaoValue = texture(ssao, gl_FragCoord).x;
+
 	vec4 texColor = texture(u_Texture0, v_TexCoord);
-	color = v_Color;
+	color = texColor;
+	//color = v_Color * ssaoValue;
 }

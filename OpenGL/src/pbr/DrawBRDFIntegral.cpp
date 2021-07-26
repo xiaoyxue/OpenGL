@@ -3,16 +3,19 @@
 #include "opengl/Texture.h"
 #include "opengl/Renderer.h"
 #include "visual/Camera.h"
+#include "opengl/GLImage.h"
 
 namespace PBR 
 {
-	
+	using namespace OpenGL;
 
 	BRDFIntegral::BRDFIntegral()
 	{
 		mpVAO = std::make_unique<VertexArray>();
 		mpVBO = std::make_unique<VertexBuffer>();
 		mpIBO = std::make_unique<IndexBuffer>();
+		//mpRenderBuffer = std::make_unique<RenderBuffer>();
+		mpFrameBuffer = std::make_unique<FrameBuffer>();
 		mpVBO->SetData(&(mPoints[0]), 32 * sizeof(float));
 		mpIBO->SetData(&(mIndex[0]), 6);
 		VertexBufferLayout layout;
@@ -30,24 +33,51 @@ namespace PBR
 
 	}
 
+	//void BRDFIntegral::DrawFace(const Renderer& renderer) const
+	//{
+
+	//	unsigned int fbo, rbo;
+	//	GLCall(glGenFramebuffers(1, &fbo));
+	//	GLCall(glGenRenderbuffers(1, &rbo));
+	//	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, fbo));
+	//	GLCall(glBindRenderbuffer(GL_RENDERBUFFER, rbo));
+	//	mpTexture->Bind();
+	//	GLuint brdfLUTTexture = mpTexture->GetHandle();
+	//	GLCall(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, mpTexture->GetWidth(), mpTexture->GetHeight()));
+	//	GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, brdfLUTTexture, 0));
+
+	//	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	//		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
+	//	//GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+
+	//	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, fbo));
+	//	auto& shader = mShaders["BRDF_LUT"];
+	//	renderer.EnableDepthTest();
+	//	shader->Bind();
+	//	shader->SetUniform2f("u_Resolution", mpTexture->GetWidth(), mpTexture->GetHeight());
+	//	glViewport(0, 0, mpTexture->GetWidth(), mpTexture->GetHeight());
+	//	shader->SetUniform1i("u_Texture", 0); mpTexture->Bind(0);
+	//	renderer.Draw(*mpVAO, *mpIBO, *shader);
+	//	renderer.DisableDepthTest();
+	//	mpTexture->UnBind();
+	//	shader->UnBind();
+	//	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+	//}
+
+
 	void BRDFIntegral::DrawFace(const Renderer& renderer) const
 	{
 
-		unsigned int fbo, rbo;
-		GLCall(glGenFramebuffers(1, &fbo));
-		GLCall(glGenRenderbuffers(1, &rbo));
-		GLCall(glBindFramebuffer(GL_FRAMEBUFFER, fbo));
-		GLCall(glBindRenderbuffer(GL_RENDERBUFFER, rbo));
+		mpFrameBuffer->Bind();
+		mpFrameBuffer->SetTarget(FrameBufferTarget::Frame);
+		
 		mpTexture->Bind();
-		GLuint brdfLUTTexture = mpTexture->GetHandle();
-		GLCall(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, mpTexture->GetWidth(), mpTexture->GetHeight()));
-		GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, brdfLUTTexture, 0));
+		//mpRenderBuffer->SetStorage(mpTexture->GetWidth(), mpTexture->GetHeight(), ImageFormat::Depth24, 0);
+		mpFrameBuffer->Attach(FrameBufferAttachment::Color0, mpTexture, 0);
+		mpFrameBuffer->Bind();
+		mpFrameBuffer->Check();
+		mpFrameBuffer->Bind();
 
-		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-			std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
-		GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
-
-		GLCall(glBindFramebuffer(GL_FRAMEBUFFER, fbo));
 		auto& shader = mShaders["BRDF_LUT"];
 		renderer.EnableDepthTest();
 		shader->Bind();
@@ -58,7 +88,9 @@ namespace PBR
 		renderer.DisableDepthTest();
 		mpTexture->UnBind();
 		shader->UnBind();
-		GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+
+		mpFrameBuffer->UnBind();
+
 	}
 
 	void BRDFIntegral::AddShader(const std::string& shaderName, std::shared_ptr<Shader> shader)

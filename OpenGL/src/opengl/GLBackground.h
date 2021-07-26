@@ -18,7 +18,7 @@ namespace OpenGL
 		std::unique_ptr<VertexBuffer> mpVBO;
 		std::unique_ptr<IndexBuffer> mpIBO;
 		std::unique_ptr<VertexArray> mpVAO;
-		Texture* mpTexture;
+		Texture2D* mpTexture;
 		mutable std::unordered_map<std::string, std::shared_ptr<Shader>> mShaders;
 	public:
 		GLBackground();
@@ -26,6 +26,6 @@ namespace OpenGL
 		void DrawFace(const Renderer& renderer) const override;
 		BBox GetBBox() const override;
 		void AddShader(const std::string& shaderName, std::shared_ptr<Shader> shader);
-		void AddTexture(Texture* texture) { mpTexture = texture; }
+		void AddTexture(Texture2D* texture) { mpTexture = texture; }
 	};
 }

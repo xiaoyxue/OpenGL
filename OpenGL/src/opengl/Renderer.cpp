@@ -9,6 +9,7 @@
 #include "math/Lingal.h"
 #include "DrawableObject.h"
 #include "math/AABB.h"
+#include "DrawQuad.h"
 #include <iostream>
 
 namespace OpenGL
@@ -245,9 +246,50 @@ namespace OpenGL
 		boarderDrawer.Draw(w, Vec2i(mWidth, mHeight), this);
 	}
 
+	void Renderer::DrawGbuffer(const DrawableObject& object, FrameBuffer& frameBuffer) const
+	{
+		object.DrawToGbuffer(*this, frameBuffer);
+	}
+
+
+	void Renderer::DrawGbuffer(const Scene& scene, FrameBuffer& frameBuffer) const
+	{
+		//GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
+		//GLCall(glEnable(GL_POLYGON_OFFSET_FILL));
+		//GLCall(glPolygonOffset(1.0, 1.0));
+		for (auto it : scene.GetDrawObjects())
+		{
+			it->DrawToGbuffer(*this, frameBuffer);
+		}
+	}
+
+	void Renderer::DrawToFrameBuffer(const DrawableObject& object, FrameBuffer& frameBuffer) const
+	{
+		object.DrawToFrameBuffer(*this, frameBuffer);
+	}
+
+	void Renderer::DrawToFrameBuffer(const Scene& scene, FrameBuffer& frameBuffer) const
+	{
+		for (auto it : scene.GetDrawObjects())
+		{
+			it->DrawToFrameBuffer(*this, frameBuffer);
+		}
+	}
+
+	void Renderer::DebugDraw(DrawQuad& quad, Texture2D& texture) const
+	{
+		quad.AddTexture(&texture);
+		quad.DrawFace(*this);
+	}
+
 	void Renderer::SetCamera(Camera* pCamera)
 	{
 		mpCamera = pCamera;
+	}
+
+	void Renderer::SetSSAO(SSAO* pSSAO)
+	{
+		mpSSAO = pSSAO;
 	}
 
 	unsigned int Renderer::IsReady()

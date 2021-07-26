@@ -6,11 +6,11 @@
 namespace PBR {
 
 	using namespace OpenGL;
-	class BRDFTexture : public Texture
+	class BRDFTexture : public Texture2D
 	{
 
 	public:
-		BRDFTexture();
+		BRDFTexture() = default;
 		BRDFTexture(int width, int height);
 		~BRDFTexture();
 	};

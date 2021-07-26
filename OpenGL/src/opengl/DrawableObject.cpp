@@ -2,6 +2,7 @@
 #include "math/Transform.h"
 #include "math/Lingal.h"
 #include "Renderer.h"
+#include "visual/Camera.h"
 
 namespace OpenGL
 {

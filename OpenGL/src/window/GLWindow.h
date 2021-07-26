@@ -28,6 +28,7 @@ namespace GLFW
 		void SetMaxFps(double fps = 60);
 		inline GLFWwindow* GetGlfwWindow() const { return mpWindow; }
 		virtual void DrawAll() const;
+		virtual void DebugDraw() const {}
 
 	private:
 		void SetErrorCallback();

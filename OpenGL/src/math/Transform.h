@@ -97,6 +97,8 @@ namespace Math
 			return ret;
 		}
 
+		FORCE_INLINE Vector3 TransformNormal(const Vector3& n) const;
+
 		static Transform Translate(const Vector3& v);
 		static Transform Scale(real sx, real sy, real sz);
 		static Transform RotateX(real theta);
@@ -112,4 +114,10 @@ namespace Math
 	private:
 		Matrix4 mat, invMat;
 	};
+
+	FORCE_INLINE Vector3 Transform::TransformNormal(const Vector3& n) const {
+		Vector4 nn(n.x, n.y, n.z, 0);
+		nn = invMat.Transpose() * nn;
+		return Vector3(nn.x, nn.y, nn.z);
+	}
 }

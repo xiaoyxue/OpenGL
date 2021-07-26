@@ -1,5 +1,6 @@
 #pragma once
 #include "opengl/DrawableObject.h"
+#include "opengl/FrameBuffer.h"
 
 namespace PBR
 {
@@ -19,7 +20,9 @@ namespace PBR
 		std::unique_ptr<VertexBuffer> mpVBO;
 		std::unique_ptr<IndexBuffer> mpIBO;
 		std::unique_ptr<VertexArray> mpVAO;
-		Texture* mpTexture;
+		std::unique_ptr<FrameBuffer> mpFrameBuffer;
+		//std::unique_ptr<RenderBuffer> mpRenderBuffer;
+		Texture2D* mpTexture;
 		mutable std::unordered_map<std::string, std::shared_ptr<Shader>> mShaders;
 		unsigned int mHandler;
 	public:
@@ -27,7 +30,7 @@ namespace PBR
 		virtual ~BRDFIntegral();
 		void DrawFace(const Renderer& renderer) const override;
 		void AddShader(const std::string& shaderName, std::shared_ptr<Shader> shader);
-		void AddTexture(Texture* texture) { mpTexture = texture; }
+		void AddTexture(Texture2D* texture) { mpTexture = texture; }
 		BBox GetBBox() const { return BBox(); }
 	};
 }

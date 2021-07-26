@@ -15,5 +15,6 @@ namespace Preview
 	EditMode gEditMode;
 	RotateMode gRotateMode;
 	TransformMode gTransformMode;
+	bool gUseGbuffer = true;
 }
 

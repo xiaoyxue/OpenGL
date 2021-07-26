@@ -7,6 +7,7 @@
 #include "IndexBuffer.h"
 #include "VertexBufferLayout.h"
 #include "visual/Camera.h"
+#include "ssao/SSAO.h"
 #include <sstream>
 
 namespace OpenGL
@@ -43,6 +44,8 @@ namespace OpenGL
 			shader->SetUniform1i(textureName, i);
 			mTextures[i]->Bind(i);
 		}
+		SSAO* pSSAO = renderer.GetSSAO();
+		shader->SetUniform1i("ssao", 5); pSSAO->mpSSAO_Color->Bind(5);
 		renderer.Draw(*mpVAO, *mpIBO, *shader);
 		renderer.DisableDepthTest();
 		for (int i = 0; i < mTextures.size(); ++i)
@@ -52,6 +55,27 @@ namespace OpenGL
 		shader->UnBind();
 	}
 
+	void GLMesh::DrawToGbuffer(const Renderer& renderer, const FrameBuffer& frameBuffer) const
+	{
+		frameBuffer.Bind();
+
+		auto& shader = mShaders["Gbuffer"];
+		renderer.EnableDepthTest();
+		shader->Bind();
+		Matrix4 proj = renderer.GetCamera()->GetProjMatrix();
+		Matrix4 view = renderer.GetCamera()->GetViewMatrix();
+		Matrix4 model = LocalToWorld.GetMatrix();
+		shader->SetUniformMat4f("Model", model);
+		shader->SetUniformMat4f("View", view);
+		shader->SetUniformMat4f("Proj", proj);
+		Vec3 cameraPosition = renderer.GetCamera()->GetPosition();
+		shader->SetUniform3f("cameraPosition", cameraPosition[0], cameraPosition[1], cameraPosition[2]);
+		renderer.Draw(*mpVAO, *mpIBO, *shader);
+		renderer.DisableDepthTest();
+		shader->UnBind();
+
+		frameBuffer.UnBind();
+	}
 
 	void GLMesh::DrawWireFrame(const Renderer& renderer) const
 	{

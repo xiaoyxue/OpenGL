@@ -156,6 +156,7 @@ namespace OpenGL
         Camera* mpCamera;
         Coordinates mCoords;
         int mWidth, mHeight;
+        SSAO* mpSSAO;
 
     public:
         Renderer() = delete;
@@ -164,6 +165,7 @@ namespace OpenGL
         void Resize(int width, int height);
         void SetSize(int width, int height);
         void SetCamera(Camera* pCamera);
+        void SetSSAO(SSAO* pSSAO);
         void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
         void DrawFaces(const DrawableObject &object) const;
         void DrawFaces(const Scene& scene) const;
@@ -180,10 +182,15 @@ namespace OpenGL
         void DisableBlend() const;
         void DrawCoordinates() const;
         void DrawBoarder(int w) const;
+        void DrawGbuffer(const DrawableObject& object, FrameBuffer& frameBuffer) const;
+        void DrawGbuffer(const Scene& scene, FrameBuffer& frameBuffer) const;
+        void DrawToFrameBuffer(const DrawableObject& object, FrameBuffer& frameBuffer) const;
+        void DrawToFrameBuffer(const Scene& scene, FrameBuffer& frameBuffer) const;
+        void DebugDraw(DrawQuad& quad, Texture2D &texture) const;
+
         void Flush() const { glFlush(); }
-
         inline Camera* GetCamera() const { return mpCamera; }
-
+        inline SSAO* GetSSAO() const { return mpSSAO; }
         static unsigned int IsReady();
 
     };

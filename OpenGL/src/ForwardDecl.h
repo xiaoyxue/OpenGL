@@ -6,7 +6,7 @@ namespace OpenGL
 	class GLObject;
 	class IndexBuffer;
 	class ObjMesh;
-	class Texture;
+	class Texture2D;
 	class VertexBuffer;
 	class VertexArray;
 	class VertexBufferLayout;
@@ -15,6 +15,8 @@ namespace OpenGL
 	class DrawableObject;
 	class Shader;
 	class FrameBuffer;
+	class DrawQuad;
+	class SSAO;
 	enum class ImageDataType;
 	enum class ImageFormat;
 }

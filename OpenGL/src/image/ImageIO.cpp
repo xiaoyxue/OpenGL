@@ -1,8 +1,10 @@
 #include "ImageIO.h"
 #include "container/Array.h"
+#include "math/MathUtils.h"
+
 #include "stb/stb_image.h"
 #include "stb/stb_image_write.h"
-#include "math/MathUtils.h"
+
 
 namespace OpenGL {
 

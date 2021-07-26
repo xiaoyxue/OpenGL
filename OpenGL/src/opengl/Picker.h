@@ -21,6 +21,6 @@ namespace OpenGL
 		int mWidth, mHeight;
 		FrameBuffer mFrameBuffer;
 		RenderBuffer mRenderBuffer;
-		std::unique_ptr<Texture> mpTexture;
+		std::unique_ptr<Texture2D> mpTexture;
 	};
 }

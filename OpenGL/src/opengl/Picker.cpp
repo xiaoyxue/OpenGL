@@ -11,7 +11,7 @@ namespace OpenGL
 	{
 		mWidth = w;
 		mHeight = h;
-		mpTexture = std::make_unique<GLTexture>(mWidth, mHeight);
+		mpTexture = std::make_unique<Texture2D>(mWidth, mHeight);
 		mRenderBuffer.SetStorage(mWidth, mHeight, ImageFormat::Depth32);
 		mFrameBuffer.Attach(FrameBufferAttachment::Color0, mpTexture.get());
 		mFrameBuffer.Attach(FrameBufferAttachment::Depth, &mRenderBuffer);
@@ -21,7 +21,7 @@ namespace OpenGL
 	{
 		mWidth = width;
 		mHeight = height;
-		mpTexture = std::make_unique<GLTexture>(width, height);
+		mpTexture = std::make_unique<Texture2D>(width, height);
 		mRenderBuffer.SetStorage(mWidth, mHeight, ImageFormat::Depth32);
 		mFrameBuffer.Attach(FrameBufferAttachment::Color0, mpTexture.get());
 		mFrameBuffer.Attach(FrameBufferAttachment::Depth, &mRenderBuffer);

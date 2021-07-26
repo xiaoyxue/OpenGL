@@ -4,6 +4,7 @@
 #include "opengl/Picker.h"
 #include "PreviewerGui.h"
 #include "ForwardDecl.h"
+#include "ssao/SSAO.h"
 #include <vector>
 #include <set>
 
@@ -26,6 +27,9 @@ namespace Preview
 		Picker* mpPicker;
 		std::unique_ptr<ImmediateGui> mpGui;
 		int mBoarderWidth;
+		std::unique_ptr<SSAO> mpSSAO;
+		FrameBuffer* mpFrameBuffer;
+		std::unordered_map<std::string, FrameBuffer*> mFrameBuffers;
 	public:
 		Previewer();
 		Previewer(const std::string& title, int w = 1024, int h = 768);
@@ -33,12 +37,17 @@ namespace Preview
 
 		void Init();
 		void DrawAll() const override;
+		void DebugDraw() const override;
 		void SetScene(Scene* pScene);
 		void SetCamera(Camera* pCamera);
 		void SetPicker(Picker* pPicker) { mpPicker = pPicker; }
 		void SetBoardWidth(int w) { mBoarderWidth = w; }
 		void AddDrawableObject(DrawableObject* pObject);
 		void AddBackground(DrawableObject* pBackground);
+		void SetDebugQuad(DrawQuad* pDebugQuad);
+		void SetQuad(DrawQuad* pQuad);
+		void SetFrameBuffer(FrameBuffer* pFrameBuffer) { mpFrameBuffer = pFrameBuffer; }
+		void SetSSAO();
 
 		bool HandleGLMouseEvent() const;
 		bool IsSelected() const;
@@ -48,6 +57,8 @@ namespace Preview
 		mutable int mBackgroundIndex = 0;
 		mutable std::set<DrawableObject*> mTargets;
 
+		mutable DrawQuad* mpDebugQuad;
+		mutable DrawQuad* mpQuad;
 	private:
 		// Private methods
 		void InitState();

@@ -1,10 +1,10 @@
 #shader vertex
 #version 330 core
 
-layout(location = 0) in vec4 position;
-layout(location = 1) in vec4 normal;
+layout(location = 0) in vec3 position;
+layout(location = 1) in vec3 normal;
 layout(location = 2) in vec2 texCoord;
-layout(location = 3) in vec4 v_color;
+//layout(location = 3) in vec4 v_color;
 
 uniform mat4 u_Model;
 uniform mat4 u_View;
@@ -18,11 +18,13 @@ out vec2 v_TexCoord;
 out vec4 v_Color;
 void main()
 {
-    gl_Position = u_Proj * u_View * u_Model * position;
+    mat4 MVP = u_Proj * u_View * u_Model;
+    gl_Position = MVP * vec4(position, 1);
     v_TexCoord = texCoord;
-    v_Color = v_color;
-    dir2camera = (vec4(cameraPosition, 0) - u_Model * position).xyz;
-    N = vec3(normal);
+    //v_Color = v_color;
+    dir2camera = (vec4(cameraPosition, 1) - u_Model * vec4(position, 1)).xyz;
+    mat4 normalTransform = transpose(inverse(u_Model));
+    N = normalize(normalTransform * vec4(normal, 0)).xyz;
 }
 
 
@@ -95,5 +97,5 @@ void main()
     float NdotV = clamp((1.0 + dot(V, N)) / 2.0, 0.0, 1.0);
     vec2 BRDF = IntegralBRDF(NdotV, roughness);
     //color = vec4(Li, 1);
-    color = vec4(Li * (F0 * BRDF.x + BRDF.y), 1);
+    color =  vec4(Li * (F0 * BRDF.x + BRDF.y), 1);
 }

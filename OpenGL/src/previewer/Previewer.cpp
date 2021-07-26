@@ -6,6 +6,8 @@
 #include "opengl/Picker.h"
 #include "opengl/Scene.h"
 #include "opengl/DrawableObject.h"
+#include "opengl/DrawQuad.h"
+#include "Preview.h"
 #include <iostream>
 
 
@@ -18,6 +20,7 @@ namespace Preview
 	Previewer::Previewer()
 	{
 		mpGui = std::make_unique<PreviewerGui>(this);
+		//mpSSAO = std::make_unique<SSAO>();
 	}
 
 	Previewer::Previewer(const std::string& title, int w /*= 1024*/, int h /*= 760*/)
@@ -36,15 +39,53 @@ namespace Preview
 		GLWindow::Init();
 		InitState();
 		mpGui->InitImGui(this);
+		mpSSAO = std::make_unique<SSAO>(mWidth, mHeight);
 	}
 
 	void Previewer::DrawAll() const
 	{
+		gUseGbuffer = true;
+		if (!gUseGbuffer)
+		{
+			mpRenderer->Clear();
+			DrawObjects();
+			if (gShowCoordnates)
+				mpRenderer->DrawCoordinates();
+			mpGui->Draw();
+		}
+		else
+		{
+			//Draw Geometory Buffer
+			mpSSAO->BindGbuffer();
+			mpRenderer->Clear();
+			mpRenderer->DrawGbuffer(*mpScene, mpSSAO->mFrameBuffer);
+			mpSSAO->UnBindGbuffer();
+			
+			//Draw SSAO Map
+			mpSSAO->BindSSAO_Buffer();
+			mpRenderer->Clear();
+			mpQuad->DrawSSAO(*mpRenderer, *mpSSAO);
+			mpSSAO->UnBindSSAO_Buffer();
+			
+
+			//mpRenderer->Clear();
+			//DrawObjects();
+			//if (gShowCoordnates)
+			//	mpRenderer->DrawCoordinates();
+			//mpGui->Draw();
+
+
+			DebugDraw();
+			if (gShowCoordnates)
+				mpRenderer->DrawCoordinates();
+			mpGui->Draw();
+		}
+	}
+
+	void Previewer::DebugDraw() const
+	{
 		mpRenderer->Clear();
-		DrawObjects();
-		if (gShowCoordnates)
-			mpRenderer->DrawCoordinates();
-		mpGui->Draw();
+		mpRenderer->DebugDraw(*mpDebugQuad, *(mpSSAO->mpSSAO_Color));
 	}
 
 	void Previewer::SetScene(Scene* pScene)
@@ -69,6 +110,16 @@ namespace Preview
 			mpScene->AddBackground(pBackground);
 	}
 
+	void Previewer::SetDebugQuad(DrawQuad* pDebugQuad)
+	{
+		mpDebugQuad = pDebugQuad;
+	}
+
+	void Previewer::SetQuad(DrawQuad* pQuad)
+	{
+		mpQuad = pQuad;
+	}
+
 	int Previewer::Pick(int x, int y)
 	{
 		int id = -1;
@@ -79,6 +130,11 @@ namespace Preview
 		mpPicker->UnBind();
 		mpScene->SetPickId(id);
 		return id;
+	}
+
+	void Previewer::SetSSAO()
+	{
+		mpRenderer->SetSSAO(mpSSAO.get());
 	}
 
 	bool Previewer::HandleGLMouseEvent() const
