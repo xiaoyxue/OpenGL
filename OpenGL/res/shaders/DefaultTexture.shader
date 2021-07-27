@@ -50,8 +50,7 @@ void main()
 		resolutionX = 1280;
 		resolutionY = 1280;
 		vec2 uv = vec2(gl_FragCoord.x / resolutionX, gl_FragCoord.y / resolutionY);
-		float ssaoValue = texture(ssao, uv.xy).x;
 		vec4 texColor = texture(u_Texture0, v_TexCoord);
-		color = vec4(ssaoValue, ssaoValue, ssaoValue, ssaoValue);
+		color = texColor;
 	}
 }

@@ -170,6 +170,28 @@ int main(void)
 	//quad.AddShader("SSAO_Shader", ssaoMapShader);
 	previewer.SetQuad(&quad);
 
+
+	//Set FrameBuffer
+	Texture2D frameBufferTexure2D(resolutionX, resolutionY, 0, ImageDataType::Float);
+	FrameBuffer frameBuffer;
+	frameBuffer.Bind();
+	frameBuffer.SetTarget(FrameBufferTarget::Frame);
+	frameBufferTexure2D.Bind();
+	frameBufferTexure2D.SetFilter(TextureFilter::Linear);
+	frameBuffer.Attach(FrameBufferAttachment::Color0, &frameBufferTexure2D);
+	frameBuffer.Bind();
+	frameBuffer.Check();
+
+	RenderBuffer renderBuffer;
+	frameBuffer.Bind();
+	renderBuffer.SetStorage(resolutionX, resolutionY, ImageFormat::Depth32, 0);
+	frameBuffer.Attach(FrameBufferAttachment::Depth, &renderBuffer);
+	frameBuffer.Bind();
+	frameBuffer.Check();
+
+	previewer.SetFrameBuffer("offlineFrameBuffer", &frameBuffer);
+	previewer.SetTexture("offlineTexture", &frameBufferTexure2D);
+
 	GLMeshShading mailbox;
 	mailbox.AddMesh("..\\models\\mailbox\\10556_Mailbox-L2.obj");
 	mailbox.RotateLocal(0, 90);

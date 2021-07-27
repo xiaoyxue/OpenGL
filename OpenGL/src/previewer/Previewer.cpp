@@ -66,14 +66,16 @@ namespace Preview
 			mpRenderer->Clear();
 			mpQuad->DrawSSAO(*mpRenderer, *mpSSAO);
 			mpSSAO->UnBindSSAO_Buffer();
-			
 
-			//mpRenderer->Clear();
-			//DrawObjects();
+
+			
+			mFrameBuffers["offlineFrameBuffer"]->Bind();
+			mpRenderer->Clear();
+			DrawObjects();
+			mFrameBuffers["offlineFrameBuffer"]->UnBind();
 			//if (gShowCoordnates)
 			//	mpRenderer->DrawCoordinates();
 			//mpGui->Draw();
-
 
 			DebugDraw();
 			if (gShowCoordnates)
@@ -84,8 +86,11 @@ namespace Preview
 
 	void Previewer::DebugDraw() const
 	{
+		mpDebugQuad->AddTexture("ssao", mpSSAO->mpSSAO_Color.get());
+		mpDebugQuad->AddTexture("offlineTexture", mTextures["offlineTexture"]);
+
 		mpRenderer->Clear();
-		mpRenderer->DebugDraw(*mpDebugQuad, *(mpSSAO->mpSSAO_Color));
+		mpRenderer->DebugDraw(*mpDebugQuad);
 	}
 
 	void Previewer::SetScene(Scene* pScene)
@@ -135,6 +140,16 @@ namespace Preview
 	void Previewer::SetSSAO()
 	{
 		mpRenderer->SetSSAO(mpSSAO.get());
+	}
+
+	void Previewer::SetFrameBuffer(const std::string& bufferName, FrameBuffer* pFrameBuffer)
+	{
+		mFrameBuffers[bufferName] = pFrameBuffer;
+	}
+
+	void Previewer::SetTexture(const std::string& textureName, Texture2D* pTexture)
+	{
+		mTextures[textureName] = pTexture;
 	}
 
 	bool Previewer::HandleGLMouseEvent() const

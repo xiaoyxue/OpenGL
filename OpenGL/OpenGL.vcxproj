@@ -204,6 +204,7 @@
     <None Include="res\shaders\DefaultTexture.shader" />
     <None Include="res\shaders\ImageBasedLighting.shader" />
     <None Include="res\shaders\ImageBasedLightingV2.shader" />
+    <None Include="res\shaders\MixFrameBufferAndOcclusion.shader" />
     <None Include="res\shaders\ObjectPicker.shader" />
     <None Include="external\glm\detail\func_common.inl" />
     <None Include="external\glm\detail\func_common_simd.inl" />

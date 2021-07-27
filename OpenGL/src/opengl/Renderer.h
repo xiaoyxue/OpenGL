@@ -187,7 +187,7 @@ namespace OpenGL
         void DrawToFrameBuffer(const DrawableObject& object, FrameBuffer& frameBuffer) const;
         void DrawToFrameBuffer(const Scene& scene, FrameBuffer& frameBuffer) const;
         void DebugDraw(DrawQuad& quad, Texture2D &texture) const;
-
+        void DebugDraw(DrawQuad& quad) const;
         void Flush() const { glFlush(); }
         inline Camera* GetCamera() const { return mpCamera; }
         inline SSAO* GetSSAO() const { return mpSSAO; }

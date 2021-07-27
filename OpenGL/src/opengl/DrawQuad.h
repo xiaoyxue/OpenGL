@@ -19,6 +19,7 @@ namespace OpenGL
 		std::unique_ptr<IndexBuffer> mpIBO;
 		std::unique_ptr<VertexArray> mpVAO;
 		Texture2D* mpTexture;
+		mutable std::unordered_map<std::string, Texture2D*> mTextures;
 		mutable std::unordered_map<std::string, std::shared_ptr<Shader>> mShaders;
 		std::vector<Vec3> mSample;
 		std::vector<Vec3> ssaoKernel;
@@ -30,9 +31,11 @@ namespace OpenGL
 		void DrawFace(const Renderer& renderer) const override;
 		BBox GetBBox() const override;
 		void AddShader(const std::string& shaderName, std::shared_ptr<Shader> shader);
-		void AddTexture(Texture2D* texture) { mpTexture = texture; }
+		void AddTexture(Texture2D* pTexture) { mpTexture = pTexture; }
+		void AddTexture(const std::string & textureName, Texture2D* pTexture) { mTextures[textureName] = pTexture; }
 		void DrawSSAO(const Renderer& renderer, const SSAO& ssaoBuffer) const override;
 		void DrawToFrameBuffer(const Renderer& renderer, const FrameBuffer& frameBuffer) const override;
 		void GenerateSamples(int n);
+		void DebugDraw(const Renderer& renderer) const;
 	};
 }

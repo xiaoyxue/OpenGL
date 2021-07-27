@@ -29,7 +29,9 @@ namespace Preview
 		int mBoarderWidth;
 		std::unique_ptr<SSAO> mpSSAO;
 		FrameBuffer* mpFrameBuffer;
-		std::unordered_map<std::string, FrameBuffer*> mFrameBuffers;
+
+		mutable std::unordered_map<std::string, Texture2D*> mTextures;
+		mutable std::unordered_map<std::string, FrameBuffer*> mFrameBuffers;
 	public:
 		Previewer();
 		Previewer(const std::string& title, int w = 1024, int h = 768);
@@ -48,7 +50,8 @@ namespace Preview
 		void SetQuad(DrawQuad* pQuad);
 		void SetFrameBuffer(FrameBuffer* pFrameBuffer) { mpFrameBuffer = pFrameBuffer; }
 		void SetSSAO();
-
+		void SetFrameBuffer(const std::string& bufferName, FrameBuffer* pFrameBuffer);
+		void SetTexture(const std::string& textureName, Texture2D* pTexture);
 		bool HandleGLMouseEvent() const;
 		bool IsSelected() const;
 

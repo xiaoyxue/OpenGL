@@ -68,10 +68,10 @@ namespace OpenGL
 	void Renderer::DrawFaces(const Scene& scene) const
 	{
 		//GLCall(glDisable(GL_BLEND));
-		EnableBlend();
-		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
-		GLCall(glEnable(GL_POLYGON_OFFSET_FILL));
-		GLCall(glPolygonOffset(1.0, 1.0));
+		//EnableBlend();
+		//GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
+		//GLCall(glEnable(GL_POLYGON_OFFSET_FILL));
+		//GLCall(glPolygonOffset(1.0, 1.0));
 		for (auto it : scene.GetDrawObjects())
 		{
 			it->DrawFace(*this);
@@ -280,6 +280,11 @@ namespace OpenGL
 	{
 		quad.AddTexture(&texture);
 		quad.DrawFace(*this);
+	}
+
+	void Renderer::DebugDraw(DrawQuad& quad) const
+	{
+		quad.DebugDraw(*this);
 	}
 
 	void Renderer::SetCamera(Camera* pCamera)

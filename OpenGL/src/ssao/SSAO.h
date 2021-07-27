@@ -76,7 +76,7 @@ namespace OpenGL
 			//SSAO blur buffer
 			mSSAO_BlurBuffer.Bind();
 			mSSAO_BlurBuffer.SetTarget(FrameBufferTarget::Frame);
-			mpSSAO_BlurColor = std::make_unique<Texture2D>(resolutionX, resolutionY, ImageFormat::RGBA, ImageDataType::Float);
+			mpSSAO_BlurColor = std::make_unique<Texture2D>(resolutionX, resolutionY, ImageFormat::RGB, ImageDataType::Float, ImageFormat::RGB);
 			mpSSAO_BlurColor->Bind();
 			mSSAO_BlurBuffer.Attach(FrameBufferAttachment::Color0, mpSSAO_BlurColor.get());
 			mSSAO_BlurBuffer.Bind();

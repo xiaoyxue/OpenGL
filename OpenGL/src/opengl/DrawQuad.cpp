@@ -148,6 +148,29 @@ namespace OpenGL
 		mpNoiseTexture = std::make_shared<Texture2D>(4, 4, ImageFormat::RGB, ImageDataType::Float, ImageFormat::RGBA_32F, &ssaoNoise[0]);
 	}
 
+	void DrawQuad::DebugDraw(const Renderer& renderer) const
+	{
+		auto& shader = mShaders["Debug"];
+		renderer.EnableDepthTest();
+		shader->Bind();
+		Matrix4 proj = renderer.GetCamera()->GetProjMatrix();
+		Matrix4 view = renderer.GetCamera()->GetViewMatrix();
+		Matrix4 model(1);
+		shader->SetUniformMat4f("u_Model", model);
+		shader->SetUniformMat4f("u_View", view);
+		shader->SetUniformMat4f("u_Proj", proj);
+
+		float resolutionX = 1280, resolutionY = 1280;
+		shader->SetUniform2f("u_Resolution", resolutionX, resolutionY);
+		shader->SetUniform1i("offlineTexture", 0); mTextures["offlineTexture"]->Bind(0);
+		shader->SetUniform1i("ssao", 1); mTextures["ssao"]->Bind(1);
+
+		renderer.Draw(*mpVAO, *mpIBO, *shader);
+		renderer.DisableDepthTest();
+		mpTexture->UnBind();
+		shader->UnBind();
+	}
+
 	Math::BBox DrawQuad::GetBBox() const
 	{
 		return BBox();
