@@ -46,4 +46,5 @@ namespace Preview
 	extern RotateMode gRotateMode;
 	extern TransformMode gTransformMode;
 	extern bool gUseGbuffer;
+	extern float gRoughness;
 }

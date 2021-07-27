@@ -33,8 +33,8 @@ const float PI = 3.14159265359;
 const int SAMPLE_SIZE = 64;
 float bias = 0.0025;
 
-const float radius = 0.6;
-
+const float radius = 0.15;
+const float radiusMin = 0.1;
 in vec2 TexCoords;
 
 layout(location = 0) out vec4 FragColor;
@@ -71,7 +71,7 @@ void main()
     vec3 tangent, binormal;
     float occlusion = 0.0;
     float visibility = 1.0;
-
+    float occlusionScale = 3.0;
 
 
     vec4 debugVal = vec4(0, 0, 0, 1);
@@ -83,7 +83,7 @@ void main()
         for (int i = 0; i < SAMPLE_SIZE; ++i) {
             vec3 randomSample = samples[i];
             float zeta1 = randomSample.x, zeta2 = randomSample.y, zeta3 = randomSample.z;
-            float r = radius * zeta3;
+            float r = radiusMin + radius * zeta3;
             float x = r * cos(2 * PI * zeta2) * sqrt(1 - zeta1 * zeta1);
             float y = r * sin(2 * PI * zeta2) * sqrt(1 - zeta1 * zeta1);
             float z = r * zeta1;
@@ -99,7 +99,7 @@ void main()
            
             float cosWeight = dot(normalize(sampleDir).xyz, normal);
             if (cameraSpaceSamplePoint.z > sampleDepth && cosWeight > 0.01) {
-                float rangeCheck = smoothstep(0.0, 1.0, radius / abs(position.z - sampleDepth));
+                float rangeCheck = smoothstep(0.0, 1.0, r / abs(position.z - sampleDepth));
                 occlusion += 1 * rangeCheck * cosWeight ;
                 //occlusion += 1.0;
 
@@ -107,7 +107,7 @@ void main()
 
         }
         occlusion /= SAMPLE_SIZE;
-        occlusion *= 2.0;
+        occlusion *= occlusionScale;
         visibility = 1.0 - occlusion;
        
     }
