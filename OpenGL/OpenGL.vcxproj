@@ -342,9 +342,6 @@
     <None Include="external\glm\gtx\wrap.inl" />
     <None Include="res\shaders\ssao\Gbuffer.shader" />
     <None Include="res\shaders\ssao\SSAO.shader" />
-    <None Include="res\shaders\ssao\ssao_geometry.shader" />
-    <None Include="res\shaders\ssao\ssao_shader.shader" />
-    <None Include="res\shaders\ssao\SSAO_WorldSpace.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\stb\stb.h" />

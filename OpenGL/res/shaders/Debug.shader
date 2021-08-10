@@ -40,7 +40,8 @@ void main()
 	//color = vec4(texColorX, texColorX, texColorX, 1);
 	vec4 sceneColor = texture(offlineTexture, v_TexCoord);
 	float ssaoColor = texture(ssao, v_TexCoord).x;
-	color = vec4(ssaoColor, ssaoColor, ssaoColor, 1);
-	//color = sceneColor * ssaoColor;
+	//color = vec4(ssaoColor, ssaoColor, ssaoColor, 1);
+	color = sceneColor * ssaoColor;
+	//color = sceneColor;
 
 }

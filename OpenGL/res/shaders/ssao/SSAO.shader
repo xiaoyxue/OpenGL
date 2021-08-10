@@ -33,8 +33,11 @@ const float PI = 3.14159265359;
 const int SAMPLE_SIZE = 64;
 float bias = 0.0025;
 
-const float radius = 0.15;
-const float radiusMin = 0.1;
+const float radius = 0.2;
+const float radiusMin = 0.2;
+const float radiusMax = 0.5;
+float occlusionScale = 1.5;
+
 in vec2 TexCoords;
 
 layout(location = 0) out vec4 FragColor;
@@ -71,7 +74,7 @@ void main()
     vec3 tangent, binormal;
     float occlusion = 0.0;
     float visibility = 1.0;
-    float occlusionScale = 3.0;
+
 
 
     vec4 debugVal = vec4(0, 0, 0, 1);
@@ -98,9 +101,10 @@ void main()
            
            
             float cosWeight = dot(normalize(sampleDir).xyz, normal);
-            if (cameraSpaceSamplePoint.z > sampleDepth && cosWeight > 0.01) {
+            if (cameraSpaceSamplePoint.z > sampleDepth ) {
                 float rangeCheck = smoothstep(0.0, 1.0, r / abs(position.z - sampleDepth));
-                occlusion += 1 * rangeCheck * cosWeight ;
+                occlusion += 1 * rangeCheck * cosWeight;
+                /*occlusion += 1 * rangeCheck * cosWeight * (radiusMax - r) / radiusMax;*/
                 //occlusion += 1.0;
 
             }

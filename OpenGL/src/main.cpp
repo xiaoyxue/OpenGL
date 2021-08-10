@@ -152,9 +152,6 @@ int main(void)
 	auto gBufferShader = std::make_shared<Shader>("res/shaders/ssao/Gbuffer.shader");
 	auto ssaoBufferShader = std::make_shared<Shader>("res/shaders/ssao/SSAO.shader");
 	auto debugShader = std::make_shared<Shader>("res/shaders/Debug.shader");
-	auto ssaoGeometryShader = std::make_shared<Shader>("res/shaders/ssao/ssao_geometry.shader");
-	auto ssaoMapShader = std::make_shared<Shader>("res/shaders/ssao/ssao_shader.shader");
-	auto ssaoWorldSpaceBufferShader = std::make_shared<Shader>("res/shaders/ssao/SSAO_WorldSpace.shader");
 
 	//Debug
 	DrawQuad debugQuad;
@@ -207,7 +204,8 @@ int main(void)
 	previewer.AddDrawableObject(&mailbox);
 
 	GLMesh plane;
-	std::string planeTexturePath = "..\\models\\plane2\\default.png";
+	/*std::string planeTexturePath = "..\\models\\plane2\\default.png";*/
+	std::string planeTexturePath = "..\\models\\plane2\\texture0.png";
 	Texture2D planeTexture(planeTexturePath);
 	plane.AddMesh("..\\models\\plane2\\plane.obj");
 	plane.RotateLocal(0, -90);

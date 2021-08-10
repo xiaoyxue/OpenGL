@@ -553,9 +553,6 @@
     <None Include="res\shaders\ImageBasedLightingV2.shader" />
     <None Include="res\shaders\ssao\Gbuffer.shader" />
     <None Include="res\shaders\ssao\SSAO.shader" />
-    <None Include="res\shaders\ssao\ssao_geometry.shader" />
-    <None Include="res\shaders\ssao\ssao_shader.shader" />
-    <None Include="res\shaders\ssao\SSAO_WorldSpace.shader" />
     <None Include="res\shaders\MixFrameBufferAndOcclusion.shader" />
   </ItemGroup>
   <ItemGroup>
