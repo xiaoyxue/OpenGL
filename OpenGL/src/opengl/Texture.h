@@ -29,8 +29,10 @@ namespace OpenGL
 
 
 	enum class TextureMode {
-		GL_Texture2D = GL_TEXTURE_2D
+		GL_Texture2D = GL_TEXTURE_2D,
+		GL_Texture2D_MultiSample = GL_TEXTURE_2D_MULTISAMPLE
 	};
+
 
 	template<int Target>
 	class Texture : public GLObject
@@ -58,6 +60,8 @@ namespace OpenGL
 			GLCall(glTexParameteri(Target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
 
 			GLCall(glTexImage2D(GL_TEXTURE_2D, 0, int(internalFormat), w, h, 0, int(imageFormat), int(dataFromat), pLocalBuffer));
+			
+
 			//SetFilter(TextureFilter::Anisotropic16x);
 			GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 		}
@@ -71,6 +75,7 @@ namespace OpenGL
 		{
 			GLCall(glActiveTexture(GL_TEXTURE0 + slot));
 			GLCall(glBindTexture(Target, mHandle));
+
 		}
 
 		void UnBind() const
@@ -120,6 +125,7 @@ namespace OpenGL
 			}
 		}
 	};
+
 
 	class Texture2D : public Texture<GL_TEXTURE_2D> {
 	protected:
@@ -193,6 +199,19 @@ namespace OpenGL
 
 	};
 
-
+	class Texture2D_MultiSample : public GLObject
+	{
+	protected:
+		int mWidth, mHeight;
+	public:
+		Texture2D_MultiSample() = delete;
+		Texture2D_MultiSample(int w, int h, int sample = 4) : mWidth(w), mHeight(h)
+		{
+			GLCall(glGenTextures(1, &mHandle));
+			GLCall(glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, mHandle));
+			GLCall(glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, sample, GL_RGB, mWidth, mHeight, GL_TRUE));
+			GLCall(glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0));
+		}
+	};
 
 }

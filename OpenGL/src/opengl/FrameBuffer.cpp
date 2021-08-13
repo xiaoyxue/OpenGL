@@ -57,6 +57,13 @@ namespace OpenGL
 		UnBind();
 	}
 
+	void FrameBuffer::Attach(FrameBufferAttachment attachment, Texture2D_MultiSample* texture)
+	{
+		Bind();
+		GLCall(glFramebufferTexture2D(mTarget, (int)attachment, GL_TEXTURE_2D_MULTISAMPLE, texture->GetHandle(), 0));
+		UnBind();
+	}
+
 	void FrameBuffer::SetTarget(FrameBufferTarget target)
 	{
 		this->mTarget = (int)target;

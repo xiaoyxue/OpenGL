@@ -204,7 +204,6 @@
     <None Include="res\shaders\DefaultTexture.shader" />
     <None Include="res\shaders\ImageBasedLighting.shader" />
     <None Include="res\shaders\ImageBasedLightingV2.shader" />
-    <None Include="res\shaders\MixFrameBufferAndOcclusion.shader" />
     <None Include="res\shaders\ObjectPicker.shader" />
     <None Include="external\glm\detail\func_common.inl" />
     <None Include="external\glm\detail\func_common_simd.inl" />
@@ -378,6 +377,7 @@
     <ClInclude Include="src\math\MathUtils.h" />
     <ClInclude Include="src\opengl\DrawQuad.h" />
     <ClInclude Include="src\opengl\GLMeshShading.h" />
+    <ClInclude Include="src\opengl\MSAA.h" />
     <ClInclude Include="src\pbr\BRDFTexture.h" />
     <ClInclude Include="src\pbr\DrawBRDFIntegral.h" />
     <ClInclude Include="src\previewer\Preview.h" />

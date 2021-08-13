@@ -189,6 +189,7 @@ namespace OpenGL
         void DebugDraw(DrawQuad& quad, Texture2D &texture) const;
         void DebugDraw(DrawQuad& quad) const;
         void Flush() const { glFlush(); }
+
         inline Camera* GetCamera() const { return mpCamera; }
         inline SSAO* GetSSAO() const { return mpSSAO; }
         static unsigned int IsReady();

@@ -7,6 +7,7 @@
 #include "opengl/Scene.h"
 #include "opengl/DrawableObject.h"
 #include "opengl/DrawQuad.h"
+#include "opengl/MSAA.h"
 #include "Preview.h"
 #include <iostream>
 
@@ -55,24 +56,33 @@ namespace Preview
 		}
 		else
 		{
-			//Draw Geometory Buffer
-			mpSSAO->BindGbuffer();
-			mpRenderer->Clear();
-			mpRenderer->DrawGbuffer(*mpScene, mpSSAO->mFrameBuffer);
-			mpSSAO->UnBindGbuffer();
-			
-			//Draw SSAO Map
-			mpSSAO->BindSSAO_Buffer();
-			mpRenderer->Clear();
-			mpQuad->DrawSSAO(*mpRenderer, *mpSSAO);
-			mpSSAO->UnBindSSAO_Buffer();
+			if (gEnableSSAO) {
+				//Draw Geometory Buffer
+				mpSSAO->BindGbuffer();
+				mpRenderer->Clear();
+				mpRenderer->DrawGbuffer(*mpScene, mpSSAO->mFrameBuffer);
+				mpSSAO->UnBindGbuffer();
 
+				//Draw SSAO Map
+				mpSSAO->BindSSAO_Buffer();
+				mpRenderer->Clear();
+				mpQuad->DrawSSAO(*mpRenderer, *mpSSAO);
+				mpSSAO->UnBindSSAO_Buffer();
+			}
 
-			
-			mFrameBuffers["offlineFrameBuffer"]->Bind();
+			mFrameBuffers["msaaFrameBuffer"]->Bind();
 			mpRenderer->Clear();
 			DrawObjects();
-			mFrameBuffers["offlineFrameBuffer"]->UnBind();
+			mFrameBuffers["msaaFrameBuffer"]->UnBind();
+
+			MSAA::Blit(*mFrameBuffers["msaaFrameBuffer"], *mFrameBuffers["offlineFrameBuffer"], mWidth, mHeight);
+
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+			//mFrameBuffers["offlineFrameBuffer"]->Bind();
+			//mpRenderer->Clear();
+			//DrawObjects();
+			//mFrameBuffers["offlineFrameBuffer"]->UnBind();
 			//if (gShowCoordnates)
 			//	mpRenderer->DrawCoordinates();
 			//mpGui->Draw();
@@ -137,7 +147,7 @@ namespace Preview
 		return id;
 	}
 
-	void Previewer::SetSSAO()
+	void Previewer::BuildSSAO()
 	{
 		mpRenderer->SetSSAO(mpSSAO.get());
 	}
@@ -150,6 +160,11 @@ namespace Preview
 	void Previewer::SetTexture(const std::string& textureName, Texture2D* pTexture)
 	{
 		mTextures[textureName] = pTexture;
+	}
+
+	void Previewer::SetTextureMultiSample(const std::string& textureName, Texture2D_MultiSample* pTexture)
+	{
+		mTexturesMultiSample[textureName] = pTexture;
 	}
 
 	bool Previewer::HandleGLMouseEvent() const

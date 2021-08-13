@@ -160,8 +160,8 @@ namespace OpenGL
 		shader->SetUniformMat4f("u_View", view);
 		shader->SetUniformMat4f("u_Proj", proj);
 
-		float resolutionX = 1280, resolutionY = 1280;
-		shader->SetUniform2f("u_Resolution", resolutionX, resolutionY);
+		//float resolutionX = 1280, resolutionY = 1280;
+		//shader->SetUniform2f("u_Resolution", resolutionX, resolutionY);
 		shader->SetUniform1i("offlineTexture", 0); mTextures["offlineTexture"]->Bind(0);
 		shader->SetUniform1i("ssao", 1); mTextures["ssao"]->Bind(1);
 

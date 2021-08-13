@@ -7,6 +7,7 @@ namespace OpenGL
 	class IndexBuffer;
 	class ObjMesh;
 	class Texture2D;
+	class Texture2D_MultiSample;
 	class VertexBuffer;
 	class VertexArray;
 	class VertexBufferLayout;

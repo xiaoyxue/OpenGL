@@ -556,7 +556,6 @@
     <None Include="res\shaders\ssao\ssao_geometry.shader" />
     <None Include="res\shaders\ssao\ssao_shader.shader" />
     <None Include="res\shaders\ssao\SSAO_WorldSpace.shader" />
-    <None Include="res\shaders\MixFrameBufferAndOcclusion.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Def.h">
@@ -1523,6 +1522,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\opengl\DrawQuad.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\opengl\MSAA.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

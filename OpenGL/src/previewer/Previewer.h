@@ -31,6 +31,7 @@ namespace Preview
 		FrameBuffer* mpFrameBuffer;
 
 		mutable std::unordered_map<std::string, Texture2D*> mTextures;
+		mutable std::unordered_map<std::string, Texture2D_MultiSample*> mTexturesMultiSample;
 		mutable std::unordered_map<std::string, FrameBuffer*> mFrameBuffers;
 	public:
 		Previewer();
@@ -49,9 +50,10 @@ namespace Preview
 		void SetDebugQuad(DrawQuad* pDebugQuad);
 		void SetQuad(DrawQuad* pQuad);
 		void SetFrameBuffer(FrameBuffer* pFrameBuffer) { mpFrameBuffer = pFrameBuffer; }
-		void SetSSAO();
 		void SetFrameBuffer(const std::string& bufferName, FrameBuffer* pFrameBuffer);
 		void SetTexture(const std::string& textureName, Texture2D* pTexture);
+		void SetTextureMultiSample(const std::string& textureName, Texture2D_MultiSample* pTexture);
+		void BuildSSAO();
 		bool HandleGLMouseEvent() const;
 		bool IsSelected() const;
 

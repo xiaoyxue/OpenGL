@@ -58,6 +58,7 @@ namespace OpenGL
 		void SetTarget(FrameBufferTarget target);
 		void Attach(FrameBufferAttachment attachment, RenderBuffer* renderBuffer);
 		void Attach(FrameBufferAttachment attachment, Texture2D* texture, int level = 0);
+		void Attach(FrameBufferAttachment attachment, Texture2D_MultiSample* texture);
 		void Bind() const;
 		void UnBind() const;
 		void Check();

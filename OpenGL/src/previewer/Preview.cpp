@@ -16,5 +16,6 @@ namespace Preview
 	RotateMode gRotateMode;
 	TransformMode gTransformMode;
 	bool gUseGbuffer = true;
+	bool gEnableSSAO = true;
 }
 

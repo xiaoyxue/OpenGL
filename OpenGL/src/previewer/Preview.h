@@ -47,4 +47,5 @@ namespace Preview
 	extern TransformMode gTransformMode;
 	extern bool gUseGbuffer;
 	extern float gRoughness;
+	extern bool gEnableSSAO;
 }

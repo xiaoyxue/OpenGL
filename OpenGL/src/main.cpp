@@ -154,7 +154,7 @@ int main(void)
 	auto debugShader = std::make_shared<Shader>("res/shaders/Debug.shader");
 	auto ssaoGeometryShader = std::make_shared<Shader>("res/shaders/ssao/ssao_geometry.shader");
 	auto ssaoMapShader = std::make_shared<Shader>("res/shaders/ssao/ssao_shader.shader");
-	auto ssaoWorldSpaceBufferShader = std::make_shared<Shader>("res/shaders/ssao/SSAO_WorldSpace.shader");
+	auto mixedShader = std::make_shared<Shader>("res/shaders/MixFrameBufferAndOcclusion.shader");
 
 	//Debug
 	DrawQuad debugQuad;
@@ -165,10 +165,40 @@ int main(void)
 	//Quad
 	DrawQuad quad;
 	quad.GenerateSamples(64);
-	//quad.AddShader("SSAO_Shader", ssaoWorldSpaceBufferShader);
 	quad.AddShader("SSAO_Shader", ssaoBufferShader);
-	//quad.AddShader("SSAO_Shader", ssaoMapShader);
 	previewer.SetQuad(&quad);
+
+
+	//Set FrameBuffer
+	//Texture2D frameBufferTexure2D(resolutionX, resolutionY, 0, ImageDataType::Float);
+	//FrameBuffer frameBuffer;
+	//frameBuffer.Bind();
+	//frameBuffer.SetTarget(FrameBufferTarget::Frame);
+	//frameBufferTexure2D.Bind();
+	//frameBufferTexure2D.SetFilter(TextureFilter::Linear);
+	//frameBuffer.Attach(FrameBufferAttachment::Color0, &frameBufferTexure2D);
+	//frameBuffer.Bind();
+	//frameBuffer.Check();
+	Texture2D_MultiSample msaaFrameBufferTexure2D(resolutionX, resolutionY, 32);
+	FrameBuffer msaaFrameBuffer;
+	msaaFrameBuffer.Bind();
+	msaaFrameBuffer.SetTarget(FrameBufferTarget::Frame);
+	//frameBufferTexure2D.Bind();
+	//frameBufferTexure2D.SetFilter(TextureFilter::Linear);
+	msaaFrameBuffer.Attach(FrameBufferAttachment::Color0, &msaaFrameBufferTexure2D);
+	msaaFrameBuffer.Bind();
+	msaaFrameBuffer.Check();
+
+
+	RenderBuffer renderBuffer;
+	msaaFrameBuffer.Bind();
+	renderBuffer.SetStorage(resolutionX, resolutionY, ImageFormat::Depth32, 32);
+	msaaFrameBuffer.Attach(FrameBufferAttachment::Depth, &renderBuffer);
+	msaaFrameBuffer.Bind();
+	msaaFrameBuffer.Check();
+
+	previewer.SetFrameBuffer("msaaFrameBuffer", &msaaFrameBuffer);
+	previewer.SetTextureMultiSample("msaaTexture", &msaaFrameBufferTexure2D);
 
 
 	//Set FrameBuffer
@@ -182,12 +212,14 @@ int main(void)
 	frameBuffer.Bind();
 	frameBuffer.Check();
 
-	RenderBuffer renderBuffer;
-	frameBuffer.Bind();
-	renderBuffer.SetStorage(resolutionX, resolutionY, ImageFormat::Depth32, 0);
-	frameBuffer.Attach(FrameBufferAttachment::Depth, &renderBuffer);
-	frameBuffer.Bind();
-	frameBuffer.Check();
+	//RenderBuffer offlineFrameRenderBuffer;
+	//frameBuffer.Bind();
+	//offlineFrameRenderBuffer.SetStorage(resolutionX, resolutionY, ImageFormat::Depth32, 0);
+	//frameBuffer.Attach(FrameBufferAttachment::Depth, &offlineFrameRenderBuffer);
+	//frameBuffer.Bind();
+	//frameBuffer.Check();
+
+
 
 	previewer.SetFrameBuffer("offlineFrameBuffer", &frameBuffer);
 	previewer.SetTexture("offlineTexture", &frameBufferTexure2D);
@@ -224,7 +256,7 @@ int main(void)
 
 	previewer.SetCamera(&camera);
 	previewer.SetRenderer(&renderer);
-	previewer.SetSSAO();
+	previewer.BuildSSAO();
 	// Set max fps
 	previewer.SetMaxFps(60);
 	previewer.MainLoop();
