@@ -8,7 +8,7 @@
 #include "VertexBufferLayout.h"
 #include "visual/Camera.h"
 #include "ssao/SSAO.h"
-
+#include <GLFW/glfw3.h>
 
 namespace OpenGL
 {
@@ -52,8 +52,23 @@ namespace OpenGL
 		shader->SetUniformMat4f("u_Model", model);
 		shader->SetUniformMat4f("u_View", view);
 		shader->SetUniformMat4f("u_Proj", proj);
-
-		shader->SetUniform2f("u_Resolution", mpTexture->GetWidth(), mpTexture->GetHeight());
+		//uniform float iTime;
+		shader->SetUniform1f("iTime", glfwGetTime());
+		//uniform vec3 camDir;
+		const Camera* pCamera = renderer.GetCamera();
+		shader->SetUniform3f("camDir", pCamera->mCz.x, pCamera->mCz.y, pCamera->mCz.z);
+		//uniform vec3 camPos;
+		shader->SetUniform3f("camPos", pCamera->GetPosition().x, pCamera->GetPosition().y, pCamera->GetPosition().z);
+		//uniform vec3 camLookAt;
+		Vec3 cameraLookAt = pCamera->GetPosition() + pCamera->mCz;
+		shader->SetUniform3f("camLookAt", cameraLookAt.x, cameraLookAt.y, cameraLookAt.z);
+		//uniform vec3 camUU;
+		shader->SetUniform3f("camUU", pCamera->mCx.x, pCamera->mCx.y, pCamera->mCx.z);
+		//uniform vec3 camVV;
+		shader->SetUniform3f("camvv", pCamera->mCy.x, pCamera->mCy.y, pCamera->mCy.z);
+		//uniform vec3 camWW;
+		shader->SetUniform3f("camvv", pCamera->mCz.x, pCamera->mCz.y, pCamera->mCz.z);
+		shader->SetUniform2i("iResolution", 1280, 1280);
 		shader->SetUniform1i("u_Texture", 0); mpTexture->Bind(0);
 		renderer.Draw(*mpVAO, *mpIBO, *shader);
 		renderer.DisableDepthTest();

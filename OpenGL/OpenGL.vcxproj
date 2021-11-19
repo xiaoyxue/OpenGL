@@ -151,7 +151,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="external\stb\stb_vorbis.c" />
     <ClCompile Include="src\gui\ImmediateGui.cpp" />
     <ClCompile Include="src\image\ImageIO.cpp" />
     <ClCompile Include="src\opengl\DrawQuad.cpp" />
@@ -202,9 +201,9 @@
     <None Include="res\shaders\DefaultFace.shader" />
     <None Include="res\shaders\DefaultLine.shader" />
     <None Include="res\shaders\DefaultTexture.shader" />
+    <None Include="res\shaders\DefaultWater.shader" />
     <None Include="res\shaders\ImageBasedLighting.shader" />
     <None Include="res\shaders\ImageBasedLightingV2.shader" />
-    <None Include="res\shaders\MixFrameBufferAndOcclusion.shader" />
     <None Include="res\shaders\ObjectPicker.shader" />
     <None Include="external\glm\detail\func_common.inl" />
     <None Include="external\glm\detail\func_common_simd.inl" />
@@ -340,31 +339,10 @@
     <None Include="external\glm\gtx\vector_angle.inl" />
     <None Include="external\glm\gtx\vector_query.inl" />
     <None Include="external\glm\gtx\wrap.inl" />
-    <None Include="res\shaders\ssao\Gbuffer.shader" />
-    <None Include="res\shaders\ssao\SSAO.shader" />
+    <None Include="res\shaders\water\BasicWater.shader" />
+    <None Include="res\shaders\water\Water1.shader" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="external\stb\stb.h" />
-    <ClInclude Include="external\stb\stb_connected_components.h" />
-    <ClInclude Include="external\stb\stb_c_lexer.h" />
-    <ClInclude Include="external\stb\stb_divide.h" />
-    <ClInclude Include="external\stb\stb_ds.h" />
-    <ClInclude Include="external\stb\stb_dxt.h" />
-    <ClInclude Include="external\stb\stb_easy_font.h" />
-    <ClInclude Include="external\stb\stb_herringbone_wang_tile.h" />
-    <ClInclude Include="external\stb\stb_image.h" />
-    <ClInclude Include="external\stb\stb_image_resize.h" />
-    <ClInclude Include="external\stb\stb_image_write.h" />
-    <ClInclude Include="external\stb\stb_include.h" />
-    <ClInclude Include="external\stb\stb_leakcheck.h" />
-    <ClInclude Include="external\stb\stb_perlin.h" />
-    <ClInclude Include="external\stb\stb_rect_pack.h" />
-    <ClInclude Include="external\stb\stb_sprintf.h" />
-    <ClInclude Include="external\stb\stb_textedit.h" />
-    <ClInclude Include="external\stb\stb_tilemap_editor.h" />
-    <ClInclude Include="external\stb\stb_truetype.h" />
-    <ClInclude Include="external\stb\stb_voxel_render.h" />
-    <ClInclude Include="external\stb\stretchy_buffer.h" />
     <ClInclude Include="src\common\Core.h" />
     <ClInclude Include="src\common\Platform.h" />
     <ClInclude Include="src\container\Array.h" />
@@ -380,7 +358,6 @@
     <ClInclude Include="src\previewer\Preview.h" />
     <ClInclude Include="src\previewer\Previewer.h" />
     <ClInclude Include="src\previewer\PreviewerGui.h" />
-    <ClInclude Include="src\ssao\SSAO.h" />
     <ClInclude Include="src\visual\Camera.h" />
     <ClInclude Include="src\Def.h" />
     <ClInclude Include="src\opengl\DrawableObject.h" />

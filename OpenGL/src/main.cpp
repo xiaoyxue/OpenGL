@@ -98,7 +98,7 @@ int main(void)
 	Renderer renderer(resolutionX, resolutionY);
 	Camera camera;
 	camera.Init(
-		Vec3(0, 0, 30),
+		Vec3(0, 0.5, 5),
 		Vec3(0, 0, 0),
 		Vec3(0, 1, 0),
 		resolutionX,
@@ -114,11 +114,11 @@ int main(void)
 
 	//std::string texturePath = "..\\models\\mailbox\\Mailbox.jpg";
 	//std::string envMapPath = "res\\envmap\\MicrosoftTeams-image.png";
-	std::string envMapPath = "res\\envmap\\prefiltered_kernal_gassian_3.png";
+	//std::string envMapPath = "res\\envmap\\prefiltered_kernal_gassian_3.png";
 
 	//GLMeshShading mesh;
 	//GLTexture texture(texturePath);
-	Texture2D evnMap(envMapPath);
+	//Texture2D evnMap(envMapPath);
 
 	//mesh.AddMesh("..\\models\\mailbox\\10556_Mailbox-L2.obj");
 	//mesh.AddTexture(&texture);
@@ -130,20 +130,16 @@ int main(void)
 	//mesh.AddShader("Face", faceShader);
 	//mesh.AddShader("WireFrame", lineShader);
 
-	BRDFIntegral brdfIntegral;
-	BRDFTexture brdfLUT(resolutionX, resolutionY);
+	//BRDFIntegral brdfIntegral;
+	//BRDFTexture brdfLUT(resolutionX, resolutionY);
 
-	brdfIntegral.AddTexture(&brdfLUT);
-	auto brdfIntegralShader = std::make_shared<Shader>("res/shaders/BRDF_Integral.shader");
-	brdfIntegral.AddShader("BRDF_LUT", brdfIntegralShader);
-	brdfIntegral.DrawFace(renderer);
+	//brdfIntegral.AddTexture(&brdfLUT);
+	//auto brdfIntegralShader = std::make_shared<Shader>("res/shaders/BRDF_Integral.shader");
+	//brdfIntegral.AddShader("BRDF_LUT", brdfIntegralShader);
+	//brdfIntegral.DrawFace(renderer);
 	
 
-	//GLBackground background;
-	//background.AddTexture(&brdfLUT);
-	//auto backgroundShader = std::make_shared<Shader>("res/shaders/Debug.shader");
-	//background.AddShader("Background", backgroundShader);
-	//previewer.AddDrawableObject(&background);
+
 
 
 	auto lineShader = std::make_shared<Shader>("res/shaders/DefaultLine.shader");
@@ -152,77 +148,28 @@ int main(void)
 	auto gBufferShader = std::make_shared<Shader>("res/shaders/ssao/Gbuffer.shader");
 	auto ssaoBufferShader = std::make_shared<Shader>("res/shaders/ssao/SSAO.shader");
 	auto debugShader = std::make_shared<Shader>("res/shaders/Debug.shader");
+	auto quadShader = std::make_shared<Shader>("res/shaders/water/BasicWater.shader");
+	auto waterShader = std::make_shared<Shader>("res/shaders/water/Water1.shader");
+	//auto waterShader = std::make_shared<Shader>("res/shaders/water/BasicWater.shader");
 
-	//Debug
-	DrawQuad debugQuad;
-	debugQuad.AddShader("Debug", debugShader);
-	previewer.SetDebugQuad(&debugQuad);
-
-
-	//Quad
 	DrawQuad quad;
-	quad.GenerateSamples(64);
-	//quad.AddShader("SSAO_Shader", ssaoWorldSpaceBufferShader);
-	quad.AddShader("SSAO_Shader", ssaoBufferShader);
-	//quad.AddShader("SSAO_Shader", ssaoMapShader);
-	previewer.SetQuad(&quad);
-
-
-	//Set FrameBuffer
-	Texture2D frameBufferTexure2D(resolutionX, resolutionY, 0, ImageDataType::Float);
-	FrameBuffer frameBuffer;
-	frameBuffer.Bind();
-	frameBuffer.SetTarget(FrameBufferTarget::Frame);
-	frameBufferTexure2D.Bind();
-	frameBufferTexure2D.SetFilter(TextureFilter::Linear);
-	frameBuffer.Attach(FrameBufferAttachment::Color0, &frameBufferTexure2D);
-	frameBuffer.Bind();
-	frameBuffer.Check();
-
-	RenderBuffer renderBuffer;
-	frameBuffer.Bind();
-	renderBuffer.SetStorage(resolutionX, resolutionY, ImageFormat::Depth32, 0);
-	frameBuffer.Attach(FrameBufferAttachment::Depth, &renderBuffer);
-	frameBuffer.Bind();
-	frameBuffer.Check();
-
-	previewer.SetFrameBuffer("offlineFrameBuffer", &frameBuffer);
-	previewer.SetTexture("offlineTexture", &frameBufferTexure2D);
-
-	GLMeshShading mailbox;
-	mailbox.AddMesh("..\\models\\mailbox\\10556_Mailbox-L2.obj");
-	mailbox.RotateLocal(0, 90);
-	mailbox.ScaleLocal(0.07);
-	mailbox.SetTexture("envMap", &evnMap);
-	mailbox.SetTexture("brdfLUT", &brdfLUT);
-	//mailbox.AddTexture(&evnMap);
-	//mailbox.AddTexture(&brdfLUT);
-	mailbox.AddShader("Face", mainboxShader);
-	mailbox.AddShader("WireFrame", lineShader);
-	mailbox.AddShader("Gbuffer", gBufferShader);
-	//mailbox.AddShader("Gbuffer", ssaoGeometryShader);
-	previewer.AddDrawableObject(&mailbox);
-
-	GLMesh plane;
-	/*std::string planeTexturePath = "..\\models\\plane2\\default.png";*/
-	std::string planeTexturePath = "..\\models\\plane2\\texture0.png";
+	std::string planeTexturePath = "res/textures/plane.png";
 	Texture2D planeTexture(planeTexturePath);
-	plane.AddMesh("..\\models\\plane2\\plane.obj");
-	plane.RotateLocal(0, -90);
-	plane.ScaleLocal(20.0);
-	plane.Translate(0, 5, 0);
-	plane.Translate(0, 0.2, 0);
-	plane.AddTexture(&planeTexture);
-	plane.AddShader("Face", textureShader);
-	plane.AddShader("WireFrame", lineShader);
-	plane.AddShader("Gbuffer", gBufferShader);
-	//plane.AddShader("Gbuffer", ssaoGeometryShader);
-	previewer.AddDrawableObject(&plane);
+	//quad.SetTexture("u_Texture", &planeTexture);
+	quad.AddTexture(&planeTexture);
+	quad.AddShader("Debug", waterShader);
+	previewer.SetQuad(&quad);
+	previewer.mDrawQuad = true;
+	//previewer.SetQuad(&quad);
+	//GLMesh plane;
+	//std::string planeTexturePath = "..res/textures/plane.png";
+	//Texture2D planeTexture(planeTexturePath);
+	//previewer.AddDrawableObject(&plane);
 	
 
 	previewer.SetCamera(&camera);
 	previewer.SetRenderer(&renderer);
-	previewer.SetSSAO();
+	//previewer.SetSSAO();
 	// Set max fps
 	previewer.SetMaxFps(60);
 	previewer.MainLoop();

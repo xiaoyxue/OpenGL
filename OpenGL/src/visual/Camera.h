@@ -24,7 +24,7 @@ namespace Visual
 		int mWidth, mHeight;
 		float mR, mTheta, mPhi;
 		Vec3 mPosition, mLookAt, mUp;
-		Vec3 mCx, mCy, mCz;
+		
 		Matrix4 mViewMatrix;
 		Matrix4 mProjMatrix;
 		
@@ -33,6 +33,8 @@ namespace Visual
 		float mMoveSpeed, mScaleFactor;
 		float mMaxR, mMinR;
 		CameraType mCameraType;
+	public:
+		Vec3 mCx, mCy, mCz;
 	public:
 		void Init(
 			const Vec3& position,

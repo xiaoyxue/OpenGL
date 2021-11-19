@@ -32,7 +32,7 @@ namespace OpenGL
 		BBox GetBBox() const override;
 		void AddShader(const std::string& shaderName, std::shared_ptr<Shader> shader);
 		void AddTexture(Texture2D* pTexture) { mpTexture = pTexture; }
-		void AddTexture(const std::string & textureName, Texture2D* pTexture) { mTextures[textureName] = pTexture; }
+		void SetTexture(const std::string & textureName, Texture2D* pTexture) { mTextures[textureName] = pTexture; }
 		void DrawSSAO(const Renderer& renderer, const SSAO& ssaoBuffer) const override;
 		void DrawToFrameBuffer(const Renderer& renderer, const FrameBuffer& frameBuffer) const override;
 		void GenerateSamples(int n);

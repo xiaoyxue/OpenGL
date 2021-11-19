@@ -54,6 +54,7 @@ namespace Preview
 		void SetTexture(const std::string& textureName, Texture2D* pTexture);
 		bool HandleGLMouseEvent() const;
 		bool IsSelected() const;
+		bool mDrawQuad = false;
 
 	private:
 		bool mIsPicked;

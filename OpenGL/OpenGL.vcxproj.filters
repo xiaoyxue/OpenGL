@@ -129,9 +129,6 @@
     <ClCompile Include="src\pbr\DrawBRDFIntegral.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="external\stb\stb_vorbis.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\opengl\DrawQuad.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -547,13 +544,13 @@
     <None Include="res\shaders\DefaultTexture.shader" />
     <None Include="res\shaders\DefaultBackground.shader" />
     <None Include="res\shaders\DefaultBoarder.shader" />
-    <None Include="res\shaders\ImageBasedLighting.shader" />
     <None Include="res\shaders\BRDF_Integral.shader" />
     <None Include="res\shaders\Debug.shader" />
+    <None Include="res\shaders\ImageBasedLighting.shader" />
     <None Include="res\shaders\ImageBasedLightingV2.shader" />
-    <None Include="res\shaders\ssao\Gbuffer.shader" />
-    <None Include="res\shaders\ssao\SSAO.shader" />
-    <None Include="res\shaders\MixFrameBufferAndOcclusion.shader" />
+    <None Include="res\shaders\DefaultWater.shader" />
+    <None Include="res\shaders\water\BasicWater.shader" />
+    <None Include="res\shaders\water\Water1.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Def.h">
@@ -1414,7 +1411,10 @@
     <ClInclude Include="src\previewer\PreviewerGui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\visual\Texture.h">
+    <ClInclude Include="src\common\Core.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\Platform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\container\Array.h">
@@ -1423,25 +1423,13 @@
     <ClInclude Include="src\image\ImageIO.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\common\Core.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\visual\EvnMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\visual\Sampling.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\math\MathUtils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\common\Platform.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\light\EnvLight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\light\Light.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\math\MathUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\opengl\GLMeshShading.h">
@@ -1453,70 +1441,13 @@
     <ClInclude Include="src\pbr\DrawBRDFIntegral.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ssao\SSAO.h">
+    <ClInclude Include="src\visual\EvnMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="external\stb\stb.h">
+    <ClInclude Include="src\visual\Sampling.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="external\stb\stb_c_lexer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="external\stb\stb_connected_components.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="external\stb\stb_divide.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="external\stb\stb_ds.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="external\stb\stb_dxt.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="external\stb\stb_easy_font.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="external\stb\stb_herringbone_wang_tile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="external\stb\stb_image.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="external\stb\stb_image_resize.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="external\stb\stb_image_write.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="external\stb\stb_include.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="external\stb\stb_leakcheck.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="external\stb\stb_perlin.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="external\stb\stb_rect_pack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="external\stb\stb_sprintf.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="external\stb\stb_textedit.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="external\stb\stb_tilemap_editor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="external\stb\stb_truetype.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="external\stb\stb_voxel_render.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="external\stb\stretchy_buffer.h">
+    <ClInclude Include="src\visual\Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\opengl\DrawQuad.h">

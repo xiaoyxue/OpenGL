@@ -80,16 +80,16 @@ namespace GLFW
 		mpRenderer->EnableDepthTest();
 		while (!glfwWindowShouldClose(mpWindow))
 		{
-			double currentTime = glfwGetTime();
-			mDeltaTime = currentTime - mLastRefreshTime;
+			mCurrentTime = glfwGetTime();
+			mDeltaTime = mCurrentTime - mLastRefreshTime;
 			// Limit the max fps
-			if ((currentTime - mLastFrameTime) >= mInvFpsLimit)
+			if ((mCurrentTime - mLastFrameTime) >= mInvFpsLimit)
 			{
 				DrawAll();
 				glfwSwapBuffers(mpWindow);
-				mLastFrameTime = currentTime;
+				mLastFrameTime = mCurrentTime;
 			}
-			mLastRefreshTime = currentTime;
+			mLastRefreshTime = mCurrentTime;
 			/* Poll for and process events */
 			glfwPollEvents();
 		}

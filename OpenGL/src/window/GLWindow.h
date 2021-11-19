@@ -16,6 +16,7 @@ namespace GLFW
 		double mDeltaTime, mLastRefreshTime, mLastFrameTime;
 		double mMaxFps, mInvFpsLimit;
 		double mFps;
+		double mCurrentTime;
 		long long mFrameCount = 0;
 	public:
 		GLWindow() = default;

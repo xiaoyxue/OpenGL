@@ -44,50 +44,59 @@ namespace Preview
 
 	void Previewer::DrawAll() const
 	{
-		gUseGbuffer = true;
-		if (!gUseGbuffer)
-		{
+		
+		if (mDrawQuad == true) {
 			mpRenderer->Clear();
-			DrawObjects();
-			if (gShowCoordnates)
-				mpRenderer->DrawCoordinates();
+			mpRenderer->DrawFaces(*mpQuad);
 			mpGui->Draw();
 		}
-		else
-		{
-			//Draw Geometory Buffer
-			mpSSAO->BindGbuffer();
-			mpRenderer->Clear();
-			mpRenderer->DrawGbuffer(*mpScene, mpSSAO->mFrameBuffer);
-			mpSSAO->UnBindGbuffer();
-			
-			//Draw SSAO Map
-			mpSSAO->BindSSAO_Buffer();
-			mpRenderer->Clear();
-			mpQuad->DrawSSAO(*mpRenderer, *mpSSAO);
-			mpSSAO->UnBindSSAO_Buffer();
+		else {
+			gUseGbuffer = true;
+			if (!gUseGbuffer)
+			{
+				mpRenderer->Clear();
+				DrawObjects();
+				if (gShowCoordnates)
+					mpRenderer->DrawCoordinates();
+				mpGui->Draw();
+			}
+			else
+			{
+				//Draw Geometory Buffer
+				mpSSAO->BindGbuffer();
+				mpRenderer->Clear();
+				mpRenderer->DrawGbuffer(*mpScene, mpSSAO->mFrameBuffer);
+				mpSSAO->UnBindGbuffer();
+
+				//Draw SSAO Map
+				mpSSAO->BindSSAO_Buffer();
+				mpRenderer->Clear();
+				mpQuad->DrawSSAO(*mpRenderer, *mpSSAO);
+				mpSSAO->UnBindSSAO_Buffer();
 
 
-			
-			mFrameBuffers["offlineFrameBuffer"]->Bind();
-			mpRenderer->Clear();
-			DrawObjects();
-			mFrameBuffers["offlineFrameBuffer"]->UnBind();
-			//if (gShowCoordnates)
-			//	mpRenderer->DrawCoordinates();
-			//mpGui->Draw();
 
-			DebugDraw();
-			if (gShowCoordnates)
-				mpRenderer->DrawCoordinates();
-			mpGui->Draw();
+				mFrameBuffers["offlineFrameBuffer"]->Bind();
+				mpRenderer->Clear();
+				DrawObjects();
+				mFrameBuffers["offlineFrameBuffer"]->UnBind();
+				//if (gShowCoordnates)
+				//	mpRenderer->DrawCoordinates();
+				//mpGui->Draw();
+
+				DebugDraw();
+				if (gShowCoordnates)
+					mpRenderer->DrawCoordinates();
+				mpGui->Draw();
+			}
 		}
+		
 	}
 
 	void Previewer::DebugDraw() const
 	{
-		mpDebugQuad->AddTexture("ssao", mpSSAO->mpSSAO_Color.get());
-		mpDebugQuad->AddTexture("offlineTexture", mTextures["offlineTexture"]);
+		mpDebugQuad->SetTexture("ssao", mpSSAO->mpSSAO_Color.get());
+		mpDebugQuad->SetTexture("offlineTexture", mTextures["offlineTexture"]);
 
 		mpRenderer->Clear();
 		mpRenderer->DebugDraw(*mpDebugQuad);
