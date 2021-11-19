@@ -91,15 +91,15 @@ using namespace OpenGL;
 
 int main(void)
 {
-	int resolutionX = 1280, resolutionY = 1280;
+	int resolutionX = 2280, resolutionY = 1280;
 	Previewer previewer("Hello World!", resolutionX, resolutionY);
 	previewer.Init();
 	Picker picker(resolutionX, resolutionY);
 	Renderer renderer(resolutionX, resolutionY);
 	Camera camera;
 	camera.Init(
-		Vec3(0, 0.5, 5),
-		Vec3(0, 0, 0),
+		Vec3(0, 0.3, 5),
+		Vec3(0, 0,  0),
 		Vec3(0, 1, 0),
 		resolutionX,
 		resolutionY,
@@ -153,7 +153,8 @@ int main(void)
 	//auto waterShader = std::make_shared<Shader>("res/shaders/water/BasicWater.shader");
 
 	DrawQuad quad;
-	std::string planeTexturePath = "res/textures/plane.png";
+	//std::string planeTexturePath = "res/textures/plane.png";
+	std::string planeTexturePath = "res/textures/ShaderToyTexture1.jpg";
 	Texture2D planeTexture(planeTexturePath);
 	//quad.SetTexture("u_Texture", &planeTexture);
 	quad.AddTexture(&planeTexture);
