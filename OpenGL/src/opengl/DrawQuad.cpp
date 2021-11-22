@@ -68,7 +68,10 @@ namespace OpenGL
 		shader->SetUniform3f("camvv", pCamera->mCy.x, pCamera->mCy.y, pCamera->mCy.z);
 		//uniform vec3 camWW;
 		shader->SetUniform3f("camvv", pCamera->mCz.x, pCamera->mCz.y, pCamera->mCz.z);
-		shader->SetUniform2i("iResolution", 1280, 1280);
+		shader->SetUniform2f("iResolution", 1920, 1080);
+		//shader->SetUniform1i("u_Texture", 0); mpTexture->Bind(0);
+		//shader->SetUniform1i("waterTexture", 1); mpTexture->Bind(1);
+		//shader->SetUniform1i("waterBottomTexture", 2); mpTexture->Bind(2);
 		shader->SetUniform1i("u_Texture", 0); mpTexture->Bind(0);
 		renderer.Draw(*mpVAO, *mpIBO, *shader);
 		renderer.DisableDepthTest();

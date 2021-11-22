@@ -30,6 +30,8 @@ uniform vec3 camUU;
 uniform vec3 camVV;
 uniform vec3 camWW;
 uniform sampler2D u_Texture;
+uniform sampler2D waterTexture;
+
 #define time iTime
 
 
@@ -65,11 +67,22 @@ vec3 doBackground(in vec3 dir)
     float sky = dot(dir, vec3(0.0, -1.0, 0.0)) * 0.5 + 0.5;
     float sun = pow(dot(dir, normalize(vec3(1.0, 0.7, 0.9))) * 0.5 + 0.5, 32.0);
     vec2 p = vec2(dir.x + dir.z, dir.y - dir.z);
-    float clouds = noise(p * 8.0) * noise(p * 9.0) * noise(p * 10.0) * noise(p * 11.0) * sky;
-    vec3 total = vec3(sky * 0.6 + 0.05 + sun + clouds, sky * 0.8 + 0.075 + pow(sun, 1.5) + clouds, sky + 0.2 + pow(sun, 4.0) + clouds);
-    vec3 ground = texture(u_Texture, (dir.xz) / dir.y).rrr * vec3(1.1, 1.0, 0.9);
+    //float clouds = noise(p * 8.0) * noise(p * 9.0) * noise(p * 10.0) * noise(p * 11.0) * sky;
+    vec3 total = vec3(sky * 0.6 + 0.05 + sun , sky * 0.8 + 0.075 + pow(sun, 1.5), sky + 0.2 + pow(sun, 4.0) );
+    vec3 ground = texture(waterTexture, (dir.xz) / dir.y).rrr * vec3(1.1, 1.0, 0.9);
     return mix(total, ground, clamp((sky - 0.6) * 64.0, 0.0, 1.0));
 }
+
+//vec3 doBackground(in vec3 dir)
+//{
+//    float sky = dot(dir, vec3(0.0, -1.0, 0.0)) * 0.5 + 0.5;
+//    float sun = pow(dot(dir, normalize(vec3(1.0, 0.7, 0.9))) * 0.5 + 0.5, 32.0);
+//    vec2 p = vec2(dir.x + dir.z, dir.y - dir.z);
+//    float clouds = noise(p * 8.0) * noise(p * 9.0) * noise(p * 10.0) * noise(p * 11.0) * sky;
+//    vec3 total = vec3(sky * 0.6 + 0.05 + sun + clouds, sky * 0.8 + 0.075 + pow(sun, 1.5) + clouds, sky + 0.2 + pow(sun, 4.0) + clouds);
+//    vec3 ground = texture(u_Texture, (dir.xz) / dir.y).rrr * vec3(1.1, 1.0, 0.9);
+//    return mix(total, ground, clamp((sky - 0.6) * 64.0, 0.0, 1.0));
+//}
 
 float doModel(vec3 pos)
 {

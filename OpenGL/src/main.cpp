@@ -91,14 +91,14 @@ using namespace OpenGL;
 
 int main(void)
 {
-	int resolutionX = 2280, resolutionY = 1280;
+	int resolutionX = 1920, resolutionY = 1080;
 	Previewer previewer("Hello World!", resolutionX, resolutionY);
 	previewer.Init();
 	Picker picker(resolutionX, resolutionY);
 	Renderer renderer(resolutionX, resolutionY);
 	Camera camera;
 	camera.Init(
-		Vec3(0, 0.3, 5),
+		Vec3(0, 0.3, 5000),
 		Vec3(0, 0,  0),
 		Vec3(0, 1, 0),
 		resolutionX,
@@ -149,16 +149,29 @@ int main(void)
 	auto ssaoBufferShader = std::make_shared<Shader>("res/shaders/ssao/SSAO.shader");
 	auto debugShader = std::make_shared<Shader>("res/shaders/Debug.shader");
 	auto quadShader = std::make_shared<Shader>("res/shaders/water/BasicWater.shader");
-	auto waterShader = std::make_shared<Shader>("res/shaders/water/Water1.shader");
-	//auto waterShader = std::make_shared<Shader>("res/shaders/water/BasicWater.shader");
+	auto waterShader0 = std::make_shared<Shader>("res/shaders/water/BasicWater.shader");
+	auto waterShader1 = std::make_shared<Shader>("res/shaders/water/Water1.shader");
+	auto waterShader2 = std::make_shared<Shader>("res/shaders/water/Water2.shader");
+	auto waterShader3 = std::make_shared<Shader>("res/shaders/water/Water3.shader");
+	auto waterShader4 = std::make_shared<Shader>("res/shaders/water/Water4.shader");
 
 	DrawQuad quad;
+	//std::string backgroundTexturePath = "background3.jpg";
+	//Texture2D backgroundTexture(backgroundTexturePath);
+	//quad.SetTexture("background", &backgroundTexture);
+
 	//std::string planeTexturePath = "res/textures/plane.png";
-	std::string planeTexturePath = "res/textures/ShaderToyTexture1.jpg";
-	Texture2D planeTexture(planeTexturePath);
-	//quad.SetTexture("u_Texture", &planeTexture);
-	quad.AddTexture(&planeTexture);
-	quad.AddShader("Debug", waterShader);
+	//Texture2D planeTexture(planeTexturePath);
+	//quad.AddTexture(&planeTexture);
+
+	//std::string backgroundTexturePath = "res/textures/water.png";
+	//std::string backgroundTexturePath = "res/textures/ShaderToyTexture1.jpg";
+	std::string backgroundTexturePath = "res/textures/top.jpg";
+	Texture2D backgroundTexture(backgroundTexturePath);
+	quad.AddTexture(&backgroundTexture);
+
+
+	quad.AddShader("Debug", waterShader4);
 	previewer.SetQuad(&quad);
 	previewer.mDrawQuad = true;
 	//previewer.SetQuad(&quad);

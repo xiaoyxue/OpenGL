@@ -54,8 +54,13 @@ namespace OpenGL
 			//GLCall(glTexParameteri(Target, GL_TEXTURE_WRAP_S, GL_REPEAT));
 			//GLCall(glTexParameteri(Target, GL_TEXTURE_WRAP_T, GL_REPEAT));
 			//GLCall(glTexParameteri(Target, GL_TEXTURE_WRAP_R, GL_REPEAT));
-			GLCall(glTexParameteri(Target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
-			GLCall(glTexParameteri(Target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+			//GLCall(glTexParameteri(Target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+			//GLCall(glTexParameteri(Target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+
+
+			GLCall(glTexParameteri(Target, GL_TEXTURE_WRAP_S, GL_REPEAT));
+			GLCall(glTexParameteri(Target, GL_TEXTURE_WRAP_T, GL_REPEAT));
+			GLCall(glTexParameteri(Target, GL_TEXTURE_WRAP_R, GL_REPEAT));
 
 			GLCall(glTexImage2D(GL_TEXTURE_2D, 0, int(internalFormat), w, h, 0, int(imageFormat), int(dataFromat), pLocalBuffer));
 			//SetFilter(TextureFilter::Anisotropic16x);
@@ -142,8 +147,12 @@ namespace OpenGL
 			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
 			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 
-			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
-			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+			//GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+			//GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+
+			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
+			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT));
 
 			GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, mWidth, mHeight, 0, GL_RGBA, int(dataFormat), NULL));
 			GLCall(glBindTexture(GL_TEXTURE_2D, 0));
@@ -167,8 +176,12 @@ namespace OpenGL
 			SetFilter(TextureFilter::Linear);
 			//GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
 			//GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
-			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+			//GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+			//GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+
+			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
+			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT));
 
 			GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, mWidth, mHeight, 0, GL_RGBA, int(dataFormat), mLocalBuffer));
 			GLCall(glBindTexture(GL_TEXTURE_2D, 0));

@@ -551,6 +551,9 @@
     <None Include="res\shaders\DefaultWater.shader" />
     <None Include="res\shaders\water\BasicWater.shader" />
     <None Include="res\shaders\water\Water1.shader" />
+    <None Include="res\shaders\water\Water2.shader" />
+    <None Include="res\shaders\water\Water3.shader" />
+    <None Include="res\shaders\water\Water4.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Def.h">
