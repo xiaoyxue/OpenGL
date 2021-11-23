@@ -166,10 +166,14 @@ int main(void)
 
 	//std::string backgroundTexturePath = "res/textures/water.png";
 	//std::string backgroundTexturePath = "res/textures/ShaderToyTexture1.jpg";
-	std::string backgroundTexturePath = "res/textures/top.jpg";
+	std::string backgroundTexturePath = "res/textures/background3.jpg";
 	Texture2D backgroundTexture(backgroundTexturePath);
-	quad.AddTexture(&backgroundTexture);
+	quad.SetTexture("backgroundTexture", &backgroundTexture);
 
+
+	std::string noiseTexturePath = "res/textures/noise.png";
+	Texture2D noiseTexture(noiseTexturePath);
+	quad.SetTexture("noiseTexture", &noiseTexture);
 
 	quad.AddShader("Debug", waterShader4);
 	previewer.SetQuad(&quad);

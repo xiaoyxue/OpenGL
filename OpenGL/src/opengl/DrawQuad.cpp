@@ -72,7 +72,8 @@ namespace OpenGL
 		//shader->SetUniform1i("u_Texture", 0); mpTexture->Bind(0);
 		//shader->SetUniform1i("waterTexture", 1); mpTexture->Bind(1);
 		//shader->SetUniform1i("waterBottomTexture", 2); mpTexture->Bind(2);
-		shader->SetUniform1i("u_Texture", 0); mpTexture->Bind(0);
+		shader->SetUniform1i("backgroundTexture", 0); mTextures["backgroundTexture"]->Bind(0);
+		shader->SetUniform1i("noiseTexture", 1); mTextures["noiseTexture"]->Bind(1);
 		renderer.Draw(*mpVAO, *mpIBO, *shader);
 		renderer.DisableDepthTest();
 		mpTexture->UnBind();
