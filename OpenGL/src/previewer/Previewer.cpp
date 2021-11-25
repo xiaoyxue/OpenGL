@@ -10,8 +10,9 @@
 #include "Preview.h"
 #include <iostream>
 
-std::vector<unsigned char> imageBuffer(2560 * 1440 * 3);
-
+std::vector<unsigned char> imageBuffer(1920 * 1080 * 3);
+int frameNumber = 0;
+int maxframeCount = 200;
 
 namespace Preview
 {
@@ -49,8 +50,15 @@ namespace Preview
 		if (mDrawQuad == true) {
 			mpRenderer->Clear();
 			mpRenderer->DrawFaces(*mpQuad);
-			glReadPixels(0, 0, mWidth, mHeight, GL_RGB, GL_UNSIGNED_BYTE, &imageBuffer[0]);
-			stbi_write_png("c:/Misc/ImageFrame/1.png", mWidth, mHeight, 3, &imageBuffer[0], 3 * mWidth);
+			
+			if (frameNumber < maxframeCount) {
+				std::string imagePath = "C:/Misc/ImageFrame/" + std::to_string(frameNumber) + ".png";
+				glReadPixels(0, 0, mWidth, mHeight, GL_RGB, GL_UNSIGNED_BYTE, &imageBuffer[0]);
+				stbi_flip_vertically_on_write(true);
+				stbi_write_png(imagePath.c_str(), mWidth, mHeight, 3, &imageBuffer[0], 3 * mWidth);
+				frameNumber++;
+			}
+
 			mpGui->Draw();
 		}
 		else {
