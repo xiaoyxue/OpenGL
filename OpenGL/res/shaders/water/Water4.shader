@@ -121,7 +121,7 @@ void main() {
 	vec4 cm = texture(backgroundTexture, st);
 	vec3 pt = rd * t + ro;
 	vec3 pn = PLANE.xyz;
-	vec3 dv = fbm3v(pt.xz / 512.0 + iTime / 512.0).xyz - 0.5;
+	vec3 dv = fbm3v(pt.xz / 512.0 + iTime / 256.0).xyz - 0.5;
 	pn = normalize(pn + dv * 0.2);
 	vec3 rfl = reflect(rd, pn);
 	float fs = fresnel_step(rd, pn, vec3(0.0, 3.0, 6.0));

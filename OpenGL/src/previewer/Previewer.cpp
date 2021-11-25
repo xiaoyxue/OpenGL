@@ -10,9 +10,11 @@
 #include "Preview.h"
 #include <iostream>
 
-std::vector<unsigned char> imageBuffer(1920 * 1080 * 3);
+constexpr int ImageBufferSize = 1000;
+
+std::vector<std::vector<unsigned char>> imageBuffer(ImageBufferSize);
 int frameNumber = 0;
-int maxframeCount = 200;
+int maxframeCount = ImageBufferSize;
 
 namespace Preview
 {
@@ -29,6 +31,10 @@ namespace Preview
 		:GLWindow(title, w, h)
 	{
 		mpGui = std::make_unique<PreviewerGui>(this);
+		for (int i = 0; i < ImageBufferSize; ++i) {
+			std::vector<unsigned char> imageFrameBuffer(mWidth * mHeight * 3);
+			imageBuffer[i] = imageFrameBuffer;
+		}
 	}
 
 	Previewer::~Previewer()
@@ -52,11 +58,17 @@ namespace Preview
 			mpRenderer->DrawFaces(*mpQuad);
 			
 			if (frameNumber < maxframeCount) {
-				std::string imagePath = "C:/Misc/ImageFrame/" + std::to_string(frameNumber) + ".png";
-				glReadPixels(0, 0, mWidth, mHeight, GL_RGB, GL_UNSIGNED_BYTE, &imageBuffer[0]);
-				stbi_flip_vertically_on_write(true);
-				stbi_write_png(imagePath.c_str(), mWidth, mHeight, 3, &imageBuffer[0], 3 * mWidth);
+				std::vector<unsigned char>& imageFrameBuffer = imageBuffer[frameNumber];
+				glReadPixels(0, 0, mWidth, mHeight, GL_RGB, GL_UNSIGNED_BYTE, &imageFrameBuffer[0]);
+
 				frameNumber++;
+			}
+			else {
+				for (int i = 0; i < maxframeCount; ++i) {
+					std::string imagePath = "C:/Misc/ImageFrame2/" + std::to_string(i) + ".png";
+					stbi_flip_vertically_on_write(true);
+					stbi_write_png(imagePath.c_str(), mWidth, mHeight, 3, &imageBuffer[i][0], 3 * mWidth);
+				}
 			}
 
 			mpGui->Draw();
