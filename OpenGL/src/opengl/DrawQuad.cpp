@@ -19,7 +19,7 @@ namespace OpenGL
 	}
 
 	using namespace Math;
-	DrawQuad::DrawQuad()
+	DrawQuad::DrawQuad(int resX, int resY) : mResolution(resX, resY)
 	{
 		mpVAO = std::make_unique<VertexArray>();
 		mpVBO = std::make_unique<VertexBuffer>();
@@ -65,10 +65,10 @@ namespace OpenGL
 		//uniform vec3 camUU;
 		shader->SetUniform3f("camUU", pCamera->mCx.x, pCamera->mCx.y, pCamera->mCx.z);
 		//uniform vec3 camVV;
-		shader->SetUniform3f("camvv", pCamera->mCy.x, pCamera->mCy.y, pCamera->mCy.z);
+		shader->SetUniform3f("camVV", pCamera->mCy.x, pCamera->mCy.y, pCamera->mCy.z);
 		//uniform vec3 camWW;
-		shader->SetUniform3f("camvv", pCamera->mCz.x, pCamera->mCz.y, pCamera->mCz.z);
-		shader->SetUniform2f("iResolution", 1920, 1080);
+		shader->SetUniform3f("camWW", pCamera->mCz.x, pCamera->mCz.y, pCamera->mCz.z);
+		shader->SetUniform2f("iResolution", mResolution.x, mResolution.y);
 		//shader->SetUniform1i("u_Texture", 0); mpTexture->Bind(0);
 		//shader->SetUniform1i("waterTexture", 1); mpTexture->Bind(1);
 		//shader->SetUniform1i("waterBottomTexture", 2); mpTexture->Bind(2);

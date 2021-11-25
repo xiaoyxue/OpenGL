@@ -29,7 +29,6 @@ namespace Preview
 		int mBoarderWidth;
 		std::unique_ptr<SSAO> mpSSAO;
 		FrameBuffer* mpFrameBuffer;
-
 		mutable std::unordered_map<std::string, Texture2D*> mTextures;
 		mutable std::unordered_map<std::string, FrameBuffer*> mFrameBuffers;
 	public:

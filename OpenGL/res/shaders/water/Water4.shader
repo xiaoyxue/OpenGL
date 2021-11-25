@@ -32,6 +32,7 @@ layout(location = 0) out vec4 color;
 #define MAX_DIST	1000.0
 
 #define PLANE		vec4 (0.0, 1.0, 0.0, 10.0)
+//#define PLANE		vec4 (0.0, 1.0, 0.0, 15.0)
 #define BOTTOM		vec4 (0.0, 1.0, 0.0, 4.0)
 
 
@@ -125,26 +126,15 @@ void main() {
 	vec3 rfl = reflect(rd, pn);
 	float fs = fresnel_step(rd, pn, vec3(0.0, 3.0, 6.0));
 	vec4 c0 = vec4(0, 0, 0, 1);
-	vec4 c1 = texture(backgroundTexture, st + 0.1 * dv.xy);
-	vec4 colorLookAt = texture(backgroundTexture, st);
+	vec4 c1 = texture(backgroundTexture, st + 0.05 * dv.xy);
 
 	if (t < 1000.0) {
 		color = mix(c1, cm, smoothstep(80.0, 160.0, t));
 
 	}
 	else {
-		color = colorLookAt;
+		color = texture(backgroundTexture, st);
 	}
 
-	/*
-	if(t < 1500.0){
-		fragColor = mix (mix (
-		c0,
-		c1,
-		1.0 - fs), cm, smoothstep (80.0, 160.0, t));
-	}
-	else{
-		fragColor = colorLookAt;
-	}*/
 
 }

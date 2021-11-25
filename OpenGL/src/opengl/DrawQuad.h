@@ -25,8 +25,10 @@ namespace OpenGL
 		std::vector<Vec3> ssaoKernel;
 		std::vector<glm::vec3> ssaoNoise;
 		std::shared_ptr<Texture2D> mpNoiseTexture;
+		Vec2 mResolution;
 	public:
-		DrawQuad();
+		DrawQuad() = delete;
+		DrawQuad(int resX = 1920, int resY = 1080);
 		virtual ~DrawQuad();
 		void DrawFace(const Renderer& renderer) const override;
 		BBox GetBBox() const override;

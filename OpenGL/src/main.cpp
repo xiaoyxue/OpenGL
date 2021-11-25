@@ -91,7 +91,7 @@ using namespace OpenGL;
 
 int main(void)
 {
-	int resolutionX = 1920, resolutionY = 1080;
+	int resolutionX = 2560, resolutionY = 1440;
 	Previewer previewer("Hello World!", resolutionX, resolutionY);
 	previewer.Init();
 	Picker picker(resolutionX, resolutionY);
@@ -155,7 +155,7 @@ int main(void)
 	auto waterShader3 = std::make_shared<Shader>("res/shaders/water/Water3.shader");
 	auto waterShader4 = std::make_shared<Shader>("res/shaders/water/Water4.shader");
 
-	DrawQuad quad;
+	DrawQuad quad(resolutionX, resolutionY);
 	//std::string backgroundTexturePath = "background3.jpg";
 	//Texture2D backgroundTexture(backgroundTexturePath);
 	//quad.SetTexture("background", &backgroundTexture);
@@ -166,7 +166,7 @@ int main(void)
 
 	//std::string backgroundTexturePath = "res/textures/water.png";
 	//std::string backgroundTexturePath = "res/textures/ShaderToyTexture1.jpg";
-	std::string backgroundTexturePath = "res/textures/background3.jpg";
+	std::string backgroundTexturePath = "res/textures/R3.jpg";
 	Texture2D backgroundTexture(backgroundTexturePath);
 	quad.SetTexture("backgroundTexture", &backgroundTexture);
 
