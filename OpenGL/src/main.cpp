@@ -91,7 +91,7 @@ using namespace OpenGL;
 
 int main(void)
 {
-	int resolutionX = 2560, resolutionY = 1440;
+	int resolutionX = 3840, resolutionY = 2160;
 	Previewer previewer("Hello World!", resolutionX, resolutionY);
 	previewer.Init();
 	Picker picker(resolutionX, resolutionY);

@@ -30,7 +30,7 @@ layout(location = 0) out vec4 color;
 #define EPSILON		0.001
 #define MAX_STEPS	1000
 #define MAX_DIST	1000.0
-
+#define EDGE		1
 #define PLANE		vec4 (0.0, 1.0, 0.0, 10.0)
 //#define PLANE		vec4 (0.0, 1.0, 0.0, 15.0)
 #define BOTTOM		vec4 (0.0, 1.0, 0.0, 4.0)
@@ -83,21 +83,6 @@ float march(vec3 ro, vec3 rd) {
 	return d <= EPSILON ? t : MAX_DIST;
 }
 
-float march2(vec3 ro, vec3 rd) {
-	float t = 0.0;
-	float d = 0.0;
-	vec3 pt = vec3(0.0);
-	for (int i = 0; i < MAX_STEPS; ++i) {
-		pt = ro + rd * t;
-		d = map2(pt);
-		if (d < EPSILON || t + d >= MAX_DIST) {
-			break;
-		}
-		t += d;
-	}
-
-	return d <= EPSILON ? t : MAX_DIST;
-}
 
 float fresnel_step(vec3 I, vec3 N, vec3 f) {
 	return clamp(f.x + f.y * pow(1.0 + dot(I, N), f.z), 0.0, 1.0);
@@ -120,21 +105,35 @@ void main() {
 	float t = march(ro, rd);
 	vec4 cm = texture(backgroundTexture, st);
 	vec3 pt = rd * t + ro;
-	vec3 pn = PLANE.xyz;
-	vec3 dv = fbm3v(pt.xz / 512.0 + iTime / 256.0).xyz - 0.5;
-	pn = normalize(pn + dv * 0.2);
-	vec3 rfl = reflect(rd, pn);
-	float fs = fresnel_step(rd, pn, vec3(0.0, 3.0, 6.0));
+	//vec3 pn = PLANE.xyz;
+	//vec3 dv = fbm3v(pt.xz / 512.0 + iTime / 256.0).xyz - 0.5;
+	vec3 dv = fbm3v(pt.xz / 512.0 + iTime / 256.0).xyz;
+	dv.x = dv.x * 0.2 - 0.075 ;
+	dv.y = dv.y - 0.3;
+	//dv.x = dv.x - 0.5;
+
+
+	//pn = normalize(pn + dv * 0.2);
+	//vec3 rfl = reflect(rd, pn);
+	//float fs = fresnel_step(rd, pn, vec3(0.0, 3.0, 6.0));
 	vec4 c0 = vec4(0, 0, 0, 1);
-	vec4 c1 = texture(backgroundTexture, st + 0.05 * dv.xy);
+	vec4 c1 = texture(backgroundTexture, st + 0.02 * dv.xy);
 
-	if (t < 1000.0) {
-		color = mix(c1, cm, smoothstep(80.0, 160.0, t));
+	//if (gl_FragCoord.x < EDGE || gl_FragCoord.x > iResolution.x - EDGE) {
+	//	color = mix(c1, cm, 0.99);
+	//}
+	//else {
+	//	color = mix(c1, cm, smoothstep(80.0, 160.0, t));
+	//}
+	color = mix(c1, cm, smoothstep(80.0, 160.0, t));
 
-	}
-	else {
-		color = texture(backgroundTexture, st);
-	}
+	//if (t < 1000.0) {
+	//	color = mix(c1, cm, smoothstep(80.0, 160.0, t));
+
+	//}
+	//else {
+	//	color = texture(backgroundTexture, st);
+	//}
 
 
 }
