@@ -91,7 +91,7 @@ using namespace OpenGL;
 
 int main(void)
 {
-	int resolutionX = 3840, resolutionY = 2160;
+	int resolutionX = 1920, resolutionY = 1080;
 	Previewer previewer("Hello World!", resolutionX, resolutionY);
 	previewer.Init();
 	Picker picker(resolutionX, resolutionY);
@@ -154,6 +154,7 @@ int main(void)
 	auto waterShader2 = std::make_shared<Shader>("res/shaders/water/Water2.shader");
 	auto waterShader3 = std::make_shared<Shader>("res/shaders/water/Water3.shader");
 	auto waterShader4 = std::make_shared<Shader>("res/shaders/water/Water4.shader");
+	auto sunShader0 = std::make_shared<Shader>("res/shaders/sun/Sun1.shader");
 
 	DrawQuad quad(resolutionX, resolutionY);
 	//std::string backgroundTexturePath = "background3.jpg";
@@ -166,7 +167,7 @@ int main(void)
 
 	//std::string backgroundTexturePath = "res/textures/water.png";
 	//std::string backgroundTexturePath = "res/textures/ShaderToyTexture1.jpg";
-	std::string backgroundTexturePath = "res/textures/R3.jpg";
+	std::string backgroundTexturePath = "res/textures/background5.jpg";
 	Texture2D backgroundTexture(backgroundTexturePath);
 	quad.SetTexture("backgroundTexture", &backgroundTexture);
 
@@ -175,7 +176,7 @@ int main(void)
 	Texture2D noiseTexture(noiseTexturePath);
 	quad.SetTexture("noiseTexture", &noiseTexture);
 
-	quad.AddShader("Debug", waterShader4);
+	quad.AddShader("Debug", sunShader0);
 	previewer.SetQuad(&quad);
 	previewer.mDrawQuad = true;
 	//previewer.SetQuad(&quad);
