@@ -202,6 +202,7 @@
     <None Include="res\shaders\DefaultLine.shader" />
     <None Include="res\shaders\DefaultTexture.shader" />
     <None Include="res\shaders\DefaultWater.shader" />
+    <None Include="res\shaders\fog\Fog1.shader" />
     <None Include="res\shaders\ImageBasedLighting.shader" />
     <None Include="res\shaders\ImageBasedLightingV2.shader" />
     <None Include="res\shaders\ObjectPicker.shader" />
@@ -345,6 +346,7 @@
     <None Include="res\shaders\water\Water2.shader" />
     <None Include="res\shaders\water\Water3.shader" />
     <None Include="res\shaders\water\Water4.shader" />
+    <None Include="res\shaders\water\Water5.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\common\Core.h" />

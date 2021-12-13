@@ -106,20 +106,20 @@ void main()
      mm = vec2(sin(iTime/6.)/1., cos(iTime/8.)/2. )/2.;
     }*/
 
-    vec2 mm = vec2(0.2, 0.6);
+    vec2 mm = vec2(sin(iTime / 6.) / 2., 0.6);
 
     vec3 circColor = vec3(0.9, 0.2, 0.1);
     vec3 circColor2 = vec3(0.3, 0.1, 0.9);
 
     //now to make the sky not black
     //vec3 color = mix(vec3(0.3, 0.2, 0.02) / 0.9, vec3(0.2, 0.5, 0.8), uv.y) * 3. - 0.52 * sin(iTime);
-    vec3 color = mix(vec3(0.3, 0.2, 0.02) / 0.9, vec3(0.2, 0.5, 0.8) / 2.0, uv.y) * 3. - 0.15 * sin(iTime);
-
+    vec3 color = mix(vec3(0.3, 0.2, 0.02) / 0.9, vec3(0.2, 0.5, 0.8) / 2.0, uv.y) * 3. - 0.30 * sin(iTime);
+    
     //this calls the function which adds three circle types every time through the loop based on parameters I
     //got by trying things out. rnd i*2000. and rnd i*20 are just to help randomize things more
 
 
-    for (float i = 0.; i < 10.; i++) {
+    for (float i = 0.; i < 15.; i++) {
         color += circle(uv, pow(rnd(i * 2000.) * 1.8, 2.) + 1.41, 0.0, circColor + i, circColor2 + i, rnd(i * 20.) * 3. + 0.2 - .5, mm);
     }
 
@@ -128,14 +128,14 @@ void main()
     float a = atan(uv.y - mm.y, uv.x - mm.x);
     float l = max(1.0 - length(uv - mm) - 0.84, 0.0);
 
-    float bright = 0.01;//+0.1/abs(sin(iTime/3.))/3.;//add brightness based on how the sun moves so that it is brightest
+    float bright = 0.1 * 50;//+0.1/abs(sin(iTime/3.))/3.;//add brightness based on how the sun moves so that it is brightest
     //when it is lined up with the center
 
     //add the sun with the frill things
     color += max(0.1 / pow(length(uv - mm) * 5., 5.), 0.0) * abs(sin(a * 5. + cos(a * 9.))) / 20.;
     color += max(0.1 / pow(length(uv - mm) * 10., 1. / 20.), .0) + abs(sin(a * 3. + cos(a * 9.))) / 8. * (abs(sin(a * 9.))) / 1.;
     //add another sun in the middle (to make it brighter)  with the20color I want, and bright as the numerator.
-    color += (max(bright / pow(length(uv - mm) * 4., 1. / 2.), 0.0) * 4.) * vec3(0.2, 0.21, 0.3) * 4.;
+    //color += (max(bright / pow(length(uv - mm) * 4., 1. / 2.), 0.0) * 4.) * vec3(0.2, 0.21, 0.3) * 4.;
     // * (0.5+.5*sin(vec3(0.4, 0.2, 0.1) + vec3(a*2., 00., a*3.)+1.3));
 
     //multiply by the exponetial e^x ? of 1.0-length which kind of masks the brightness more so that
@@ -143,7 +143,8 @@ void main()
     color *= exp(1.0 - length(uv - mm)) / 5.;
     vec3 bcgColor = texture(backgroundTexture, st).rgb;
 
-    //color = mix(bcgColor, color, 0.3);
-    color += bcgColor;
+    //color = mix(bcgColor, color, 0.6);
+    color += bcgColor * 0.55;
+
     outColor = vec4(color, 1);
 }

@@ -154,7 +154,9 @@ int main(void)
 	auto waterShader2 = std::make_shared<Shader>("res/shaders/water/Water2.shader");
 	auto waterShader3 = std::make_shared<Shader>("res/shaders/water/Water3.shader");
 	auto waterShader4 = std::make_shared<Shader>("res/shaders/water/Water4.shader");
+	auto waterShader5 = std::make_shared<Shader>("res/shaders/water/Water5.shader");
 	auto sunShader0 = std::make_shared<Shader>("res/shaders/sun/Sun1.shader");
+	auto fogFshader0 = std::make_shared<Shader>("res/shaders/fog/Fog1.shader");
 
 	DrawQuad quad(resolutionX, resolutionY);
 	//std::string backgroundTexturePath = "background3.jpg";
@@ -167,7 +169,7 @@ int main(void)
 
 	//std::string backgroundTexturePath = "res/textures/water.png";
 	//std::string backgroundTexturePath = "res/textures/ShaderToyTexture1.jpg";
-	std::string backgroundTexturePath = "res/textures/background5.jpg";
+	std::string backgroundTexturePath = "res/textures/background7.jpg";
 	Texture2D backgroundTexture(backgroundTexturePath);
 	quad.SetTexture("backgroundTexture", &backgroundTexture);
 
@@ -176,7 +178,7 @@ int main(void)
 	Texture2D noiseTexture(noiseTexturePath);
 	quad.SetTexture("noiseTexture", &noiseTexture);
 
-	quad.AddShader("Debug", sunShader0);
+	quad.AddShader("Debug", waterShader5);
 	previewer.SetQuad(&quad);
 	previewer.mDrawQuad = true;
 	//previewer.SetQuad(&quad);
