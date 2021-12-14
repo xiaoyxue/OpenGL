@@ -238,7 +238,7 @@ int main(void)
 	std::string leafTexturePath = "res/textures/leaf1.png";
 	Texture2D leafTexture(leafTexturePath);
 	mesh.AddTexture(&leafTexture);
-	mesh.Scale(0.3);
+	mesh.Scale(0.2);
 	
 	previewer.mDrawQuad = true;
 	previewer.AddDrawableObject(&mesh);
