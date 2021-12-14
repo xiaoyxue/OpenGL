@@ -76,7 +76,7 @@ float col(vec2 coord, float time)
 
 void main()
 {
-    float time = iTime * 0.5;
+    float time = iTime * 0.6;
 
     vec2 p = (gl_FragCoord.xy) / iResolution.xy, c1 = p, c2 = p;
     float cc1 = col(c1, time);
@@ -89,7 +89,7 @@ void main()
     float dy = emboss * (cc1 - col(c2, time)) / delta;
 
     c1.x += dx * 0.5;
-    c1.y = -(c1.y + dy * 0.5);
+    //c1.y = -(c1.y + dy * 0.5);
 
     float alpha = 1. + dot(dx, dy) * gain;
 

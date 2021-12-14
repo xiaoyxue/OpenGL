@@ -44,8 +44,8 @@ namespace OpenGL
 			shader->SetUniform1i(textureName, i);
 			mTextures[i]->Bind(i);
 		}
-		SSAO* pSSAO = renderer.GetSSAO();
-		shader->SetUniform1i("ssao", 5); pSSAO->mpSSAO_Color->Bind(5);
+		//SSAO* pSSAO = renderer.GetSSAO();
+		//shader->SetUniform1i("ssao", 5); pSSAO->mpSSAO_Color->Bind(5);
 		renderer.Draw(*mpVAO, *mpIBO, *shader);
 		renderer.DisableDepthTest();
 		for (int i = 0; i < mTextures.size(); ++i)

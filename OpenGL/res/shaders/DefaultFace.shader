@@ -37,4 +37,5 @@ void main()
 	vec4 texColor = texture(u_Texture0, v_TexCoord);
 	color = texColor;
 	//color = v_Color * ssaoValue;
+	//color = v_Color;
 }

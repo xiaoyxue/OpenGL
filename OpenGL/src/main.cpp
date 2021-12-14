@@ -88,7 +88,7 @@ using namespace OpenGL;
 
 
 
-
+/**
 int main(void)
 {
 	int resolutionX = 1920, resolutionY = 1080;
@@ -197,6 +197,60 @@ int main(void)
 
 	return 0;
 }
+*/
+
+
+
+
+int main(void)
+{
+	int resolutionX = 1280, resolutionY = 900;
+	Previewer previewer("Hello World!", resolutionX, resolutionY);
+	previewer.Init();
+	Picker picker(resolutionX, resolutionY);
+	Renderer renderer(resolutionX, resolutionY);
+	Camera camera;
+	camera.Init(
+		Vec3(0, 0, 5),
+		Vec3(0, 0, 0),
+		Vec3(0, 1, 0),
+		resolutionX,
+		resolutionY,
+		CameraType::Perspective
+	);
+	renderer.SetCamera(&camera);
+	//model and shader
+
+	Scene scene;
+	previewer.SetPicker(&picker);
+	previewer.SetScene(&scene);
+
+
+	GLMesh mesh;
+	mesh.Scale(0.1);
+	mesh.AddMesh("..\\models\\leaf\\Leaf_a_24.obj");
+	auto faceShader = std::make_shared<Shader>("res/shaders/DefaultFace.shader");
+	auto lineShader = std::make_shared<Shader>("res/shaders/DefaultLine.shader");
+	//mesh2.AddTexture(&texture);
+	mesh.AddShader("Face", faceShader);
+	mesh.AddShader("WireFrame", lineShader);
+	
+	std::string leafTexturePath = "res/textures/leaf1.png";
+	Texture2D leafTexture(leafTexturePath);
+	mesh.AddTexture(&leafTexture);
+	mesh.Scale(0.3);
+	
+	previewer.mDrawQuad = true;
+	previewer.AddDrawableObject(&mesh);
+	previewer.SetCamera(&camera);
+	previewer.SetRenderer(&renderer);
+	// Set max fps
+	previewer.SetMaxFps(60);
+	previewer.MainLoop();
+
+	return 0;
+}
+
 
 
 
