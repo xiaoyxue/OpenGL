@@ -200,6 +200,7 @@
     <None Include="res\shaders\DefaultCoord.shader" />
     <None Include="res\shaders\DefaultFace.shader" />
     <None Include="res\shaders\DefaultLine.shader" />
+    <None Include="res\shaders\DefaultQuad.shader" />
     <None Include="res\shaders\DefaultTexture.shader" />
     <None Include="res\shaders\DefaultWater.shader" />
     <None Include="res\shaders\fog\Fog1.shader" />
@@ -347,6 +348,7 @@
     <None Include="res\shaders\water\Water3.shader" />
     <None Include="res\shaders\water\Water4.shader" />
     <None Include="res\shaders\water\Water5.shader" />
+    <None Include="res\shaders\wind\Wind1.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\common\Core.h" />

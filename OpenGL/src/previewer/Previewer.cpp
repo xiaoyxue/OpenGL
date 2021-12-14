@@ -10,7 +10,7 @@
 #include "Preview.h"
 #include <iostream>
 
-constexpr int ImageBufferSize = 500;
+constexpr int ImageBufferSize = 800;
 
 std::vector<std::vector<unsigned char>> imageBuffer(ImageBufferSize);
 int frameNumber = 0;
@@ -58,21 +58,21 @@ namespace Preview
 			//mpRenderer->DrawFaces(*mpQuad);
 			
 
-			//{
-			//	if (frameNumber < maxframeCount) {
-			//		std::vector<unsigned char>& imageFrameBuffer = imageBuffer[frameNumber];
-			//		glReadPixels(0, 0, mWidth, mHeight, GL_RGB, GL_UNSIGNED_BYTE, &imageFrameBuffer[0]);
+			{
+				if (frameNumber < maxframeCount) {
+					std::vector<unsigned char>& imageFrameBuffer = imageBuffer[frameNumber];
+					glReadPixels(0, 0, mWidth, mHeight, GL_RGB, GL_UNSIGNED_BYTE, &imageFrameBuffer[0]);
 
-			//		frameNumber++;
-			//	}
-			//	else {
-			//		for (int i = 0; i < maxframeCount; ++i) {
-			//			std::string imagePath = "E:/Video/ImageFrame13/" + std::to_string(i) + ".png";
-			//			stbi_flip_vertically_on_write(true);
-			//			stbi_write_png(imagePath.c_str(), mWidth, mHeight, 3, &imageBuffer[i][0], 3 * mWidth);
-			//		}
-			//	}
-			//}
+					frameNumber++;
+				}
+				else {
+					for (int i = 0; i < maxframeCount; ++i) {
+						std::string imagePath = "E:/Video/ImageFrame14/" + std::to_string(i) + ".png";
+						stbi_flip_vertically_on_write(true);
+						stbi_write_png(imagePath.c_str(), mWidth, mHeight, 3, &imageBuffer[i][0], 3 * mWidth);
+					}
+				}
+			}
 
 
 			mpRenderer->Clear();

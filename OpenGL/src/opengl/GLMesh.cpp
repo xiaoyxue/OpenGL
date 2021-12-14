@@ -9,6 +9,7 @@
 #include "visual/Camera.h"
 #include "ssao/SSAO.h"
 #include <sstream>
+#include <GLFW/glfw3.h>
 
 namespace OpenGL
 {
@@ -30,7 +31,18 @@ namespace OpenGL
 		shader->Bind();
 		Matrix4 proj = renderer.GetCamera()->GetProjMatrix();
 		Matrix4 view = renderer.GetCamera()->GetViewMatrix();
+		
+		
+		
 		Matrix4 model = LocalToWorld.GetMatrix();
+		model = model * Transform::RotateZ(glfwGetTime() * 60).GetMatrix() * 2 * Transform::RotateY(glfwGetTime() * 60).GetMatrix() * 2 *Transform::RotateX(glfwGetTime() * 60).GetMatrix();
+		model = model * Transform::Translate(
+			Vec3(std::sin(glfwGetTime()*3) * std::cos(glfwGetTime() * 3),
+				 std::cos(glfwGetTime()*5),
+				 3)).GetMatrix();
+		
+
+
 		Vec3 camPosition = renderer.GetCamera()->GetPosition();
 		shader->SetUniformMat4f("u_Model", model);
 		shader->SetUniformMat4f("u_View", view);

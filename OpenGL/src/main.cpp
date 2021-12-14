@@ -88,7 +88,7 @@ using namespace OpenGL;
 
 
 
-/**
+
 int main(void)
 {
 	int resolutionX = 1920, resolutionY = 1080;
@@ -98,7 +98,7 @@ int main(void)
 	Renderer renderer(resolutionX, resolutionY);
 	Camera camera;
 	camera.Init(
-		Vec3(0, 0.3, 5000),
+		Vec3(0, 0.3, 10),
 		Vec3(0, 0,  0),
 		Vec3(0, 1, 0),
 		resolutionX,
@@ -140,15 +140,15 @@ int main(void)
 	
 
 
-
-
+	auto quadShader = std::make_shared<Shader>("res/shaders/DefaultQuad.shader");
+	auto faceShader = std::make_shared<Shader>("res/shaders/DefaultFace.shader");
 	auto lineShader = std::make_shared<Shader>("res/shaders/DefaultLine.shader");
 	auto textureShader = std::make_shared<Shader>("res/shaders/DefaultTexture.shader");
 	auto mainboxShader = std::make_shared<Shader>("res/shaders/ImageBasedLightingV2.shader");
 	auto gBufferShader = std::make_shared<Shader>("res/shaders/ssao/Gbuffer.shader");
 	auto ssaoBufferShader = std::make_shared<Shader>("res/shaders/ssao/SSAO.shader");
 	auto debugShader = std::make_shared<Shader>("res/shaders/Debug.shader");
-	auto quadShader = std::make_shared<Shader>("res/shaders/water/BasicWater.shader");
+	auto basicWater = std::make_shared<Shader>("res/shaders/water/BasicWater.shader");
 	auto waterShader0 = std::make_shared<Shader>("res/shaders/water/BasicWater.shader");
 	auto waterShader1 = std::make_shared<Shader>("res/shaders/water/Water1.shader");
 	auto waterShader2 = std::make_shared<Shader>("res/shaders/water/Water2.shader");
@@ -169,17 +169,31 @@ int main(void)
 
 	//std::string backgroundTexturePath = "res/textures/water.png";
 	//std::string backgroundTexturePath = "res/textures/ShaderToyTexture1.jpg";
-	std::string backgroundTexturePath = "res/textures/background7.jpg";
+	std::string backgroundTexturePath = "res/textures/background9.jpg";
 	Texture2D backgroundTexture(backgroundTexturePath);
 	quad.SetTexture("backgroundTexture", &backgroundTexture);
-
-
 	std::string noiseTexturePath = "res/textures/noise.png";
 	Texture2D noiseTexture(noiseTexturePath);
 	quad.SetTexture("noiseTexture", &noiseTexture);
+	quad.AddShader("Debug", quadShader);
+	//previewer.SetQuad(&quad);
+	previewer.AddDrawableObject(&quad);
 
-	quad.AddShader("Debug", waterShader5);
-	previewer.SetQuad(&quad);
+
+	GLMesh mesh;
+	mesh.Scale(0.1);
+	mesh.AddMesh("..\\models\\leaf\\Leaf_a_24.obj");
+	auto leafShader = std::make_shared<Shader>("res/shaders/wind/Wind1.shader");
+	mesh.AddShader("Face", leafShader);
+	mesh.AddShader("WireFrame", lineShader);
+
+	std::string leafTexturePath = "res/textures/leaf1.png";
+	Texture2D leafTexture(leafTexturePath);
+	mesh.AddTexture(&leafTexture);
+	mesh.Scale(0.15);
+	previewer.AddDrawableObject(&mesh);
+
+
 	previewer.mDrawQuad = true;
 	//previewer.SetQuad(&quad);
 	//GLMesh plane;
@@ -197,59 +211,58 @@ int main(void)
 
 	return 0;
 }
-*/
 
 
 
-
-int main(void)
-{
-	int resolutionX = 1280, resolutionY = 900;
-	Previewer previewer("Hello World!", resolutionX, resolutionY);
-	previewer.Init();
-	Picker picker(resolutionX, resolutionY);
-	Renderer renderer(resolutionX, resolutionY);
-	Camera camera;
-	camera.Init(
-		Vec3(0, 0, 5),
-		Vec3(0, 0, 0),
-		Vec3(0, 1, 0),
-		resolutionX,
-		resolutionY,
-		CameraType::Perspective
-	);
-	renderer.SetCamera(&camera);
-	//model and shader
-
-	Scene scene;
-	previewer.SetPicker(&picker);
-	previewer.SetScene(&scene);
-
-
-	GLMesh mesh;
-	mesh.Scale(0.1);
-	mesh.AddMesh("..\\models\\leaf\\Leaf_a_24.obj");
-	auto faceShader = std::make_shared<Shader>("res/shaders/DefaultFace.shader");
-	auto lineShader = std::make_shared<Shader>("res/shaders/DefaultLine.shader");
-	//mesh2.AddTexture(&texture);
-	mesh.AddShader("Face", faceShader);
-	mesh.AddShader("WireFrame", lineShader);
-	
-	std::string leafTexturePath = "res/textures/leaf1.png";
-	Texture2D leafTexture(leafTexturePath);
-	mesh.AddTexture(&leafTexture);
-	mesh.Scale(0.2);
-	
-	previewer.mDrawQuad = true;
-	previewer.AddDrawableObject(&mesh);
-	previewer.SetCamera(&camera);
-	previewer.SetRenderer(&renderer);
-	// Set max fps
-	previewer.SetMaxFps(60);
-	previewer.MainLoop();
-
-	return 0;
-}
+//
+//int main(void)
+//{
+//	int resolutionX = 1280, resolutionY = 900;
+//	Previewer previewer("Hello World!", resolutionX, resolutionY);
+//	previewer.Init();
+//	Picker picker(resolutionX, resolutionY);
+//	Renderer renderer(resolutionX, resolutionY);
+//	Camera camera;
+//	camera.Init(
+//		Vec3(0, 0, 5),
+//		Vec3(0, 0, 0),
+//		Vec3(0, 1, 0),
+//		resolutionX,
+//		resolutionY,
+//		CameraType::Perspective
+//	);
+//	renderer.SetCamera(&camera);
+//	//model and shader
+//
+//	Scene scene;
+//	previewer.SetPicker(&picker);
+//	previewer.SetScene(&scene);
+//
+//
+//	GLMesh mesh;
+//	mesh.Scale(0.1);
+//	mesh.AddMesh("..\\models\\leaf\\Leaf_a_24.obj");
+//	auto faceShader = std::make_shared<Shader>("res/shaders/wind/Wind1.shader");
+//	auto lineShader = std::make_shared<Shader>("res/shaders/DefaultLine.shader");
+//	//mesh2.AddTexture(&texture);
+//	mesh.AddShader("Face", faceShader);
+//	mesh.AddShader("WireFrame", lineShader);
+//	
+//	std::string leafTexturePath = "res/textures/leaf1.png";
+//	Texture2D leafTexture(leafTexturePath);
+//	mesh.AddTexture(&leafTexture);
+//	mesh.Scale(0.2);
+//	
+//	previewer.mDrawQuad = true;
+//	previewer.AddDrawableObject(&mesh);
+//	previewer.SetCamera(&camera);
+//	previewer.SetRenderer(&renderer);
+//	// Set max fps
+//	previewer.SetMaxFps(60);
+//	previewer.MainLoop();
+//
+//	return 0;
+//}
 
 
 

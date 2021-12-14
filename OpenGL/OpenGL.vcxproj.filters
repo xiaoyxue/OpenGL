@@ -557,6 +557,8 @@
     <None Include="res\shaders\sun\Sun1.shader" />
     <None Include="res\shaders\fog\Fog1.shader" />
     <None Include="res\shaders\water\Water5.shader" />
+    <None Include="res\shaders\wind\Wind1.shader" />
+    <None Include="res\shaders\DefaultQuad.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Def.h">
